@@ -27,7 +27,8 @@ export default defineNuxtConfig({
 
   typescript: {
     typeCheck: false,
-    strict: false
+    strict: false,
+    shim: false
   },
 
   vite: {
@@ -45,6 +46,11 @@ export default defineNuxtConfig({
   // Configuration build pour production
   build: {
     transpile: ['@google/generative-ai']
+  },
+
+  // Désactiver la génération automatique des types
+  hooks: {
+    'prepare:types': () => {}
   },
 
   // Headers de sécurité

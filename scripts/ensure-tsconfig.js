@@ -1,66 +1,109 @@
-#!/usr/bin/env node
+// scripts/ensure-tsconfig.js
+import fs from 'fs'
+import path from 'path'
 
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+const nuxtDir = '.nuxt'
+const requiredFiles = ['tsconfig.json', 'tsconfig.server.json']
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const tsconfigAppPath = path.join(__dirname, '..', '.nuxt', 'tsconfig.app.json');
-const tsconfigPath = path.join(__dirname, '..', '.nuxt', 'tsconfig.json');
-
-// Vérifier si le fichier tsconfig.app.json existe
-if (!fs.existsSync(tsconfigAppPath)) {
-  console.log('Création du fichier tsconfig.app.json manquant...');
-  
-  const tsconfigAppContent = {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-      "target": "ESNext",
-      "module": "ESNext",
-      "moduleResolution": "Bundler",
-      "allowImportingTsExtensions": true,
-      "noEmit": true,
-      "isolatedModules": true,
-      "verbatimModuleSyntax": true,
-      "strict": true,
-      "skipLibCheck": true,
-      "esModuleInterop": true,
-      "allowSyntheticDefaultImports": true,
-      "forceConsistentCasingInFileNames": true,
-      "useDefineForClassFields": true,
-      "lib": [
-        "ESNext",
-        "DOM",
-        "DOM.Iterable"
-      ],
-      "types": [
-        "vite/client"
-      ]
-    },
-    "include": [
-      "../**/*",
-      "./nuxt.d.ts",
-      "./imports.d.ts",
-      "./components.d.ts"
-    ],
-    "exclude": [
-      "../dist",
-      "../.data",
-      "../.output",
-      "../node_modules"
-    ]
-  };
-  
-  // S'assurer que le dossier .nuxt existe
-  const nuxtDir = path.dirname(tsconfigAppPath);
-  if (!fs.existsSync(nuxtDir)) {
-    fs.mkdirSync(nuxtDir, { recursive: true });
-  }
-  
-  fs.writeFileSync(tsconfigAppPath, JSON.stringify(tsconfigAppContent, null, 2));
-  console.log('✅ tsconfig.app.json créé avec succès');
-} else {
-  console.log('✅ tsconfig.app.json existe déjà');
+// Créer le dossier .nuxt s'il n'existe pas
+if (!fs.existsSync(nuxtDir)) {
+  fs.mkdirSync(nuxtDir, {recursive: true})
+  console.log('✅ Dossier .nuxt créé')
 }
+
+// Créer les fichiers TypeScript manquants
+requiredFiles.forEach((fileName) => {
+  const filePath = path.join(nuxtDir, fileName)
+
+  if (!fs.existsSync(filePath)) {
+    let content = ''
+
+    if (fileName === 'tsconfig.json') {
+      content = JSON.stringify(
+        {
+          compilerOptions: {
+            target: 'ESNext',
+            module: 'ESNext',
+            moduleResolution: 'Node',
+            strict: false,
+            jsx: 'preserve',
+            esModuleInterop: true,
+            allowSyntheticDefaultImports: true,
+            skipLibCheck: true,
+            noEmit: true,
+            baseUrl: '..',
+            paths: {
+              '~/*': ['../*'],
+              '@/*': ['../*'],
+              '~~/*': ['../*'],
+              '@@/*': ['../*']
+            },
+            types: ['node', '@nuxt/types']
+          },
+          include: ['../**/*.ts', '../**/*.vue', '../**/*.js'],
+          exclude: ['../node_modules', '../.output']
+        },
+        null,
+        2
+      )
+    } else if (fileName === 'tsconfig.server.json') {
+      content = JSON.stringify(
+        {
+          extends: './tsconfig.json',
+          compilerOptions: {
+            module: 'ESNext',
+            types: ['node']
+          },
+          include: ['../server/**/*.ts']
+        },
+        null,
+        2
+      )
+    } else if (fileName === 'tsconfig.app.json') {
+      content = JSON.stringify(
+        {
+          extends: './tsconfig.json',
+          compilerOptions: {
+            lib: ['DOM', 'DOM.Iterable', 'ESNext'],
+            types: ['@nuxt/types']
+          },
+          include: ['../**/*.vue', '../**/*.ts', '../**/*.tsx'],
+          exclude: ['../server/**/*']
+        },
+        null,
+        2
+      )
+    }
+
+    fs.writeFileSync(filePath, content)
+    console.log(`✅ ${fileName} créé dans .nuxt/`)
+  } else {
+    console.log(`✓ ${fileName} existe déjà`)
+  }
+})
+
+// Créer aussi tsconfig.app.json même s'il n'est pas dans la liste par défaut
+const appTsConfigPath = path.join(nuxtDir, 'tsconfig.app.json')
+if (!fs.existsSync(appTsConfigPath)) {
+  const appTsConfig = {
+    extends: './tsconfig.json',
+    compilerOptions: {
+      lib: ['DOM', 'DOM.Iterable', 'ESNext'],
+      types: ['@nuxt/types', '@vue/runtime-core']
+    },
+    include: [
+      '../**/*.vue',
+      '../**/*.ts',
+      '../**/*.tsx',
+      '../components/**/*.vue',
+      '../composables/**/*.ts',
+      '../pages/**/*.vue'
+    ],
+    exclude: ['../server/**/*', '../node_modules']
+  }
+
+  fs.writeFileSync(appTsConfigPath, JSON.stringify(appTsConfig, null, 2))
+  console.log('✅ tsconfig.app.json créé dans .nuxt/')
+}
+
+console.log('🎉 Configuration TypeScript initialisée avec succès !')
