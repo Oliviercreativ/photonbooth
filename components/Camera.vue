@@ -14,32 +14,58 @@
       <!-- Sélecteur de fond -->
       <div
         v-if="showBackgroundSelector"
-        class="bg-black/80 rounded-xl p-4 backdrop-blur"
+        class="fixed inset-0 bg-black/95 backdrop-blur z-50 flex flex-col"
       >
-        <div class="grid grid-cols-3 gap-2 mb-3">
-          <div
-            v-for="bg in backgrounds"
-            :key="bg.id"
-            @click="selectBackground(bg)"
-            class="relative cursor-pointer rounded-lg overflow-hidden"
-            :class="
-              selectedBackground?.id === bg.id ? 'ring-2 ring-blue-400' : ''
-            "
+        <!-- Header -->
+        <div class="flex justify-between items-center p-4 border-b border-white/20">
+          <h2 class="text-white text-xl font-bold">🌍 Choisir un fond</h2>
+          <button
+            @click="showBackgroundSelector = false"
+            class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
           >
-            <img :src="bg.preview" class="w-full h-16 object-cover" />
+            ✕ Fermer
+          </button>
+        </div>
+
+        <!-- Grille des fonds -->
+        <div class="flex-1 overflow-y-auto p-4">
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             <div
-              class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent"
+              v-for="bg in backgrounds"
+              :key="bg.id"
+              @click="selectBackground(bg)"
+              class="relative cursor-pointer rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-200"
+              :class="
+                selectedBackground?.id === bg.id ? 'ring-4 ring-blue-400 shadow-lg' : 'ring-2 ring-transparent hover:ring-white/30'
+              "
             >
-              <p class="text-white text-xs p-1 text-center">{{ bg.emoji }}</p>
+              <img :src="bg.preview" class="w-full h-32 sm:h-40 md:h-48 object-cover" />
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"
+              >
+                <div class="absolute bottom-0 left-0 right-0 p-3">
+                  <p class="text-white text-lg font-semibold mb-1">{{ bg.emoji }}</p>
+                  <p class="text-white text-xs opacity-90 leading-tight">{{ bg.name }}</p>
+                </div>
+              </div>
+              
+              <!-- Indicateur de sélection -->
+              <div
+                v-if="selectedBackground?.id === bg.id"
+                class="absolute top-2 right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center"
+              >
+                <span class="text-white text-xs">✓</span>
+              </div>
             </div>
           </div>
         </div>
-        <button
-          @click="showBackgroundSelector = false"
-          class="w-full bg-gray-600 text-white py-2 rounded text-sm"
-        >
-          Fermer
-        </button>
+
+        <!-- Footer avec info -->
+        <div class="border-t border-white/20 p-4">
+          <p class="text-white/70 text-center text-sm">
+            {{ backgrounds.length }} fonds disponibles • Cliquez sur un fond pour le sélectionner
+          </p>
+        </div>
       </div>
     </div>
 
@@ -263,6 +289,42 @@ const backgrounds = ref([
     name: 'Studio Ghibli Pure',
     emoji: '🎨✨',
     preview: '/previews/ghibli-pure.jpg'
+  },
+  {
+    id: 'disney-inspired',
+    name: 'Classic Animation Style',
+    emoji: '🏰✨',
+    preview: '/previews/disney-inspired.jpg'
+  },
+  {
+    id: 'disney-belgium',
+    name: 'Classic Animation Belgique',
+    emoji: '🏰🇧🇪',
+    preview: '/previews/disney-belgium.jpg'
+  },
+  {
+    id: 'disney-uk',
+    name: 'Classic Animation Grande-Bretagne',
+    emoji: '🏰🇬🇧',
+    preview: '/previews/disney-uk.jpg'
+  },
+  {
+    id: 'disney-germany',
+    name: 'Classic Animation Allemagne',
+    emoji: '🏰🇩🇪',
+    preview: '/previews/disney-germany.jpg'
+  },
+  {
+    id: 'disney-france',
+    name: 'Classic Animation France',
+    emoji: '🏰🇫🇷',
+    preview: '/previews/disney-france.jpg'
+  },
+  {
+    id: 'disney-conflans',
+    name: 'Classic Animation Conflans',
+    emoji: '🏰🏘️',
+    preview: '/previews/disney-conflans.jpg'
   }
 ])
 
@@ -509,5 +571,41 @@ defineExpose({
     aspect-ratio: 4/3;
     max-height: 60vh;
   }
+}
+
+/* Animations pour le sélecteur de fonds */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.group:hover img {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+/* Scrollbar personnalisée pour le sélecteur */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
 }
 </style>

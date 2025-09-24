@@ -180,6 +180,66 @@ export default defineEventHandler(async (event) => {
       category: 'artistique',
       preview: '/previews/ghibli-pure.jpg',
       featured: true
+    },
+    {
+      id: 'disney-inspired',
+      name: 'Classic Animation Style',
+      emoji: '🏰✨',
+      description: 'Transformation en style animation classique traditionnel',
+      country: 'Animation',
+      category: 'artistique',
+      preview: '/previews/disney-inspired.jpg',
+      featured: true
+    },
+    {
+      id: 'disney-belgium',
+      name: 'Classic Animation Belgique',
+      emoji: '🏰🇧🇪',
+      description: 'Personnage animation classique dans décor belge',
+      country: 'Belgique',
+      category: 'artistique',
+      preview: '/previews/disney-belgium.jpg',
+      featured: true
+    },
+    {
+      id: 'disney-uk',
+      name: 'Classic Animation Grande-Bretagne',
+      emoji: '🏰🇬🇧',
+      description: 'Personnage animation classique dans décor britannique',
+      country: 'Royaume-Uni',
+      category: 'artistique',
+      preview: '/previews/disney-uk.jpg',
+      featured: true
+    },
+    {
+      id: 'disney-germany',
+      name: 'Classic Animation Allemagne',
+      emoji: '🏰🇩🇪',
+      description: 'Personnage animation classique dans décor Oktoberfest',
+      country: 'Allemagne',
+      category: 'artistique',
+      preview: '/previews/disney-germany.jpg',
+      featured: true
+    },
+    {
+      id: 'disney-france',
+      name: 'Classic Animation France',
+      emoji: '🏰🇫🇷',
+      description: 'Personnage animation classique dans décor français',
+      country: 'France',
+      category: 'artistique',
+      preview: '/previews/disney-france.jpg',
+      featured: true
+    },
+    {
+      id: 'disney-conflans',
+      name: 'Classic Animation Conflans',
+      emoji: '🏰🏘️',
+      description: 'Personnage animation classique à Conflans Sainte Honorine',
+      country: 'France',
+      category: 'artistique',
+      preview: '/previews/disney-conflans.jpg',
+      featured: true
     }
   ]
 
