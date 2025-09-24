@@ -325,6 +325,42 @@ const backgrounds = ref([
     name: 'Classic Animation Conflans',
     emoji: '🏰🏘️',
     preview: '/previews/disney-conflans.jpg'
+  },
+  {
+    id: 'street-caricature',
+    name: 'Caricature de Rue',
+    emoji: '🎨✏️',
+    preview: '/previews/street-caricature.jpg'
+  },
+  {
+    id: 'street-caricature-belgium',
+    name: 'Caricature Rue Belgique',
+    emoji: '🎨🇧🇪',
+    preview: '/previews/street-caricature-belgium.jpg'
+  },
+  {
+    id: 'street-caricature-uk',
+    name: 'Caricature Rue Grande-Bretagne',
+    emoji: '🎨🇬🇧',
+    preview: '/previews/street-caricature-uk.jpg'
+  },
+  {
+    id: 'street-caricature-germany',
+    name: 'Caricature Rue Allemagne',
+    emoji: '🎨🇩🇪',
+    preview: '/previews/street-caricature-germany.jpg'
+  },
+  {
+    id: 'street-caricature-france',
+    name: 'Caricature Rue France',
+    emoji: '🎨🇫🇷',
+    preview: '/previews/street-caricature-france.jpg'
+  },
+  {
+    id: 'street-caricature-conflans',
+    name: 'Caricature Rue Conflans',
+    emoji: '🎨🏘️',
+    preview: '/previews/street-caricature-conflans.jpg'
   }
 ])
 

@@ -248,6 +248,66 @@ export const useBackgrounds = () => {
           category: 'artistique',
           preview: '/previews/disney-conflans.jpg',
           featured: true
+        },
+        {
+          id: 'street-caricature',
+          name: 'Caricature de Rue',
+          emoji: '🎨✏️',
+          description: 'Style caricature artistique de rue',
+          country: 'Artistique',
+          category: 'artistique',
+          preview: '/previews/street-caricature.jpg',
+          featured: true
+        },
+        {
+          id: 'street-caricature-belgium',
+          name: 'Caricature Rue Belgique',
+          emoji: '🎨🇧🇪',
+          description: 'Caricature de rue dans décor belge',
+          country: 'Belgique',
+          category: 'artistique',
+          preview: '/previews/street-caricature-belgium.jpg',
+          featured: true
+        },
+        {
+          id: 'street-caricature-uk',
+          name: 'Caricature Rue Grande-Bretagne',
+          emoji: '🎨🇬🇧',
+          description: 'Caricature de rue dans décor britannique',
+          country: 'Royaume-Uni',
+          category: 'artistique',
+          preview: '/previews/street-caricature-uk.jpg',
+          featured: true
+        },
+        {
+          id: 'street-caricature-germany',
+          name: 'Caricature Rue Allemagne',
+          emoji: '🎨🇩🇪',
+          description: 'Caricature de rue dans décor Oktoberfest',
+          country: 'Allemagne',
+          category: 'artistique',
+          preview: '/previews/street-caricature-germany.jpg',
+          featured: true
+        },
+        {
+          id: 'street-caricature-france',
+          name: 'Caricature Rue France',
+          emoji: '🎨🇫🇷',
+          description: 'Caricature de rue dans décor français',
+          country: 'France',
+          category: 'artistique',
+          preview: '/previews/street-caricature-france.jpg',
+          featured: true
+        },
+        {
+          id: 'street-caricature-conflans',
+          name: 'Caricature Rue Conflans',
+          emoji: '🎨🏘️',
+          description: 'Caricature de rue à Conflans Sainte Honorine',
+          country: 'France',
+          category: 'artistique',
+          preview: '/previews/street-caricature-conflans.jpg',
+          featured: true
         }
       ]
       categories.value = ['all', 'historique', 'monument', 'religieux', 'nature', 'artistique', 'patriotique']
