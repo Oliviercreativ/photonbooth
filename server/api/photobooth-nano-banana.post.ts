@@ -217,6 +217,14 @@ export default defineEventHandler(async (event) => {
       ? `Transform EVERYTHING into a Pixar 3D animated movie. Convert the person(s) into Pixar 3D characters with large expressive eyes and simplified features. Transform the ENTIRE background into a Pixar 3D animated environment - convert all walls, furniture, objects, and details into Pixar 3D style with vibrant colors, soft lighting, and plastic material look. Make the background look like it's from a Pixar movie, not realistic. Everything must be in Pixar 3D animation style - both characters AND background. Add a simple golden aura around the person(s).`
       : `Transform EVERYTHING into Pixar 3D animation - characters AND background with golden aura`,
     
+    'captain-future-transformed': highQuality
+      ? `Transform EVERYTHING into a retro-futuristic Captain Future style. Keep the person(s) looking like themselves but dressed in Captain Future style - white and olive-green space suit with chest plate, futuristic blaster pistol, and classic 1970s-80s anime style. Maintain their facial features, hair color, and personal characteristics while adding the Captain Future costume and accessories. Transform the ENTIRE background into a retro-futuristic space environment with vintage spaceships, colorful planets with rings, classic stars, floating asteroids, and nostalgic sci-fi elements. Use vintage color palette with orange, blue, white, and silver tones. Everything must be in retro-futuristic Captain Future style - both characters AND background.`
+      : `Transform EVERYTHING into Captain Future style - characters AND background`,
+    
+    'captain-future-original': highQuality
+      ? `Keep the person(s) looking like themselves but dressed in Captain Future style - white and olive-green space suit with chest plate, futuristic blaster pistol, and classic 1970s-80s anime style. Maintain their facial features, hair color, and personal characteristics while adding the Captain Future costume and accessories. Keep the original background exactly as it appears in the photo - do not modify or transform the background environment. Make it look like the real person(s) dressed as Captain Future in the original environment.`
+      : `Transform person(s) into Captain Future style, keep original background`,
+    
   }
   
   const prompt = prompts[backgroundId] || 'Replace the green screen background with a beautiful natural landscape'

@@ -471,6 +471,26 @@ export default defineEventHandler(async (event) => {
       preview: '/previews/aura-glow-pixar-transformed.jpg',
       featured: true
     },
+    {
+      id: 'captain-future-transformed',
+      name: 'Capitaine Flam Monde Entier',
+      emoji: '🚀👨‍🚀🌍',
+      description: 'Style rétro-futuriste Capitaine Flam avec fond transformé',
+      country: 'Rétro',
+      category: 'artistique',
+      preview: '/previews/captain-future-transformed.jpg',
+      featured: true
+    },
+    {
+      id: 'captain-future-original',
+      name: 'Capitaine Flam Fond Original',
+      emoji: '🚀👨‍🚀📷',
+      description: 'Personnage Capitaine Flam avec fond original',
+      country: 'Rétro',
+      category: 'artistique',
+      preview: '/previews/captain-future-original.jpg',
+      featured: true
+    },
   ]
 
   const query = getQuery(event)

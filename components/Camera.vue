@@ -303,14 +303,16 @@ const filteredBackgrounds = computed(() => {
         bg.name.includes('Monde Entier') ||
         bg.id.includes('aura-glow-dreamworks-transformed') ||
         bg.id.includes('aura-glow-pixar-transformed') ||
-        bg.id.includes('aura-glow-pure-original')
+        bg.id.includes('aura-glow-pure-original') ||
+        bg.id.includes('captain-future-transformed')
       )
     case 'original':
       // Fonds "Monde Original" (fond original conservé)
       return backgrounds.value.filter(bg => 
         bg.id.includes('pure-original') ||
         bg.id.includes('fond-original') ||
-        bg.name.includes('Fond Original')
+        bg.name.includes('Fond Original') ||
+        bg.id.includes('captain-future-original')
       )
     default:
       return backgrounds.value
@@ -588,6 +590,18 @@ const backgrounds = ref([
     name: 'Aura Pixar Monde Entier',
     emoji: '✨🎭🌍',
     preview: '/previews/aura-glow-pixar-transformed.jpg'
+  },
+  {
+    id: 'captain-future-transformed',
+    name: 'Capitaine Flam Monde Entier',
+    emoji: '🚀👨‍🚀🌍',
+    preview: '/previews/captain-future-transformed.jpg'
+  },
+  {
+    id: 'captain-future-original',
+    name: 'Capitaine Flam Fond Original',
+    emoji: '🚀👨‍🚀📷',
+    preview: '/previews/captain-future-original.jpg'
   },
 ])
 
