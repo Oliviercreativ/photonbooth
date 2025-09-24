@@ -205,6 +205,18 @@ export default defineEventHandler(async (event) => {
       ? `Transform the person(s) into charming DreamWorks-style 3D animated character(s) while keeping the original background unchanged. Create stylized, realistic 3D character(s) with the distinctive DreamWorks animation features - detailed facial expressions, realistic proportions with slight cartoonish exaggeration, and warm, engaging personality. Use the characteristic DreamWorks 3D rendering style with smooth surfaces, realistic lighting, subtle subsurface scattering, and the signature "DreamWorks glow" effect. Keep the original background exactly as it appears in the photo - do not modify or transform the background environment. If multiple people are present, position them naturally together showing their interactions and relationships. Make it look like DreamWorks character(s) that have been placed into the original real-world environment with that distinctive DreamWorks 3D animation style.`
       : `Transform person(s) into DreamWorks-style 3D character(s), keep original background unchanged, realistic proportions`,
     
+    'aura-glow-pure-original': highQuality
+      ? `Transform EVERYTHING into a mystical fantasy scene. Convert the person(s) into DreamWorks 3D animated characters with stylized cartoon features, large expressive eyes, simplified facial features, and the signature DreamWorks animation style. Add a bright orange-yellow aura/halo around their entire body, hair, and silhouette. Transform the ENTIRE background into a mystical fantasy environment with floating light particles, ethereal atmosphere, magical elements, and fantasy landscapes. The background should look like a mystical fantasy realm, not realistic. Everything must be in mystical fantasy style - both characters AND background.`
+      : `Transform EVERYTHING into mystical fantasy with DreamWorks characters and aura`,
+    
+    'aura-glow-dreamworks-transformed': highQuality
+      ? `Transform EVERYTHING into a DreamWorks 3D animated movie. Convert the person(s) into DreamWorks 3D animated characters with stylized cartoon features, large expressive eyes, simplified facial features, and the signature DreamWorks animation style. Make the person(s) look like they are from a DreamWorks animated movie - NOT realistic. Transform the ENTIRE background into a DreamWorks 3D animated environment - convert all walls, furniture, objects, and details into DreamWorks 3D style with smooth surfaces, realistic lighting, and subtle subsurface scattering. Make the background look like it's from a DreamWorks movie, not realistic. Everything must be in DreamWorks 3D animation style - both characters AND background. Add a bright orange-yellow aura/halo around the person(s) creating a luminous glowing effect that radiates outward.`
+      : `Transform EVERYTHING into DreamWorks 3D animation - characters AND background with bright orange aura`,
+    
+    'aura-glow-pixar-transformed': highQuality
+      ? `Transform EVERYTHING into a Pixar 3D animated movie. Convert the person(s) into Pixar 3D characters with large expressive eyes and simplified features. Transform the ENTIRE background into a Pixar 3D animated environment - convert all walls, furniture, objects, and details into Pixar 3D style with vibrant colors, soft lighting, and plastic material look. Make the background look like it's from a Pixar movie, not realistic. Everything must be in Pixar 3D animation style - both characters AND background. Add a simple golden aura around the person(s).`
+      : `Transform EVERYTHING into Pixar 3D animation - characters AND background with golden aura`,
+    
   }
   
   const prompt = prompts[backgroundId] || 'Replace the green screen background with a beautiful natural landscape'

@@ -1,13 +1,36 @@
 <template>
   <div class="camera-container">
-    <!-- Sélecteur de fond -->
+    <!-- Menu mobile -->
+    <div class="fixed bottom-0 left-0 right-0 z-30 bg-black/90 backdrop-blur border-t border-white/20">
+      <div class="flex">
+        <button
+          @click="activeMobileTab = 'camera'"
+          class="flex-1 flex flex-col items-center py-3 touch-manipulation"
+          :class="activeMobileTab === 'camera' ? 'text-blue-400' : 'text-white/70'"
+        >
+          <span class="text-2xl mb-1">📷</span>
+          <span class="text-xs font-medium">Caméra</span>
+        </button>
+        <button
+          @click="activeMobileTab = 'photos'"
+          class="flex-1 flex flex-col items-center py-3 touch-manipulation"
+          :class="activeMobileTab === 'photos' ? 'text-blue-400' : 'text-white/70'"
+        >
+          <span class="text-2xl mb-1">🖼️</span>
+          <span class="text-xs font-medium">Photos</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Onglet Caméra -->
+    <div v-if="activeMobileTab === 'camera'" class="h-full w-full relative pb-20">
+      <!-- Bouton choisir fond en haut -->
     <div class="absolute top-4 left-4 right-4 z-20">
-      <div v-if="!showBackgroundSelector" class="flex justify-center">
         <button
           @click="openBackgroundSelector"
-          class="bg-black/50 text-white px-4 py-2 rounded-full text-sm backdrop-blur"
+          class="w-full bg-black/70 text-white px-6 py-4 rounded-full text-lg font-semibold backdrop-blur shadow-lg border border-white/20 min-h-[56px] touch-manipulation"
         >
-          🌍 {{ selectedBackground?.name || 'Choisir fond' }}
+          🌍 {{ selectedBackground?.name || 'Choisir un fond' }}
         </button>
       </div>
 
@@ -18,10 +41,10 @@
       >
         <!-- Header -->
         <div class="flex justify-between items-center p-4 border-b border-white/20">
-          <h2 class="text-white text-xl font-bold">🌍 Choisir un fond</h2>
+          <h2 class="text-white text-lg sm:text-xl font-bold">🌍 Choisir un fond</h2>
           <button
             @click="showBackgroundSelector = false"
-            class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
+            class="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white px-4 py-3 rounded-lg transition-colors touch-manipulation min-h-[48px] min-w-[80px] font-semibold"
           >
             ✕ Fermer
           </button>
@@ -31,84 +54,121 @@
         <div class="flex border-b border-white/20">
           <button
             @click="activeTab = 'geographic'"
-            class="flex-1 px-4 py-3 text-center transition-colors"
-            :class="activeTab === 'geographic' ? 'bg-blue-600 text-white' : 'text-white/70 hover:text-white hover:bg-white/10'"
+            class="flex-1 px-2 py-4 text-center transition-colors touch-manipulation min-h-[60px] flex flex-col items-center justify-center"
+            :class="activeTab === 'geographic' ? 'bg-blue-600 text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'"
           >
-            🌍 Pays et Ville
+            <span class="text-xl mb-1">🌍</span>
+            <span class="text-sm font-medium">Pays et Ville</span>
           </button>
           <button
             @click="activeTab = 'transformed'"
-            class="flex-1 px-4 py-3 text-center transition-colors"
-            :class="activeTab === 'transformed' ? 'bg-blue-600 text-white' : 'text-white/70 hover:text-white hover:bg-white/10'"
+            class="flex-1 px-2 py-4 text-center transition-colors touch-manipulation min-h-[60px] flex flex-col items-center justify-center"
+            :class="activeTab === 'transformed' ? 'bg-blue-600 text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'"
           >
-            🌎 Monde Entier
+            <span class="text-xl mb-1">🌎</span>
+            <span class="text-sm font-medium">Monde Entier</span>
           </button>
           <button
             @click="activeTab = 'original'"
-            class="flex-1 px-4 py-3 text-center transition-colors"
-            :class="activeTab === 'original' ? 'bg-blue-600 text-white' : 'text-white/70 hover:text-white hover:bg-white/10'"
+            class="flex-1 px-2 py-4 text-center transition-colors touch-manipulation min-h-[60px] flex flex-col items-center justify-center"
+            :class="activeTab === 'original' ? 'bg-blue-600 text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'"
           >
-            📷 Monde Original
+            <span class="text-xl mb-1">📷</span>
+            <span class="text-sm font-medium">Monde Original</span>
           </button>
         </div>
 
         <!-- Grille des fonds -->
-        <div class="flex-1 overflow-y-auto p-4">
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+        <div class="flex-1 overflow-y-auto p-3 sm:p-4">
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
             <div
               v-for="bg in filteredBackgrounds"
               :key="bg.id"
               @click="selectBackground(bg)"
-              class="relative cursor-pointer rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-200"
+              class="relative cursor-pointer rounded-xl overflow-hidden group active:scale-95 transition-transform duration-150 touch-manipulation"
               :class="
-                selectedBackground?.id === bg.id ? 'ring-4 ring-blue-400 shadow-lg' : 'ring-2 ring-transparent hover:ring-white/30'
+                selectedBackground?.id === bg.id ? 'ring-4 ring-blue-400 shadow-xl' : 'ring-2 ring-transparent hover:ring-white/30'
               "
             >
-              <img :src="bg.preview" class="w-full h-32 sm:h-40 md:h-48 object-cover" />
+              <img :src="bg.preview" class="w-full h-28 sm:h-32 md:h-40 lg:h-48 object-cover" />
               <div
-                class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"
+                class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent"
               >
-                <div class="absolute bottom-0 left-0 right-0 p-3">
-                  <p class="text-white text-lg font-semibold mb-1">{{ bg.emoji }}</p>
-                  <p class="text-white text-xs opacity-90 leading-tight">{{ bg.name }}</p>
+                <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-3">
+                  <p class="text-white text-base sm:text-lg font-bold mb-1">{{ bg.emoji }}</p>
+                  <p class="text-white text-xs sm:text-sm opacity-95 leading-tight font-medium">{{ bg.name }}</p>
                 </div>
               </div>
               
               <!-- Indicateur de sélection -->
               <div
                 v-if="selectedBackground?.id === bg.id"
-                class="absolute top-2 right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center"
+                class="absolute top-2 right-2 w-7 h-7 sm:w-8 sm:h-8 bg-blue-500 rounded-full flex items-center justify-center shadow-lg"
               >
-                <span class="text-white text-xs">✓</span>
+                <span class="text-white text-sm sm:text-base font-bold">✓</span>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Footer avec info -->
-        <div class="border-t border-white/20 p-4">
-          <p class="text-white/70 text-center text-sm">
-            {{ filteredBackgrounds.length }} fonds disponibles • Cliquez sur un fond pour le sélectionner
-          </p>
+      </div>
+    </div>
+
+    <!-- Onglet Photos -->
+    <div v-if="activeMobileTab === 'photos'" class="h-full w-full relative pb-20">
+      <div class="p-4 pt-16">
+        <h2 class="text-white text-2xl font-bold mb-6 text-center">📸 Mes Photos</h2>
+        
+        <!-- Galerie des photos -->
+        <div v-if="capturedPhotos.length > 0" class="grid grid-cols-2 gap-4">
+          <div
+            v-for="(photo, index) in capturedPhotos"
+            :key="index"
+            class="relative aspect-square rounded-xl overflow-hidden shadow-lg"
+          >
+            <img :src="photo.processedImage" class="w-full h-full object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent">
+              <div class="absolute bottom-2 left-2 right-2">
+                <p class="text-white text-sm font-medium truncate">{{ photo.backgroundName }}</p>
+                <p class="text-white/80 text-xs">{{ new Date(photo.timestamp).toLocaleTimeString() }}</p>
+              </div>
+            </div>
+            <!-- Bouton de téléchargement -->
+        <button
+              @click="downloadPhoto(photo)"
+              class="absolute top-2 right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg touch-manipulation"
+        >
+              <span class="text-white text-sm">⬇️</span>
+        </button>
+          </div>
+        </div>
+        
+        <!-- Message si pas de photos -->
+        <div v-else class="flex flex-col items-center justify-center h-64 text-white/70">
+          <span class="text-6xl mb-4">📷</span>
+          <p class="text-lg font-medium">Aucune photo prise</p>
+          <p class="text-sm text-center mt-2">Prenez votre première photo avec la caméra !</p>
         </div>
       </div>
     </div>
 
     <!-- Vidéo avec contraintes de résolution -->
+    <div v-if="activeMobileTab === 'camera'" class="fixed inset-0 z-0">
     <video
       ref="videoElement"
       autoplay
       playsinline
       muted
-      class="w-full h-full object-cover rounded-lg"
+        class="w-full h-full object-cover"
       :class="{mirror: frontCamera}"
     ></video>
+    </div>
 
     <canvas ref="canvasElement" class="hidden"></canvas>
 
     <!-- Guide de positionnement -->
     <div
-      v-if="selectedBackground"
+      v-if="selectedBackground && activeMobileTab === 'camera'"
       class="absolute inset-8 border-2 border-white/60 pointer-events-none rounded-lg"
     >
       <div
@@ -142,12 +202,12 @@
     </div>
 
     <!-- Contrôles -->
-    <div class="absolute bottom-4 left-0 right-0 px-4">
+    <div v-if="activeMobileTab === 'camera'" class="absolute bottom-24 left-0 right-0 px-4">
       <div class="flex items-center justify-between">
         <!-- Switch Camera -->
         <button
           @click="switchCamera"
-          class="w-12 h-12 bg-black/50 rounded-full flex items-center justify-center text-white text-xl backdrop-blur"
+          class="w-12 h-12 bg-black/50 rounded-full flex items-center justify-center text-white text-xl backdrop-blur touch-manipulation"
           :disabled="!isReady || isProcessing"
         >
           🔄
@@ -156,7 +216,7 @@
         <!-- Capture Button -->
         <button
           @click="capturePhoto"
-          class="w-20 h-20 bg-white border-4 border-gray-300 rounded-full flex items-center justify-center shadow-lg transition-transform"
+          class="w-24 h-24 bg-white border-4 border-gray-300 rounded-full flex items-center justify-center shadow-xl transition-transform touch-manipulation"
           :disabled="!isReady || !selectedBackground || isProcessing"
           :class="isProcessing ? 'animate-pulse' : 'active:scale-95'"
         >
@@ -215,6 +275,7 @@ const showBackgroundSelector = ref(false)
 const frontCamera = ref(true)
 const capturedPhotos = ref([])
 const activeTab = ref('geographic')
+const activeMobileTab = ref('camera')
 
 const emit = defineEmits(['photo-captured', 'show-gallery'])
 
@@ -239,7 +300,10 @@ const filteredBackgrounds = computed(() => {
       return backgrounds.value.filter(bg => 
         bg.id.includes('pure-transformed') ||
         bg.id.includes('monde-entier') ||
-        bg.name.includes('Monde Entier')
+        bg.name.includes('Monde Entier') ||
+        bg.id.includes('aura-glow-dreamworks-transformed') ||
+        bg.id.includes('aura-glow-pixar-transformed') ||
+        bg.id.includes('aura-glow-pure-original')
       )
     case 'original':
       // Fonds "Monde Original" (fond original conservé)
@@ -507,6 +571,24 @@ const backgrounds = ref([
     emoji: '🎬📷',
     preview: '/previews/dreamworks-pure-original.jpg'
   },
+  {
+    id: 'aura-glow-pure-original',
+    name: 'Aura Lumineuse Fond Original',
+    emoji: '✨📷',
+    preview: '/previews/aura-glow-pure-original.jpg'
+  },
+  {
+    id: 'aura-glow-dreamworks-transformed',
+    name: 'Aura DreamWorks Monde Entier',
+    emoji: '✨🎬🌍',
+    preview: '/previews/aura-glow-dreamworks-transformed.jpg'
+  },
+  {
+    id: 'aura-glow-pixar-transformed',
+    name: 'Aura Pixar Monde Entier',
+    emoji: '✨🎭🌍',
+    preview: '/previews/aura-glow-pixar-transformed.jpg'
+  },
 ])
 
 onMounted(async () => {
@@ -572,6 +654,15 @@ const selectBackground = (background) => {
 const openBackgroundSelector = () => {
   activeTab.value = 'geographic' // Réinitialiser à l'onglet géographique
   showBackgroundSelector.value = true
+}
+
+const downloadPhoto = (photo) => {
+  const link = document.createElement('a')
+  link.href = photo.processedImage
+  link.download = `photobooth-${photo.timestamp}.jpg`
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
 
 const capturePhoto = async () => {
@@ -793,5 +884,68 @@ defineExpose({
 
 .overflow-y-auto::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.5);
+}
+
+/* Optimisations mobile pour événements extérieurs */
+@media (max-width: 768px) {
+  /* Améliorer la visibilité en plein soleil */
+  .camera-container {
+    filter: contrast(1.1) brightness(1.05);
+  }
+  
+  /* Boutons plus gros pour usage tactile */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Texte plus lisible */
+  .text-sm {
+    font-size: 0.95rem;
+  }
+  
+  /* Espacement optimisé pour les doigts */
+  .gap-3 {
+    gap: 0.75rem;
+  }
+}
+
+/* Amélioration de la visibilité extérieure */
+@media (max-width: 480px) {
+  /* Contraste renforcé pour usage extérieur */
+  .bg-black\/70 {
+    background-color: rgba(0, 0, 0, 0.85);
+  }
+  
+  .bg-black\/95 {
+    background-color: rgba(0, 0, 0, 0.98);
+  }
+  
+  /* Ombres plus prononcées */
+  .shadow-xl {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Bordures plus visibles */
+  .border-white\/20 {
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* Feedback tactile pour mobile */
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+/* Prévention du zoom sur double-tap */
+button, input, select, textarea {
+  touch-action: manipulation;
+}
+
+/* Amélioration des transitions pour mobile */
+@media (prefers-reduced-motion: no-preference) {
+  .transition-transform {
+    transition-duration: 150ms;
+  }
 }
 </style>

@@ -439,16 +439,46 @@ export const useBackgrounds = () => {
           preview: '/previews/caricature-pure-transformed.jpg',
           featured: true
         },
-        {
-          id: 'dreamworks-pure-original',
-          name: 'DreamWorks Fond Original',
-          emoji: '🎬📷',
-          description: 'Personnage DreamWorks avec fond original de la photo',
-          country: 'Animation',
-          category: 'artistique',
-          preview: '/previews/dreamworks-pure-original.jpg',
-          featured: true
-        },
+  {
+    id: 'dreamworks-pure-original',
+    name: 'DreamWorks Fond Original',
+    emoji: '🎬📷',
+    description: 'Personnage DreamWorks avec fond original de la photo',
+    country: 'Animation',
+    category: 'artistique',
+    preview: '/previews/dreamworks-pure-original.jpg',
+    featured: true
+  },
+  {
+    id: 'aura-glow-pure-original',
+    name: 'Aura Lumineuse Fond Original',
+    emoji: '✨📷',
+    description: 'Personnage avec aura lumineuse et fond original',
+    country: 'Mystique',
+    category: 'artistique',
+    preview: '/previews/aura-glow-pure-original.jpg',
+    featured: true
+  },
+  {
+    id: 'aura-glow-dreamworks-transformed',
+    name: 'Aura DreamWorks Monde Entier',
+    emoji: '✨🎬🌍',
+    description: 'Personnage DreamWorks avec aura et fond transformé',
+    country: 'Mystique',
+    category: 'artistique',
+    preview: '/previews/aura-glow-dreamworks-transformed.jpg',
+    featured: true
+  },
+  {
+    id: 'aura-glow-pixar-transformed',
+    name: 'Aura Pixar Monde Entier',
+    emoji: '✨🎭🌍',
+    description: 'Personnage Pixar avec aura et fond transformé',
+    country: 'Mystique',
+    category: 'artistique',
+    preview: '/previews/aura-glow-pixar-transformed.jpg',
+    featured: true
+  },
       ]
       categories.value = ['all', 'historique', 'monument', 'religieux', 'nature', 'artistique', 'patriotique']
     } finally {
