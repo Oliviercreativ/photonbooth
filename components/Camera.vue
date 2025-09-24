@@ -4,7 +4,7 @@
     <div class="absolute top-4 left-4 right-4 z-20">
       <div v-if="!showBackgroundSelector" class="flex justify-center">
         <button
-          @click="showBackgroundSelector = true"
+          @click="openBackgroundSelector"
           class="bg-black/50 text-white px-4 py-2 rounded-full text-sm backdrop-blur"
         >
           🌍 {{ selectedBackground?.name || 'Choisir fond' }}
@@ -27,11 +27,36 @@
           </button>
         </div>
 
+        <!-- Onglets -->
+        <div class="flex border-b border-white/20">
+          <button
+            @click="activeTab = 'geographic'"
+            class="flex-1 px-4 py-3 text-center transition-colors"
+            :class="activeTab === 'geographic' ? 'bg-blue-600 text-white' : 'text-white/70 hover:text-white hover:bg-white/10'"
+          >
+            🌍 Pays et Ville
+          </button>
+          <button
+            @click="activeTab = 'transformed'"
+            class="flex-1 px-4 py-3 text-center transition-colors"
+            :class="activeTab === 'transformed' ? 'bg-blue-600 text-white' : 'text-white/70 hover:text-white hover:bg-white/10'"
+          >
+            🌎 Monde Entier
+          </button>
+          <button
+            @click="activeTab = 'original'"
+            class="flex-1 px-4 py-3 text-center transition-colors"
+            :class="activeTab === 'original' ? 'bg-blue-600 text-white' : 'text-white/70 hover:text-white hover:bg-white/10'"
+          >
+            📷 Monde Original
+          </button>
+        </div>
+
         <!-- Grille des fonds -->
         <div class="flex-1 overflow-y-auto p-4">
           <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             <div
-              v-for="bg in backgrounds"
+              v-for="bg in filteredBackgrounds"
               :key="bg.id"
               @click="selectBackground(bg)"
               class="relative cursor-pointer rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-200"
@@ -63,7 +88,7 @@
         <!-- Footer avec info -->
         <div class="border-t border-white/20 p-4">
           <p class="text-white/70 text-center text-sm">
-            {{ backgrounds.length }} fonds disponibles • Cliquez sur un fond pour le sélectionner
+            {{ filteredBackgrounds.length }} fonds disponibles • Cliquez sur un fond pour le sélectionner
           </p>
         </div>
       </div>
@@ -189,8 +214,44 @@ const selectedBackground = ref(null)
 const showBackgroundSelector = ref(false)
 const frontCamera = ref(true)
 const capturedPhotos = ref([])
+const activeTab = ref('geographic')
 
 const emit = defineEmits(['photo-captured', 'show-gallery'])
+
+// Filtrage des fonds par onglet
+const filteredBackgrounds = computed(() => {
+  switch (activeTab.value) {
+    case 'geographic':
+      // Fonds géographiques (pays et villes)
+      return backgrounds.value.filter(bg => 
+        bg.id.includes('belgium') || 
+        bg.id.includes('uk') || 
+        bg.id.includes('germany') || 
+        bg.id.includes('france') || 
+        bg.id.includes('conflans') ||
+        bg.id.includes('beach') ||
+        bg.id.includes('brussels') ||
+        bg.id.includes('chimay') ||
+        bg.id.includes('paris')
+      )
+    case 'transformed':
+      // Fonds "Monde Entier" (transformation complète)
+      return backgrounds.value.filter(bg => 
+        bg.id.includes('pure-transformed') ||
+        bg.id.includes('monde-entier') ||
+        bg.name.includes('Monde Entier')
+      )
+    case 'original':
+      // Fonds "Monde Original" (fond original conservé)
+      return backgrounds.value.filter(bg => 
+        bg.id.includes('pure-original') ||
+        bg.id.includes('fond-original') ||
+        bg.name.includes('Fond Original')
+      )
+    default:
+      return backgrounds.value
+  }
+})
 
 // Fonds disponibles
 const backgrounds = ref([
@@ -361,7 +422,91 @@ const backgrounds = ref([
     name: 'Caricature Rue Conflans',
     emoji: '🎨🏘️',
     preview: '/previews/street-caricature-conflans.jpg'
-  }
+  },
+  {
+    id: 'dreamworks-inspired',
+    name: 'DreamWorks 3D Style',
+    emoji: '🎬✨',
+    preview: '/previews/dreamworks-inspired.jpg'
+  },
+  {
+    id: 'dreamworks-belgium',
+    name: 'DreamWorks Belgique',
+    emoji: '🎬🇧🇪',
+    preview: '/previews/dreamworks-belgium.jpg'
+  },
+  {
+    id: 'dreamworks-uk',
+    name: 'DreamWorks Grande-Bretagne',
+    emoji: '🎬🇬🇧',
+    preview: '/previews/dreamworks-uk.jpg'
+  },
+  {
+    id: 'dreamworks-germany',
+    name: 'DreamWorks Allemagne',
+    emoji: '🎬🇩🇪',
+    preview: '/previews/dreamworks-germany.jpg'
+  },
+  {
+    id: 'dreamworks-france',
+    name: 'DreamWorks France',
+    emoji: '🎬🇫🇷',
+    preview: '/previews/dreamworks-france.jpg'
+  },
+  {
+    id: 'dreamworks-conflans',
+    name: 'DreamWorks Conflans',
+    emoji: '🎬🏘️',
+    preview: '/previews/dreamworks-conflans.jpg'
+  },
+  {
+    id: 'pixar-pure-original',
+    name: 'Pixar Fond Original',
+    emoji: '🎭📷',
+    preview: '/previews/pixar-pure-original.jpg'
+  },
+  {
+    id: 'pixar-pure-transformed',
+    name: 'Pixar Monde Entier',
+    emoji: '🎭🌍',
+    preview: '/previews/pixar-pure-transformed.jpg'
+  },
+  {
+    id: 'ghibli-pure-original',
+    name: 'Ghibli Fond Original',
+    emoji: '🎨📷',
+    preview: '/previews/ghibli-pure-original.jpg'
+  },
+  {
+    id: 'ghibli-pure-transformed',
+    name: 'Ghibli Monde Entier',
+    emoji: '🎨🌍',
+    preview: '/previews/ghibli-pure-transformed.jpg'
+  },
+  {
+    id: 'disney-pure-original',
+    name: 'Disney Fond Original',
+    emoji: '🏰📷',
+    preview: '/previews/disney-pure-original.jpg'
+  },
+  {
+    id: 'disney-pure-transformed',
+    name: 'Disney Monde Entier',
+    emoji: '🏰🌍',
+    preview: '/previews/disney-pure-transformed.jpg'
+  },
+  {
+    id: 'caricature-pure-transformed',
+    name: 'Caricature Monde Entier',
+    emoji: '🎨✏️🌍',
+    preview: '/previews/caricature-pure-transformed.jpg'
+  },
+  {
+    id: 'dreamworks-pure-original',
+    name: 'DreamWorks Fond Original',
+    emoji: '🎬📷',
+    preview: '/previews/dreamworks-pure-original.jpg'
+  },
 ])
 
 onMounted(async () => {
@@ -422,6 +567,11 @@ const switchCamera = async () => {
 const selectBackground = (background) => {
   selectedBackground.value = background
   showBackgroundSelector.value = false
+}
+
+const openBackgroundSelector = () => {
+  activeTab.value = 'geographic' // Réinitialiser à l'onglet géographique
+  showBackgroundSelector.value = true
 }
 
 const capturePhoto = async () => {

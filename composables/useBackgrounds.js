@@ -308,7 +308,147 @@ export const useBackgrounds = () => {
           category: 'artistique',
           preview: '/previews/street-caricature-conflans.jpg',
           featured: true
-        }
+        },
+        {
+          id: 'dreamworks-inspired',
+          name: 'DreamWorks 3D Style',
+          emoji: '🎬✨',
+          description: 'Style animation 3D DreamWorks-inspired',
+          country: 'Animation',
+          category: 'artistique',
+          preview: '/previews/dreamworks-inspired.jpg',
+          featured: true
+        },
+        {
+          id: 'dreamworks-belgium',
+          name: 'DreamWorks Belgique',
+          emoji: '🎬🇧🇪',
+          description: 'Personnage DreamWorks dans décor belge',
+          country: 'Belgique',
+          category: 'artistique',
+          preview: '/previews/dreamworks-belgium.jpg',
+          featured: true
+        },
+        {
+          id: 'dreamworks-uk',
+          name: 'DreamWorks Grande-Bretagne',
+          emoji: '🎬🇬🇧',
+          description: 'Personnage DreamWorks dans décor britannique',
+          country: 'Royaume-Uni',
+          category: 'artistique',
+          preview: '/previews/dreamworks-uk.jpg',
+          featured: true
+        },
+        {
+          id: 'dreamworks-germany',
+          name: 'DreamWorks Allemagne',
+          emoji: '🎬🇩🇪',
+          description: 'Personnage DreamWorks dans décor Oktoberfest',
+          country: 'Allemagne',
+          category: 'artistique',
+          preview: '/previews/dreamworks-germany.jpg',
+          featured: true
+        },
+        {
+          id: 'dreamworks-france',
+          name: 'DreamWorks France',
+          emoji: '🎬🇫🇷',
+          description: 'Personnage DreamWorks dans décor français',
+          country: 'France',
+          category: 'artistique',
+          preview: '/previews/dreamworks-france.jpg',
+          featured: true
+        },
+        {
+          id: 'dreamworks-conflans',
+          name: 'DreamWorks Conflans',
+          emoji: '🎬🏘️',
+          description: 'Personnage DreamWorks à Conflans Sainte Honorine',
+          country: 'France',
+          category: 'artistique',
+          preview: '/previews/dreamworks-conflans.jpg',
+          featured: true
+        },
+        {
+          id: 'pixar-pure-original',
+          name: 'Pixar Fond Original',
+          emoji: '🎭📷',
+          description: 'Personnage Pixar avec fond original de la photo',
+          country: 'Animation',
+          category: 'artistique',
+          preview: '/previews/pixar-pure-original.jpg',
+          featured: true
+        },
+        {
+          id: 'pixar-pure-transformed',
+          name: 'Pixar Monde Entier',
+          emoji: '🎭🌍',
+          description: 'Personnage et fond entièrement transformés en Pixar',
+          country: 'Animation',
+          category: 'artistique',
+          preview: '/previews/pixar-pure-transformed.jpg',
+          featured: true
+        },
+        {
+          id: 'ghibli-pure-original',
+          name: 'Ghibli Fond Original',
+          emoji: '🎨📷',
+          description: 'Personnage Ghibli avec fond original de la photo',
+          country: 'Animation',
+          category: 'artistique',
+          preview: '/previews/ghibli-pure-original.jpg',
+          featured: true
+        },
+        {
+          id: 'ghibli-pure-transformed',
+          name: 'Ghibli Monde Entier',
+          emoji: '🎨🌍',
+          description: 'Personnage et fond entièrement transformés en Ghibli',
+          country: 'Animation',
+          category: 'artistique',
+          preview: '/previews/ghibli-pure-transformed.jpg',
+          featured: true
+        },
+        {
+          id: 'disney-pure-original',
+          name: 'Disney Fond Original',
+          emoji: '🏰📷',
+          description: 'Personnage Disney avec fond original de la photo',
+          country: 'Animation',
+          category: 'artistique',
+          preview: '/previews/disney-pure-original.jpg',
+          featured: true
+        },
+        {
+          id: 'disney-pure-transformed',
+          name: 'Disney Monde Entier',
+          emoji: '🏰🌍',
+          description: 'Personnage et fond entièrement transformés en Disney',
+          country: 'Animation',
+          category: 'artistique',
+          preview: '/previews/disney-pure-transformed.jpg',
+          featured: true
+        },
+        {
+          id: 'caricature-pure-transformed',
+          name: 'Caricature Monde Entier',
+          emoji: '🎨✏️🌍',
+          description: 'Personnage et fond entièrement transformés en caricature',
+          country: 'Artistique',
+          category: 'artistique',
+          preview: '/previews/caricature-pure-transformed.jpg',
+          featured: true
+        },
+        {
+          id: 'dreamworks-pure-original',
+          name: 'DreamWorks Fond Original',
+          emoji: '🎬📷',
+          description: 'Personnage DreamWorks avec fond original de la photo',
+          country: 'Animation',
+          category: 'artistique',
+          preview: '/previews/dreamworks-pure-original.jpg',
+          featured: true
+        },
       ]
       categories.value = ['all', 'historique', 'monument', 'religieux', 'nature', 'artistique', 'patriotique']
     } finally {
