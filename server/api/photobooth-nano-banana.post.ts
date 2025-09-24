@@ -50,7 +50,27 @@ export default defineEventHandler(async (event) => {
     
     'mountain-alps': highQuality
       ? `Replace the green background with majestic Swiss Alps mountain scenery. Show snow-capped peaks, alpine meadows, and crystal clear mountain air. Use natural mountain lighting with crisp, clean shadows. The person should appear as if they're hiking or exploring these breathtaking Alpine landscapes with proper mountain perspective.`
-      : `Replace green with Swiss Alps, snow peaks, alpine meadows, mountain lighting`
+      : `Replace green with Swiss Alps, snow peaks, alpine meadows, mountain lighting`,
+    
+    'pixar-caricature': highQuality
+      ? `Transform the person into a charming Pixar-style 3D caricature character. Create a stylized, cartoon-like version with exaggerated features typical of Pixar animation - large expressive eyes, simplified facial features, and a warm, friendly appearance. Use vibrant Pixar-style colors with soft lighting and subtle subsurface scattering. The character should have that distinctive Pixar 3D rendering with smooth surfaces, gentle shadows, and the characteristic "plastic" material look. Make it look like a character that could appear in a Pixar movie with personality and charm.`
+      : `Transform person into Pixar 3D caricature character, stylized cartoon features, vibrant colors, soft lighting`,
+    
+    'belgium-patriotic': highQuality
+      ? `Replace the green screen background with a patriotic Belgian scene featuring the iconic Belgian flag (black, yellow, red vertical stripes) prominently displayed. Include classic Belgian culinary specialties like golden Belgian waffles with whipped cream and strawberries, a glass of Belgian beer with foam, Belgian chocolate truffles, and Belgian fries in a paper cone. Add Belgian landmarks like the Atomium structure or Brussels architecture in the background. Use warm, inviting lighting that celebrates Belgian culture and heritage. The person should appear naturally integrated into this Belgian celebration scene.`
+      : `Replace green with Belgian flag, waffles, beer, chocolate, fries, Atomium, patriotic Belgian scene`,
+    
+    'pixar-belgium': highQuality
+      ? `Transform the person into a charming Pixar-style 3D caricature character and place them in a delightful Belgian-themed environment. Create a stylized, cartoon-like version with exaggerated Pixar features - large expressive eyes, simplified facial features, and warm personality. The character should be positioned in a Belgian celebration scene featuring the iconic Belgian flag (black, yellow, red vertical stripes), golden Belgian waffles with whipped cream, Belgian beer with foam, Belgian chocolate truffles, Belgian fries, and the Atomium structure in the background. Use vibrant Pixar-style colors with soft lighting, subsurface scattering, and the characteristic "plastic" material look. The entire scene should look like it could be from a Pixar movie celebrating Belgian culture with authentic Belgian elements rendered in Pixar's signature 3D style.`
+      : `Transform person into Pixar 3D character in Belgian scene with flag, waffles, beer, chocolate, Atomium`,
+    
+    'pixar-uk': highQuality
+      ? `Transform the person into a charming Pixar-style 3D caricature character and place them in a delightful British-themed environment. Create a stylized, cartoon-like version with exaggerated Pixar features - large expressive eyes, simplified facial features, and warm personality. The character should be positioned in a British celebration scene featuring the iconic Union Jack flag (red, white, blue), traditional British elements like Big Ben clock tower, red double-decker bus, black taxi cab, British tea service with scones and jam, fish and chips, and London landmarks in the background. Use vibrant Pixar-style colors with soft lighting, subsurface scattering, and the characteristic "plastic" material look. The entire scene should look like it could be from a Pixar movie celebrating British culture with authentic British elements rendered in Pixar's signature 3D style.`
+      : `Transform person into Pixar 3D character in British scene with Union Jack, Big Ben, tea, fish and chips`,
+    
+    'pixar-germany': highQuality
+      ? `Transform the person into a charming Pixar-style 3D caricature character and place them in a delightful German Oktoberfest-themed environment. Create a stylized, cartoon-like version with exaggerated Pixar features - large expressive eyes, simplified facial features, and warm personality. The character should be positioned in a German Oktoberfest celebration scene featuring the iconic German flag (black, red, yellow horizontal stripes), traditional German elements like beer steins with foam, pretzels, bratwurst sausages, sauerkraut, German beer hall with wooden tables, lederhosen and dirndl clothing elements, and Bavarian architecture in the background. Use vibrant Pixar-style colors with soft lighting, subsurface scattering, and the characteristic "plastic" material look. The entire scene should look like it could be from a Pixar movie celebrating German Oktoberfest culture with authentic German elements rendered in Pixar's signature 3D style.`
+      : `Transform person into Pixar 3D character in Oktoberfest scene with German flag, beer steins, pretzels, bratwurst`
   }
   
   const prompt = prompts[backgroundId] || 'Replace the green screen background with a beautiful natural landscape'

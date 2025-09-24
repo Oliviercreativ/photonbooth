@@ -60,6 +60,56 @@ export default defineEventHandler(async (event) => {
       category: 'nature',
       preview: '/previews/alps-thumb.jpg',
       featured: false
+    },
+    {
+      id: 'pixar-caricature',
+      name: 'Caricature Pixar 3D',
+      emoji: '🎭',
+      description: 'Style Pixar avec personnage 3D caricaturé',
+      country: 'Animation',
+      category: 'artistique',
+      preview: '/previews/pixar.jpg',
+      featured: true
+    },
+    {
+      id: 'belgium-patriotic',
+      name: 'Belgique Patriotique',
+      emoji: '🇧🇪',
+      description: 'Drapeau belge avec spécialités culinaires',
+      country: 'Belgique',
+      category: 'patriotique',
+      preview: '/previews/belgium.jpg',
+      featured: true
+    },
+    {
+      id: 'pixar-belgium',
+      name: 'Pixar Belgique 3D',
+      emoji: '🎭🇧🇪',
+      description: 'Personnage Pixar 3D dans décor belge',
+      country: 'Belgique',
+      category: 'artistique',
+      preview: '/previews/pixar-belgium.jpg',
+      featured: true
+    },
+    {
+      id: 'pixar-uk',
+      name: 'Pixar Grande-Bretagne 3D',
+      emoji: '🎭🇬🇧',
+      description: 'Personnage Pixar 3D dans décor britannique',
+      country: 'Royaume-Uni',
+      category: 'artistique',
+      preview: '/previews/pixar-uk.jpg',
+      featured: true
+    },
+    {
+      id: 'pixar-germany',
+      name: 'Pixar Oktoberfest 3D',
+      emoji: '🎭🇩🇪',
+      description: 'Personnage Pixar 3D dans décor Oktoberfest',
+      country: 'Allemagne',
+      category: 'artistique',
+      preview: '/previews/pixar-germany.jpg',
+      featured: true
     }
   ]
 

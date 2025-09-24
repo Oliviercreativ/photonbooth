@@ -239,10 +239,13 @@
     <!-- Toast de notification -->
     <div
       v-if="toast.show"
-      class="fixed bottom-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-40"
+      class="fixed bottom-20 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-40"
     >
       {{ toast.message }}
     </div>
+    
+    <!-- Watermark Logo -->
+    <WatermarkLogo />
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center">
+  <div class="min-h-screen bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center relative">
     <div class="text-center">
       <h1 class="text-5xl font-bold text-white mb-8">📸 Photobooth App</h1>
       <p class="text-xl text-white/80 mb-8">Créez des souvenirs inoubliables avec votre photobooth personnel</p>
@@ -14,6 +14,9 @@
         </div>
       </div>
     </div>
+    
+    <!-- Watermark Logo -->
+    <WatermarkLogo />
   </div>
 </template>
 

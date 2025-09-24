@@ -191,6 +191,36 @@ const backgrounds = ref([
     name: 'Plage Tropicale',
     emoji: '🏝️',
     preview: '/previews/beach.jpg'
+  },
+  {
+    id: 'pixar-caricature',
+    name: 'Caricature Pixar 3D',
+    emoji: '🎭',
+    preview: '/previews/pixar.jpg'
+  },
+  {
+    id: 'belgium-patriotic',
+    name: 'Belgique Patriotique',
+    emoji: '🇧🇪',
+    preview: '/previews/belgium.jpg'
+  },
+  {
+    id: 'pixar-belgium',
+    name: 'Pixar Belgique 3D',
+    emoji: '🎭🇧🇪',
+    preview: '/previews/pixar-belgium.jpg'
+  },
+  {
+    id: 'pixar-uk',
+    name: 'Pixar Grande-Bretagne 3D',
+    emoji: '🎭🇬🇧',
+    preview: '/previews/pixar-uk.jpg'
+  },
+  {
+    id: 'pixar-germany',
+    name: 'Pixar Oktoberfest 3D',
+    emoji: '🎭🇩🇪',
+    preview: '/previews/pixar-germany.jpg'
   }
 ])
 

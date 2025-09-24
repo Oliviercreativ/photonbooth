@@ -83,11 +83,6 @@ defineProps<{
   selectedBackground?: any
 }>()
 
-defineEmits<{
-  'select-background': [background: any]
-  'close': []
-}>()
-
 const { backgrounds, categories } = useBackgrounds()
 const activeCategory = ref('all')
 
@@ -98,7 +93,9 @@ const categoryLabels = {
   religieux: '⛪ Religieux',
   nature: '🌿 Nature',
   urbain: '🏙️ Urbain',
-  plage: '🏖️ Plages'
+  plage: '🏖️ Plages',
+  artistique: '🎨 Artistique',
+  patriotique: '🇧🇪 Patriotique'
 }
 
 const getCategoryLabel = (category: string) => {
@@ -111,6 +108,11 @@ const filteredBackgrounds = computed(() => {
   }
   return backgrounds.value.filter(bg => bg.category === activeCategory.value)
 })
+
+const emit = defineEmits<{
+  'select-background': [background: any]
+  'close': []
+}>()
 
 const selectBackground = (background: any) => {
   emit('select-background', background)

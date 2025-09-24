@@ -33,6 +33,9 @@
 
     <!-- Error Toast -->
     <ErrorToast v-if="error" :message="error" @dismiss="error = null" />
+    
+    <!-- Watermark Logo -->
+    <WatermarkLogo />
   </div>
 </template>
 
