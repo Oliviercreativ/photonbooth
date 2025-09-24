@@ -251,6 +251,18 @@ const backgrounds = ref([
     name: 'Studio Ghibli Conflans',
     emoji: '🎨🏘️',
     preview: '/previews/ghibli-conflans.jpg'
+  },
+  {
+    id: 'pixar-pure',
+    name: 'Pixar Caricature Pure',
+    emoji: '🎭✨',
+    preview: '/previews/pixar-pure.jpg'
+  },
+  {
+    id: 'ghibli-pure',
+    name: 'Studio Ghibli Pure',
+    emoji: '🎨✨',
+    preview: '/previews/ghibli-pure.jpg'
   }
 ])
 

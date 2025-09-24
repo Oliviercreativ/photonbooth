@@ -90,7 +90,15 @@ export default defineEventHandler(async (event) => {
     
     'ghibli-conflans': highQuality
       ? `Transform the person into a charming Studio Ghibli-style character and place them in a delightful Conflans Sainte Honorine-themed environment. Create a stylized, hand-drawn animation character with the signature Ghibli features - large expressive eyes, simplified facial features, and warm personality. The character should be positioned in a Conflans celebration scene featuring the iconic French flag (blue, white, red vertical stripes), traditional French elements like the historic church of Saint Honorine, the Seine river with boats, French pastries, local specialties, charming riverside houses, and the peaceful atmosphere of this historic French town in the background. Use the characteristic Ghibli color palette with soft pastels, warm earth tones, and gentle watercolor-like textures. The entire scene should look like it could be from a Studio Ghibli movie celebrating Conflans Sainte Honorine culture with authentic local elements rendered in Ghibli's signature hand-painted animation style.`
-      : `Transform person into Ghibli character in Conflans scene with French flag, church, Seine river, local specialties`
+      : `Transform person into Ghibli character in Conflans scene with French flag, church, Seine river, local specialties`,
+    
+    'pixar-pure': highQuality
+      ? `Transform the person into a charming Pixar-style 3D caricature character. Create a stylized, cartoon-like version with exaggerated Pixar features - large expressive eyes, simplified facial features, and a warm, friendly appearance. Use vibrant Pixar-style colors with soft lighting and subtle subsurface scattering. The character should have that distinctive Pixar 3D rendering with smooth surfaces, gentle shadows, and the characteristic "plastic" material look. Make it look like a character that could appear in any Pixar movie with personality and charm.`
+      : `Transform person into Pixar 3D caricature character, stylized cartoon features, vibrant colors, soft lighting`,
+    
+    'ghibli-pure': highQuality
+      ? `Transform the person into a charming Studio Ghibli-style character. Create a stylized, hand-drawn animation character with the signature Ghibli features - large expressive eyes, simplified facial features, and warm personality. Use the characteristic Ghibli color palette with soft pastels, warm earth tones, and gentle watercolor-like textures. The character should have that distinctive Ghibli hand-painted animation style with soft lighting, gentle shadows, and the characteristic artistic rendering. Make it look like a character that could appear in any Studio Ghibli movie with that magical, innocent quality.`
+      : `Transform person into Ghibli character, hand-drawn animation, soft pastels, watercolor style`
   }
   
   const prompt = prompts[backgroundId] || 'Replace the green screen background with a beautiful natural landscape'

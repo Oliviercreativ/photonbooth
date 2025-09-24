@@ -168,6 +168,26 @@ export const useBackgrounds = () => {
           category: 'artistique',
           preview: '/previews/ghibli-conflans.jpg',
           featured: true
+        },
+        {
+          id: 'pixar-pure',
+          name: 'Pixar Caricature Pure',
+          emoji: '🎭✨',
+          description: 'Transformation Pixar 3D pure sans contexte géographique',
+          country: 'Animation',
+          category: 'artistique',
+          preview: '/previews/pixar-pure.jpg',
+          featured: true
+        },
+        {
+          id: 'ghibli-pure',
+          name: 'Studio Ghibli Pure',
+          emoji: '🎨✨',
+          description: 'Transformation Studio Ghibli pure sans contexte géographique',
+          country: 'Animation',
+          category: 'artistique',
+          preview: '/previews/ghibli-pure.jpg',
+          featured: true
         }
       ]
       categories.value = ['all', 'historique', 'monument', 'religieux', 'nature', 'artistique', 'patriotique']
