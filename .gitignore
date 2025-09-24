@@ -22,3 +22,10 @@ logs
 .env
 .env.*
 !.env.example
+
+# Test images and generated files
+test_*.jpg
+test_*.png
+*_output.*
+*_gemini*.*
+*_imagen*.*
