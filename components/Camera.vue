@@ -603,6 +603,18 @@ const backgrounds = ref([
     emoji: '🚀👨‍🚀📷',
     preview: '/previews/captain-future-original.jpg'
   },
+  {
+    id: 'cites-or-transformed',
+    name: 'Cités d\'Or Monde Entier',
+    emoji: '🏛️✨🌍',
+    preview: '/previews/cites-or-transformed.jpg'
+  },
+  {
+    id: 'frozen-transformed',
+    name: 'Reine des Neiges Monde Entier',
+    emoji: '❄️👑🌍',
+    preview: '/previews/frozen-transformed.jpg'
+  },
 ])
 
 onMounted(async () => {

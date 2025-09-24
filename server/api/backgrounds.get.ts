@@ -491,6 +491,26 @@ export default defineEventHandler(async (event) => {
       preview: '/previews/captain-future-original.jpg',
       featured: true
     },
+    {
+      id: 'cites-or-transformed',
+      name: 'Cités d\'Or Monde Entier',
+      emoji: '🏛️✨🌍',
+      description: 'Style Cités d\'Or avec décor Pixar 3D',
+      country: 'Aventure',
+      category: 'artistique',
+      preview: '/previews/cites-or-transformed.jpg',
+      featured: true
+    },
+    {
+      id: 'frozen-transformed',
+      name: 'Reine des Neiges Monde Entier',
+      emoji: '❄️👑🌍',
+      description: 'Style Reine des Neiges avec décor Pixar 3D',
+      country: 'Magique',
+      category: 'artistique',
+      preview: '/previews/frozen-transformed.jpg',
+      featured: true
+    },
   ]
 
   const query = getQuery(event)
