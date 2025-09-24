@@ -221,6 +221,36 @@ const backgrounds = ref([
     name: 'Pixar Oktoberfest 3D',
     emoji: '🎭🇩🇪',
     preview: '/previews/pixar-germany.jpg'
+  },
+  {
+    id: 'ghibli-belgium',
+    name: 'Studio Ghibli Belgique',
+    emoji: '🎨🇧🇪',
+    preview: '/previews/ghibli-belgium.jpg'
+  },
+  {
+    id: 'ghibli-uk',
+    name: 'Studio Ghibli Grande-Bretagne',
+    emoji: '🎨🇬🇧',
+    preview: '/previews/ghibli-uk.jpg'
+  },
+  {
+    id: 'ghibli-germany',
+    name: 'Studio Ghibli Allemagne',
+    emoji: '🎨🇩🇪',
+    preview: '/previews/ghibli-germany.jpg'
+  },
+  {
+    id: 'ghibli-france',
+    name: 'Studio Ghibli France',
+    emoji: '🎨🇫🇷',
+    preview: '/previews/ghibli-france.jpg'
+  },
+  {
+    id: 'ghibli-conflans',
+    name: 'Studio Ghibli Conflans',
+    emoji: '🎨🏘️',
+    preview: '/previews/ghibli-conflans.jpg'
   }
 ])
 

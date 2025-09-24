@@ -118,6 +118,56 @@ export const useBackgrounds = () => {
           category: 'artistique',
           preview: '/previews/pixar-germany.jpg',
           featured: true
+        },
+        {
+          id: 'ghibli-belgium',
+          name: 'Studio Ghibli Belgique',
+          emoji: '🎨🇧🇪',
+          description: 'Personnage Studio Ghibli dans décor belge',
+          country: 'Belgique',
+          category: 'artistique',
+          preview: '/previews/ghibli-belgium.jpg',
+          featured: true
+        },
+        {
+          id: 'ghibli-uk',
+          name: 'Studio Ghibli Grande-Bretagne',
+          emoji: '🎨🇬🇧',
+          description: 'Personnage Studio Ghibli dans décor britannique',
+          country: 'Royaume-Uni',
+          category: 'artistique',
+          preview: '/previews/ghibli-uk.jpg',
+          featured: true
+        },
+        {
+          id: 'ghibli-germany',
+          name: 'Studio Ghibli Allemagne',
+          emoji: '🎨🇩🇪',
+          description: 'Personnage Studio Ghibli dans décor Oktoberfest',
+          country: 'Allemagne',
+          category: 'artistique',
+          preview: '/previews/ghibli-germany.jpg',
+          featured: true
+        },
+        {
+          id: 'ghibli-france',
+          name: 'Studio Ghibli France',
+          emoji: '🎨🇫🇷',
+          description: 'Personnage Studio Ghibli dans décor français',
+          country: 'France',
+          category: 'artistique',
+          preview: '/previews/ghibli-france.jpg',
+          featured: true
+        },
+        {
+          id: 'ghibli-conflans',
+          name: 'Studio Ghibli Conflans',
+          emoji: '🎨🏘️',
+          description: 'Personnage Studio Ghibli à Conflans Sainte Honorine',
+          country: 'France',
+          category: 'artistique',
+          preview: '/previews/ghibli-conflans.jpg',
+          featured: true
         }
       ]
       categories.value = ['all', 'historique', 'monument', 'religieux', 'nature', 'artistique', 'patriotique']
