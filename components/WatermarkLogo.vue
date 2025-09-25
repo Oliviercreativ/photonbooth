@@ -1,7 +1,7 @@
 <template>
   <div class="watermark-logo fixed bottom-4 right-4 z-50">
     <a 
-      href="https://grinch.fr" 
+      href="https://madeinconflans.grinch.fr" 
       target="_blank" 
       rel="noopener noreferrer"
       class="block transition-all duration-300 hover:scale-110 hover:opacity-80"

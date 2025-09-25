@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-gray-900 p-4">
     <div class="max-w-6xl mx-auto">
       <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-white">📸 Session Photobooth</h1>
+        <h1 class="text-3xl font-bold text-white">Photobooth par made in Conflans</h1>
         <NuxtLink
           to="/"
           class="text-white/80 hover:text-white transition-colors"
@@ -107,31 +107,6 @@
             </div>
           </div>
 
-          <!-- Statistiques -->
-          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-            <h3 class="text-lg font-semibold text-white mb-4">
-              📊 Statistiques
-            </h3>
-            <div class="space-y-3">
-              <div class="flex justify-between">
-                <span class="text-white/70">Photos prises :</span>
-                <span class="text-white font-medium">{{ photos.length }}</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-white/70">Traitées par IA :</span>
-                <span class="text-green-400 font-medium">{{
-                  processedCount
-                }}</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-white/70">Fond favori :</span>
-                <span class="text-white font-medium">{{
-                  favoriteBackground
-                }}</span>
-              </div>
-            </div>
-          </div>
-
           <!-- Actions rapides -->
           <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6">
             <h3 class="text-lg font-semibold text-white mb-4">⚡ Actions</h3>
@@ -181,7 +156,7 @@
       >
         <div class="flex justify-between items-center mb-6">
           <h3 class="text-2xl font-bold text-white">
-            🖼️ Galerie ({{ photos.length }})
+          Galerie de photos ({{ photos.length }})
           </h3>
           <button
             @click="showGallery = false"
@@ -221,7 +196,7 @@
                   @click="downloadPhoto(photo)"
                   class="bg-blue-500 text-white w-8 h-8 rounded-full text-xs flex items-center justify-center"
                 >
-                  📥
+                  
                 </button>
                 <button
                   @click="removePhoto(photos.indexOf(photo))"

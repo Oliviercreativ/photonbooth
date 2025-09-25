@@ -511,6 +511,26 @@ export default defineEventHandler(async (event) => {
       preview: '/previews/frozen-transformed.jpg',
       featured: true
     },
+    {
+      id: 'kpop-pure-original',
+      name: 'K-pop Fond Original',
+      emoji: '💫📷',
+      description: 'Style K-pop avec fond original de la photo',
+      country: 'K-pop',
+      category: 'artistique',
+      preview: '/previews/kpop-pure-original.jpg',
+      featured: true
+    },
+    {
+      id: 'kpop-pure-transformed',
+      name: 'K-pop Monde Entier',
+      emoji: '💫🌍',
+      description: 'Style K-pop avec décor clip vidéo transformé',
+      country: 'K-pop',
+      category: 'artistique',
+      preview: '/previews/kpop-pure-transformed.jpg',
+      featured: true
+    },
   ]
 
   const query = getQuery(event)

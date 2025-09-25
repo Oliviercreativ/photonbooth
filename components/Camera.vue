@@ -304,7 +304,8 @@ const filteredBackgrounds = computed(() => {
         bg.id.includes('aura-glow-dreamworks-transformed') ||
         bg.id.includes('aura-glow-pixar-transformed') ||
         bg.id.includes('aura-glow-pure-original') ||
-        bg.id.includes('captain-future-transformed')
+        bg.id.includes('captain-future-transformed') ||
+        bg.id.includes('kpop-pure-transformed')
       )
     case 'original':
       // Fonds "Monde Original" (fond original conservé)
@@ -312,7 +313,8 @@ const filteredBackgrounds = computed(() => {
         bg.id.includes('pure-original') ||
         bg.id.includes('fond-original') ||
         bg.name.includes('Fond Original') ||
-        bg.id.includes('captain-future-original')
+        bg.id.includes('captain-future-original') ||
+        bg.id.includes('kpop-pure-original')
       )
     default:
       return backgrounds.value
@@ -614,6 +616,18 @@ const backgrounds = ref([
     name: 'Reine des Neiges Monde Entier',
     emoji: '❄️👑🌍',
     preview: '/previews/frozen-transformed.jpg'
+  },
+  {
+    id: 'kpop-pure-original',
+    name: 'K-pop Fond Original',
+    emoji: '💫📷',
+    preview: '/previews/kpop-pure-original.jpg'
+  },
+  {
+    id: 'kpop-pure-transformed',
+    name: 'K-pop Monde Entier',
+    emoji: '💫🌍',
+    preview: '/previews/kpop-pure-transformed.jpg'
   },
 ])
 

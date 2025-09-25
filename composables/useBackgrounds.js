@@ -454,7 +454,7 @@ export const useBackgrounds = () => {
     name: 'Aura Lumineuse Fond Original',
     emoji: '✨📷',
     description: 'Personnage avec aura lumineuse et fond original',
-    country: 'Mystique',
+    country: 'Animation',
     category: 'artistique',
     preview: '/previews/aura-glow-pure-original.jpg',
     featured: true
@@ -517,6 +517,26 @@ export const useBackgrounds = () => {
     country: 'Magique',
     category: 'artistique',
     preview: '/previews/frozen-transformed.jpg',
+    featured: true
+  },
+  {
+    id: 'kpop-pure-original',
+    name: 'K-pop Fond Original',
+    emoji: '💫📷',
+    description: 'Style K-pop avec fond original de la photo',
+    country: 'K-pop',
+    category: 'artistique',
+    preview: '/previews/kpop-pure-original.jpg',
+    featured: true
+  },
+  {
+    id: 'kpop-pure-transformed',
+    name: 'K-pop Monde Entier',
+    emoji: '💫🌍',
+    description: 'Style K-pop avec décor clip vidéo transformé',
+    country: 'K-pop',
+    category: 'artistique',
+    preview: '/previews/kpop-pure-transformed.jpg',
     featured: true
   },
       ]
