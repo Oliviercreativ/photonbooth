@@ -10,7 +10,12 @@ export default {
     "./error.vue"
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'sans': ['Rubik', 'system-ui', 'sans-serif'],
+        'rubik': ['Rubik', 'system-ui', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 }

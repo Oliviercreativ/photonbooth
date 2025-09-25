@@ -1,31 +1,25 @@
 <template>
   <div class="min-h-screen bg-gray-900 p-4">
-    <div class="max-w-6xl mx-auto">
-      <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-white">Photobooth par made in Conflans</h1>
-      </div>
+    <div class="container mx-auto">
 
-      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <!-- Caméra principale -->
         <div class="xl:col-span-2">
-          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-            <h2 class="text-xl font-semibold text-white mb-4">
-              Caméra avec IA Gemini
-            </h2>
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl">
             <Camera ref="cameraRef" @photo-captured="handlePhotoCaptured" @show-gallery="showGallery = true" />
           </div>
         </div>
 
         <!-- Galerie et contrôles -->
-        <div class="space-y-6">
+        <div class="space-y-6 xl:col-span-2">
           <!-- Photos récentes -->
           <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-            <div class="flex justify-between items-center mb-4">
+            <div class="flex justify-between items-center">
               <h2 class="text-xl font-semibold text-white">
                 Photos ({{ photos.length }})
               </h2>
               <button @click="showGallery = true" class="text-white/70 hover:text-white transition-colors">
-                Voir tout →
+                <Icon name="heroicons:photo" />
               </button>
             </div>
 
@@ -89,9 +83,9 @@
                 class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors"
                 :disabled="isSaving || photos.length === 0">
                 {{
-                  isSaving
-                    ? '💾 Sauvegarde...'
-                    : `☁️ Sauvegarder (${photos.length})`
+                isSaving
+                ? '💾 Sauvegarde...'
+                : `☁️ Sauvegarder (${photos.length})`
                 }}
               </button>
 

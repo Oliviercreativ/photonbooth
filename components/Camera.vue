@@ -28,9 +28,9 @@
     <div class="absolute top-4 left-4 right-4 z-20">
         <button
           @click="openBackgroundSelector"
-          class="w-full bg-black/70 text-white px-6 py-4 rounded-full text-lg font-semibold backdrop-blur shadow-lg border border-white/20 min-h-[56px] touch-manipulation"
+          class="w-full bg-white/50 text-gray-900 px-6 py-2 rounded-full text-lg font-semibold backdrop-blur shadow-lg min-h-[56px] touch-manipulation"
         >
-          🌍 {{ selectedBackground?.name || 'Choisir un fond' }}
+          {{ selectedBackground?.name || 'Choisir un fond' }}
         </button>
       </div>
 
@@ -117,7 +117,7 @@
     <!-- Onglet Photos -->
     <div v-if="activeMobileTab === 'photos'" class="h-full w-full relative pb-20">
       <div class="p-4 pt-16">
-        <h2 class="text-white text-2xl font-bold mb-6 text-center">📸 Mes Photos</h2>
+        <h2 class="text-white text-2xl font-bold mb-6 text-center">Mes Photos</h2>
         
         <!-- Galerie des photos -->
         <div v-if="capturedPhotos.length > 0" class="grid grid-cols-2 gap-4">
@@ -197,7 +197,7 @@
       <div class="text-center text-white bg-black/80 p-6 rounded-xl">
         <div class="text-4xl mb-3 animate-spin">⏳</div>
         <p class="text-lg font-medium">{{ processingStep }}</p>
-        <p class="text-sm opacity-75 mt-2">Gemini analyse votre photo...</p>
+        <p class="text-sm opacity-75 mt-2">Analyse votre photo...</p>
       </div>
     </div>
 
@@ -210,7 +210,7 @@
           class="w-12 h-12 bg-black/50 rounded-full flex items-center justify-center text-white text-xl backdrop-blur touch-manipulation"
           :disabled="!isReady || isProcessing"
         >
-          🔄
+          <Icon name="heroicons:arrow-path" />
         </button>
 
         <!-- Capture Button -->
@@ -230,12 +230,6 @@
 
         <!-- Photos prises -->
         <div class="relative">
-          <button
-            @click="$emit('show-gallery')"
-            class="w-12 h-12 bg-black/50 rounded-full flex items-center justify-center text-white text-xl backdrop-blur"
-          >
-            🖼️
-          </button>
           <span
             v-if="capturedPhotos.length > 0"
             class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-xs text-white flex items-center justify-center"
@@ -247,17 +241,11 @@
 
       <!-- Status -->
       <div class="text-center mt-3">
-        <p v-if="!selectedBackground" class="text-white/70 text-sm">
-          👆 Choisissez un fond d'écran
-        </p>
         <p
-          v-else-if="isProcessing"
+          v-if="isProcessing"
           class="text-yellow-400 text-sm animate-pulse"
         >
           ✨ {{ processingStep }}
-        </p>
-        <p v-else-if="selectedBackground" class="text-green-400 text-sm">
-          📸 Prêt ! Appuyez pour capturer
         </p>
       </div>
     </div>
@@ -619,14 +607,14 @@ const backgrounds = ref([
   },
   {
     id: 'kpop-pure-original',
-    name: 'K-pop Fond Original',
-    emoji: '💫📷',
+    name: 'K-pop Demon Hunter Fond Original',
+    emoji: '👹📷',
     preview: '/previews/kpop-pure-original.jpg'
   },
   {
     id: 'kpop-pure-transformed',
-    name: 'K-pop Monde Entier',
-    emoji: '💫🌍',
+    name: 'K-pop Demon Hunter Monde Entier',
+    emoji: '👹🌍',
     preview: '/previews/kpop-pure-transformed.jpg'
   },
 ])
@@ -743,7 +731,7 @@ const capturePhoto = async () => {
         }
 
         try {
-          processingStep.value = 'Gemini analyse la photo...'
+          processingStep.value = 'Analyse la photo...'
 
           // Envoyer à l'API Nano Banana pour traitement Gemini
           const formData = new FormData()
@@ -776,7 +764,7 @@ const capturePhoto = async () => {
             capturedPhotos.value.unshift(processedPhoto)
 
             console.log(
-              'Photo traitée avec succès par Gemini 2.5:',
+              'Photo traitée:',
               selectedBackground.value.name
             )
 

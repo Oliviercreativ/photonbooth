@@ -23,6 +23,7 @@
     "@supabase/supabase-js": "^2.57.4",
     "@vueuse/motion": "^3.0.3",
     "nuxt": "^3.13.2",
+    "nuxt-icon": "^0.6.7",
     "pinia": "^3.0.3",
     "sharp": "^0.34.4",
     "vercel": "^48.1.4",
