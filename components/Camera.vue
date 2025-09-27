@@ -264,6 +264,7 @@ const frontCamera = ref(true)
 const capturedPhotos = ref([])
 const activeTab = ref('geographic')
 const activeMobileTab = ref('camera')
+const currentSessionId = ref(null)
 
 const emit = defineEmits(['photo-captured', 'show-gallery'])
 
@@ -745,26 +746,89 @@ const capturePhoto = async () => {
           })
 
           if (response.ok) {
-            processingStep.value = 'Finalisation...'
+            processingStep.value = 'Sauvegarde...'
 
             const resultBlob = await response.blob()
             const photoUrl = URL.createObjectURL(resultBlob)
 
-            // Sauvegarder la photo traitée
+            // Créer une miniature
+            let thumbnailBlob = null
+            try {
+              // Créer un canvas pour la miniature
+              const thumbnailCanvas = document.createElement('canvas')
+              const thumbnailCtx = thumbnailCanvas.getContext('2d')
+              
+              // Calculer les dimensions pour 200x200 max
+              const maxSize = 200
+              const ratio = Math.min(maxSize / canvas.width, maxSize / canvas.height)
+              thumbnailCanvas.width = canvas.width * ratio
+              thumbnailCanvas.height = canvas.height * ratio
+              
+              // Dessiner la miniature
+              if (frontCamera.value) {
+                thumbnailCtx.scale(-1, 1)
+                thumbnailCtx.drawImage(video, -thumbnailCanvas.width, 0, thumbnailCanvas.width, thumbnailCanvas.height)
+                thumbnailCtx.scale(-1, 1)
+              } else {
+                thumbnailCtx.drawImage(video, 0, 0, thumbnailCanvas.width, thumbnailCanvas.height)
+              }
+              
+              // Convertir en blob avec compression
+              thumbnailBlob = await new Promise(resolve => {
+                thumbnailCanvas.toBlob(resolve, 'image/jpeg', 0.6)
+              })
+            } catch (error) {
+              console.warn('Erreur création miniature:', error)
+            }
+
+            // Préparer FormData pour l'upload
+            const formData = new FormData()
+            formData.append('image', blob, 'photo.jpg')
+            if (thumbnailBlob) {
+              formData.append('thumbnail', thumbnailBlob, 'thumbnail.jpg')
+            }
+            formData.append('background_id', selectedBackground.value.id)
+            formData.append('background_name', selectedBackground.value.name)
+            if (currentSessionId.value) {
+              formData.append('session_id', currentSessionId.value)
+            }
+
+            // Upload vers Supabase Storage
+            const uploadResponse = await fetch('/api/photos/upload', {
+              method: 'POST',
+              body: formData
+            })
+
+            const uploadResult = await uploadResponse.json()
+            
+            if (uploadResponse.ok) {
+              console.log('Photo uploadée dans Supabase Storage:', uploadResult.photo.id)
+              
+              // Stocker l'ID de session pour les photos suivantes
+              if (uploadResult.session_id) {
+                currentSessionId.value = uploadResult.session_id
+              }
+            } else {
+              console.error('Erreur upload Supabase:', uploadResult)
+            }
+
+            // Sauvegarder la photo traitée localement avec l'URL Supabase
             const processedPhoto = {
               id: Date.now(),
-              url: photoUrl,
+              url: uploadResult.photo?.photo_url || photoUrl, // URL Supabase ou fallback local
               originalUrl: canvas.toDataURL('image/jpeg', 0.8),
               background: selectedBackground.value.name,
               backgroundId: selectedBackground.value.id,
               timestamp: new Date().toLocaleString(),
-              processed: true
+              processed: true,
+              supabaseId: uploadResult.photo?.id || null,
+              thumbnailUrl: uploadResult.photo?.photo_thumbnail || null
             }
 
             capturedPhotos.value.unshift(processedPhoto)
 
             console.log(
-              'Photo traitée:',
+              'Photo traitée et uploadée:',
               selectedBackground.value.name
             )
 
@@ -791,7 +855,8 @@ const capturePhoto = async () => {
             backgroundId: 'original',
             timestamp: new Date().toLocaleString(),
             processed: false,
-            error: true
+            error: true,
+            supabaseId: null
           }
 
           capturedPhotos.value.unshift(originalPhoto)
