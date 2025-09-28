@@ -15,6 +15,9 @@ export default {
         'sans': ['Rubik', 'system-ui', 'sans-serif'],
         'rubik': ['Rubik', 'system-ui', 'sans-serif'],
       },
+      colors: {
+        'brand': '#33cccc',
+      },
     },
   },
   plugins: [],
