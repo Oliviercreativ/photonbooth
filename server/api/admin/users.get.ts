@@ -2,14 +2,6 @@ import { createClient } from '@supabase/supabase-js'
 
 export default defineEventHandler(async (event) => {
   try {
-    // Vérifier l'authentification admin
-    const token = getHeader(event, 'authorization')?.replace('Bearer ', '')
-    if (!token) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Token d\'authentification requis'
-      })
-    }
 
     // Configuration Supabase
     const config = useRuntimeConfig()

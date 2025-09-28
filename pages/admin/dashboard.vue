@@ -214,14 +214,8 @@ const isUploading = ref(false)
 const totalPhotos = ref(0)
 const emailsSent = ref(0)
 
-// Vérifier l'authentification
+// Charger les données au montage
 onMounted(async () => {
-  const token = localStorage.getItem('admin_token')
-  if (!token) {
-    await navigateTo('/admin/login')
-    return
-  }
-
   await loadUsers()
   await loadStats()
 })
@@ -305,12 +299,12 @@ const formatFileSize = (bytes) => {
 }
 
 const logout = () => {
-  localStorage.removeItem('admin_token')
-  navigateTo('/admin/login')
+  navigateTo('/')
 }
 
 definePageMeta({
   layout: false,
-  title: 'Dashboard Admin - Photobooth'
+  title: 'Dashboard Admin - Photobooth',
+  middleware: 'admin'
 })
 </script>
