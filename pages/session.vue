@@ -1,207 +1,51 @@
 <template>
   <div class="min-h-screen bg-gray-900 p-4">
-    <div class="max-w-6xl mx-auto">
-      <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-white">Photobooth par made in Conflans</h1>
-        <NuxtLink
-          to="/"
-          class="text-white/80 hover:text-white transition-colors"
-          >← Retour</NuxtLink
-        >
-      </div>
+    <div class="container mx-auto">
 
-      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <!-- Caméra principale -->
         <div class="xl:col-span-2">
-          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-            <h2 class="text-xl font-semibold text-white mb-4">
-              Caméra avec IA Gemini
-            </h2>
-            <Camera
-              ref="cameraRef"
-              @photo-captured="handlePhotoCaptured"
-              @show-gallery="showGallery = true"
-            />
-          </div>
-        </div>
-
-        <!-- Galerie et contrôles -->
-        <div class="space-y-6">
-          <!-- Photos récentes -->
-          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-            <div class="flex justify-between items-center mb-4">
-              <h2 class="text-xl font-semibold text-white">
-                Photos ({{ photos.length }})
-              </h2>
-              <button
-                @click="showGallery = true"
-                class="text-white/70 hover:text-white transition-colors"
-              >
-                Voir tout →
-              </button>
-            </div>
-
-            <!-- Aperçu des dernières photos -->
-            <div v-if="photos.length === 0" class="text-center py-8">
-              <div class="text-4xl mb-2">📸</div>
-              <p class="text-white/60">Aucune photo prise</p>
-              <p class="text-white/40 text-sm mt-2">
-                Choisissez un fond et capturez votre première photo !
-              </p>
-            </div>
-
-            <div v-else class="grid grid-cols-2 gap-3 max-h-64 overflow-y-auto">
-              <div
-                v-for="(photo, index) in photos.slice(0, 6)"
-                :key="photo.id"
-                class="relative group cursor-pointer"
-                @click="previewPhoto(photo)"
-              >
-                <img
-                  :src="photo.url"
-                  :alt="`Photo ${index + 1}`"
-                  class="w-full aspect-square object-cover rounded-lg"
-                  :class="
-                    photo.processed
-                      ? 'ring-2 ring-green-400'
-                      : 'ring-2 ring-yellow-400'
-                  "
-                />
-
-                <!-- Badge de statut -->
-                <div class="absolute top-1 left-1">
-                  <span
-                    v-if="photo.processed"
-                    class="bg-green-500 text-white text-xs px-1 py-0.5 rounded"
-                  >
-                    ✨ IA
-                  </span>
-                  <span
-                    v-else-if="photo.error"
-                    class="bg-red-500 text-white text-xs px-1 py-0.5 rounded"
-                  >
-                    ⚠️
-                  </span>
-                </div>
-
-                <!-- Actions au hover -->
-                <div
-                  class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center"
-                >
-                  <div class="flex gap-2">
-                    <button
-                      @click.stop="downloadPhoto(photo)"
-                      class="bg-blue-500 text-white w-8 h-8 rounded-full text-xs flex items-center justify-center"
-                    >
-                      📥
-                    </button>
-                    <button
-                      @click.stop="removePhoto(index)"
-                      class="bg-red-500 text-white w-8 h-8 rounded-full text-xs flex items-center justify-center"
-                    >
-                      🗑️
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Actions rapides -->
-          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-            <h3 class="text-lg font-semibold text-white mb-4">⚡ Actions</h3>
-            <div class="space-y-3">
-              <button
-                @click="downloadAllPhotos"
-                class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors"
-                :disabled="photos.length === 0"
-              >
-                📥 Télécharger tout ({{ photos.length }})
-              </button>
-
-              <button
-                @click="saveToSupabase"
-                class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors"
-                :disabled="isSaving || photos.length === 0"
-              >
-                {{
-                  isSaving
-                    ? '💾 Sauvegarde...'
-                    : `☁️ Sauvegarder (${photos.length})`
-                }}
-              </button>
-
-              <button
-                @click="clearAllPhotos"
-                class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors"
-                :disabled="photos.length === 0"
-              >
-                🗑️ Tout effacer
-              </button>
-            </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl">
+            <Camera ref="cameraRef" @photo-captured="handlePhotoCaptured" @show-gallery="showGallery = true" />
           </div>
         </div>
       </div>
     </div>
 
     <!-- Galerie plein écran -->
-    <div
-      v-if="showGallery"
-      class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center"
-      @click="showGallery = false"
-    >
-      <div
-        class="bg-gray-900 rounded-xl p-6 max-w-4xl max-h-[90vh] overflow-y-auto m-4"
-        @click.stop
-      >
+    <div v-if="showGallery" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center"
+      @click="showGallery = false">
+      <div class="bg-gray-900 rounded-xl p-6 max-w-4xl max-h-[90vh] overflow-y-auto m-4" @click.stop>
         <div class="flex justify-between items-center mb-6">
           <h3 class="text-2xl font-bold text-white">
-          Galerie de photos ({{ photos.length }})
+            Galerie de photos ({{ photos.length }})
           </h3>
-          <button
-            @click="showGallery = false"
-            class="text-white text-2xl hover:text-red-400 transition-colors"
-          >
+          <button @click="showGallery = false" class="text-white text-2xl hover:text-red-400 transition-colors">
             ✕
           </button>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          <div
-            v-for="(photo, index) in photos"
-            :key="photo.id"
-            class="relative group"
-          >
-            <img
-              :src="photo.url"
-              :alt="`Photo ${index + 1}`"
-              class="w-full aspect-square object-cover rounded-lg cursor-pointer"
-              @click="previewPhoto(photo)"
-            />
+          <div v-for="(photo, index) in photos" :key="photo.id" class="relative group">
+            <img :src="photo.url" :alt="`Photo ${index + 1}`"
+              class="w-full aspect-square object-cover rounded-lg cursor-pointer" @click="previewPhoto(photo)" />
 
             <!-- Infos photo -->
             <div
-              class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2 rounded-b-lg"
-            >
+              class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2 rounded-b-lg">
               <p class="text-white text-xs">{{ photo.background }}</p>
               <p class="text-white/60 text-xs">{{ photo.timestamp }}</p>
             </div>
 
             <!-- Actions -->
-            <div
-              class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-            >
+            <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
               <div class="flex gap-1">
-                <button
-                  @click="downloadPhoto(photo)"
-                  class="bg-blue-500 text-white w-8 h-8 rounded-full text-xs flex items-center justify-center"
-                >
-                  
+                <button @click="downloadPhoto(photo)"
+                  class="bg-blue-500 text-white w-8 h-8 rounded-full text-xs flex items-center justify-center">
+
                 </button>
-                <button
-                  @click="removePhoto(photos.indexOf(photo))"
-                  class="bg-red-500 text-white w-8 h-8 rounded-full text-xs flex items-center justify-center"
-                >
+                <button @click="removePhoto(photos.indexOf(photo))"
+                  class="bg-red-500 text-white w-8 h-8 rounded-full text-xs flex items-center justify-center">
                   🗑️
                 </button>
               </div>
@@ -212,19 +56,27 @@
     </div>
 
     <!-- Toast de notification -->
-    <div
-      v-if="toast.show"
-      class="fixed bottom-20 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-40"
-    >
+    <div v-if="toast.show" class="fixed bottom-20 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-40">
       {{ toast.message }}
     </div>
-    
-    <!-- Watermark Logo -->
-    <WatermarkLogo />
+
+
   </div>
 </template>
 
 <script setup>
+definePageMeta({
+  layout: 'default'
+})
+
+// Vérifier l'authentification
+const user = useSupabaseUser()
+
+// Rediriger vers l'auth si pas connecté
+if (!user.value) {
+  await navigateTo('/auth')
+}
+
 const photos = ref([])
 const isSaving = ref(false)
 const showGallery = ref(false)
@@ -363,10 +215,6 @@ onUnmounted(() => {
     }
   })
 })
-
-definePageMeta({
-  title: 'Session Photobooth - IA Gemini'
-})
 </script>
 
 <style scoped>
@@ -376,13 +224,14 @@ definePageMeta({
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-.grid > div {
+.grid>div {
   animation: slideIn 0.3s ease-out;
 }
 

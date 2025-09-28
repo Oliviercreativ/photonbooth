@@ -93,10 +93,14 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // Côté serveur seulement
     geminiApiKey: process.env.GEMINI_API_KEY,
-
+    supabaseUrl: process.env.SUPABASE_URL,
+    supabaseServiceKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+    supabaseAnonKey: process.env.SUPABASE_ANON_KEY,
     // Côté client aussi
     public: {
-      appName: 'Mon Photobooth'
+      appName: 'Mon Photobooth',
+      supabaseUrl: process.env.SUPABASE_URL,
+      supabaseAnonKey: process.env.SUPABASE_ANON_KEY
     }
   }
 })

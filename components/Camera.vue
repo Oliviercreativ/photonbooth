@@ -1,79 +1,45 @@
 <template>
   <div class="camera-container">
-    <!-- Menu mobile -->
-    <div class="fixed bottom-0 left-0 right-0 z-30 bg-black/90 backdrop-blur border-t border-white/20">
-      <div class="flex">
-        <button
-          @click="activeMobileTab = 'camera'"
-          class="flex-1 flex flex-col items-center py-3 touch-manipulation"
-          :class="activeMobileTab === 'camera' ? 'text-blue-400' : 'text-white/70'"
-        >
-          <span class="text-2xl mb-1">📷</span>
-          <span class="text-xs font-medium">Caméra</span>
-        </button>
-        <button
-          @click="activeMobileTab = 'photos'"
-          class="flex-1 flex flex-col items-center py-3 touch-manipulation"
-          :class="activeMobileTab === 'photos' ? 'text-blue-400' : 'text-white/70'"
-        >
-          <span class="text-2xl mb-1">🖼️</span>
-          <span class="text-xs font-medium">Photos</span>
-        </button>
-      </div>
-    </div>
 
     <!-- Onglet Caméra -->
     <div v-if="activeMobileTab === 'camera'" class="h-full w-full relative pb-20">
       <!-- Bouton choisir fond en haut -->
-    <div class="absolute top-4 left-4 right-4 z-20">
-        <button
-          @click="openBackgroundSelector"
-          class="w-full bg-white/50 text-gray-900 px-6 py-2 rounded-full text-lg font-semibold backdrop-blur shadow-lg min-h-[56px] touch-manipulation"
-        >
-          {{ selectedBackground?.name || 'Choisir un fond' }}
+      <div class="absolute top-4 left-4 right-4 z-20">
+        <button @click="openBackgroundSelector"
+          class="w-full bg-white/50 text-gray-900 px-6 py-2 rounded-full text-lg font-semibold backdrop-blur shadow-lg min-h-[56px] touch-manipulation">
+          {{ selectedBackground?.name || 'Choisir un effet' }}
         </button>
       </div>
 
       <!-- Sélecteur de fond -->
-      <div
-        v-if="showBackgroundSelector"
-        class="fixed inset-0 bg-black/95 backdrop-blur z-50 flex flex-col"
-      >
+      <div v-if="showBackgroundSelector" class="fixed inset-0 bg-black/95 backdrop-blur z-50 flex flex-col h-screen">
         <!-- Header -->
         <div class="flex justify-between items-center p-4 border-b border-white/20">
-          <h2 class="text-white text-lg sm:text-xl font-bold">🌍 Choisir un fond</h2>
-          <button
-            @click="showBackgroundSelector = false"
-            class="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white px-4 py-3 rounded-lg transition-colors touch-manipulation min-h-[48px] min-w-[80px] font-semibold"
-          >
+          <h2 class="text-white text-lg sm:text-xl font-bold">Choisissez un effet</h2>
+          <button @click="showBackgroundSelector = false"
+            class="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white px-4 py-3 rounded-lg transition-colors touch-manipulation min-h-[48px] min-w-[80px] font-semibold">
             ✕ Fermer
           </button>
         </div>
 
         <!-- Onglets -->
         <div class="flex border-b border-white/20">
-          <button
-            @click="activeTab = 'geographic'"
+          <button @click="activeTab = 'geographic'"
             class="flex-1 px-2 py-4 text-center transition-colors touch-manipulation min-h-[60px] flex flex-col items-center justify-center"
-            :class="activeTab === 'geographic' ? 'bg-blue-600 text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'"
-          >
-            <span class="text-xl mb-1">🌍</span>
+            :class="activeTab === 'geographic' ? 'bg-blue-600 text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'">
+            <span class="text-xl mb-1"><Icon name="heroicons:globe-alt" /></span>
             <span class="text-sm font-medium">Pays et Ville</span>
           </button>
-          <button
-            @click="activeTab = 'transformed'"
+          <button @click="activeTab = 'transformed'"
             class="flex-1 px-2 py-4 text-center transition-colors touch-manipulation min-h-[60px] flex flex-col items-center justify-center"
-            :class="activeTab === 'transformed' ? 'bg-blue-600 text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'"
-          >
-            <span class="text-xl mb-1">🌎</span>
+            :class="activeTab === 'transformed' ? 'bg-blue-600 text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'">
+            <span class="text-xl mb-1"><Icon name="heroicons:globe-alt" /></span>
             <span class="text-sm font-medium">Monde Entier</span>
           </button>
-          <button
-            @click="activeTab = 'original'"
+          <button @click="activeTab = 'original'"
             class="flex-1 px-2 py-4 text-center transition-colors touch-manipulation min-h-[60px] flex flex-col items-center justify-center"
-            :class="activeTab === 'original' ? 'bg-blue-600 text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'"
-          >
-            <span class="text-xl mb-1">📷</span>
+            :class="activeTab === 'original' ? 'bg-blue-600 text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'">
+            <span class="text-xl mb-1"><Icon name="heroicons:camera" /></span>
             <span class="text-sm font-medium">Monde Original</span>
           </button>
         </div>
@@ -81,30 +47,21 @@
         <!-- Grille des fonds -->
         <div class="flex-1 overflow-y-auto p-3 sm:p-4">
           <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
-            <div
-              v-for="bg in filteredBackgrounds"
-              :key="bg.id"
-              @click="selectBackground(bg)"
+            <div v-for="bg in filteredBackgrounds" :key="bg.id" @click="selectBackground(bg)"
               class="relative cursor-pointer rounded-xl overflow-hidden group active:scale-95 transition-transform duration-150 touch-manipulation"
-              :class="
-                selectedBackground?.id === bg.id ? 'ring-4 ring-blue-400 shadow-xl' : 'ring-2 ring-transparent hover:ring-white/30'
-              "
-            >
+              :class="selectedBackground?.id === bg.id ? 'ring-4 ring-blue-400 shadow-xl' : 'ring-2 ring-transparent hover:ring-white/30'
+                ">
               <img :src="bg.preview" class="w-full h-28 sm:h-32 md:h-40 lg:h-48 object-cover" />
-              <div
-                class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent"
-              >
+              <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent">
                 <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-3">
                   <p class="text-white text-base sm:text-lg font-bold mb-1">{{ bg.emoji }}</p>
                   <p class="text-white text-xs sm:text-sm opacity-95 leading-tight font-medium">{{ bg.name }}</p>
                 </div>
               </div>
-              
+
               <!-- Indicateur de sélection -->
-              <div
-                v-if="selectedBackground?.id === bg.id"
-                class="absolute top-2 right-2 w-7 h-7 sm:w-8 sm:h-8 bg-blue-500 rounded-full flex items-center justify-center shadow-lg"
-              >
+              <div v-if="selectedBackground?.id === bg.id"
+                class="absolute top-2 right-2 w-7 h-7 sm:w-8 sm:h-8 bg-blue-500 rounded-full flex items-center justify-center shadow-lg">
                 <span class="text-white text-sm sm:text-base font-bold">✓</span>
               </div>
             </div>
@@ -118,14 +75,11 @@
     <div v-if="activeMobileTab === 'photos'" class="h-full w-full relative pb-20">
       <div class="p-4 pt-16">
         <h2 class="text-white text-2xl font-bold mb-6 text-center">Mes Photos</h2>
-        
+
         <!-- Galerie des photos -->
         <div v-if="capturedPhotos.length > 0" class="grid grid-cols-2 gap-4">
-          <div
-            v-for="(photo, index) in capturedPhotos"
-            :key="index"
-            class="relative aspect-square rounded-xl overflow-hidden shadow-lg"
-          >
+          <div v-for="(photo, index) in capturedPhotos" :key="index"
+            class="relative aspect-square rounded-xl overflow-hidden shadow-lg">
             <img :src="photo.processedImage" class="w-full h-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent">
               <div class="absolute bottom-2 left-2 right-2">
@@ -134,15 +88,13 @@
               </div>
             </div>
             <!-- Bouton de téléchargement -->
-        <button
-              @click="downloadPhoto(photo)"
-              class="absolute top-2 right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg touch-manipulation"
-        >
+            <button @click="downloadPhoto(photo)"
+              class="absolute top-2 right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg touch-manipulation">
               <span class="text-white text-sm">⬇️</span>
         </button>
           </div>
         </div>
-        
+
         <!-- Message si pas de photos -->
         <div v-else class="flex flex-col items-center justify-center h-64 text-white/70">
           <span class="text-6xl mb-4">📷</span>
@@ -154,46 +106,32 @@
 
     <!-- Vidéo avec contraintes de résolution -->
     <div v-if="activeMobileTab === 'camera'" class="fixed inset-0 z-0">
-    <video
-      ref="videoElement"
-      autoplay
-      playsinline
-      muted
-        class="w-full h-full object-cover"
-      :class="{mirror: frontCamera}"
-    ></video>
+      <!-- Caméra active -->
+      <video v-if="isCameraActive" ref="videoElement" autoplay playsinline muted class="w-full h-full object-cover"
+        :class="{ mirror: frontCamera }"></video>
+      
+      <!-- Caméra éteinte -->
+      <div v-else class="w-full h-full bg-gray-900 flex items-center justify-center">
+        <div class="text-center text-white">
+          <div class="text-6xl mb-4">📷</div>
+          <p class="text-lg font-medium mb-2">Caméra éteinte</p>
+          <p class="text-sm opacity-75">Sélectionnez un fond pour activer la caméra</p>
+        </div>
+      </div>
     </div>
 
     <canvas ref="canvasElement" class="hidden"></canvas>
 
     <!-- Guide de positionnement -->
-    <div
-      v-if="selectedBackground && activeMobileTab === 'camera'"
-      class="absolute inset-8 border-2 border-white/60 pointer-events-none rounded-lg"
-    >
-      <div
-        class="absolute -top-8 left-0 bg-black/70 text-white text-xs px-2 py-1 rounded"
-      >
+    <div v-if="selectedBackground && activeMobileTab === 'camera' && isCameraActive"
+      class="absolute inset-8 border-2 border-white/60 pointer-events-none rounded-lg">
+      <div class="absolute -top-8 left-0 bg-black/70 text-white text-xs px-2 py-1 rounded">
         Placez-vous dans le cadre
       </div>
     </div>
 
-    <!-- Instructions si pas de fond sélectionné -->
-    <div
-      v-if="!selectedBackground"
-      class="absolute inset-0 flex items-center justify-center bg-black/30"
-    >
-      <div class="text-center text-white bg-black/70 p-4 rounded-xl">
-        <div class="text-3xl mb-2">📸</div>
-        <p class="text-sm">Choisissez un fond pour commencer</p>
-      </div>
-    </div>
-
     <!-- État de traitement -->
-    <div
-      v-if="isProcessing"
-      class="absolute inset-0 bg-black/50 flex items-center justify-center"
-    >
+    <div v-if="isProcessing" class="absolute inset-0 bg-black/50 flex items-center justify-center">
       <div class="text-center text-white bg-black/80 p-6 rounded-xl">
         <div class="text-4xl mb-3 animate-spin">⏳</div>
         <p class="text-lg font-medium">{{ processingStep }}</p>
@@ -205,35 +143,36 @@
     <div v-if="activeMobileTab === 'camera'" class="absolute bottom-24 left-0 right-0 px-4">
       <div class="flex items-center justify-between">
         <!-- Switch Camera -->
-        <button
-          @click="switchCamera"
+        <button @click="switchCamera"
           class="w-12 h-12 bg-black/50 rounded-full flex items-center justify-center text-white text-xl backdrop-blur touch-manipulation"
-          :disabled="!isReady || isProcessing"
-        >
+          :disabled="!isReady || isProcessing || !isCameraActive">
           <Icon name="heroicons:arrow-path" />
         </button>
 
         <!-- Capture Button -->
-        <button
-          @click="capturePhoto"
+        <button @click="capturePhoto"
           class="w-24 h-24 bg-white border-4 border-gray-300 rounded-full flex items-center justify-center shadow-xl transition-transform touch-manipulation"
-          :disabled="!isReady || !selectedBackground || isProcessing"
-          :class="isProcessing ? 'animate-pulse' : 'active:scale-95'"
-        >
-          <div
-            class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center"
-          >
-            <span v-if="isProcessing" class="text-white text-xs">⏳</span>
-            <span v-else class="text-white text-2xl">📷</span>
+          :disabled="!isReady || !selectedBackground || isProcessing || !isCameraActive"
+          :class="isProcessing ? 'animate-pulse' : 'active:scale-95'">
+          <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center">
+            <Icon 
+              v-if="isProcessing" 
+              name="heroicons:clock" 
+              class="text-white text-sm"
+            />
+            <Icon 
+              v-else 
+              name="heroicons:camera" 
+              class="text-white text-2xl"
+            />
           </div>
         </button>
 
+
         <!-- Photos prises -->
         <div class="relative">
-          <span
-            v-if="capturedPhotos.length > 0"
-            class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-xs text-white flex items-center justify-center"
-          >
+          <span v-if="capturedPhotos.length > 0"
+            class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">
             {{ capturedPhotos.length }}
           </span>
         </div>
@@ -241,10 +180,7 @@
 
       <!-- Status -->
       <div class="text-center mt-3">
-        <p
-          v-if="isProcessing"
-          class="text-yellow-400 text-sm animate-pulse"
-        >
+        <p v-if="isProcessing" class="text-yellow-400 text-sm animate-pulse">
           ✨ {{ processingStep }}
         </p>
       </div>
@@ -253,13 +189,17 @@
 </template>
 
 <script setup>
+const user = useSupabaseUser()
+const supabase = useSupabaseClient()
+
 const videoElement = ref(null)
 const canvasElement = ref(null)
 const isReady = ref(false)
 const isProcessing = ref(false)
 const processingStep = ref('')
 const selectedBackground = ref(null)
-const showBackgroundSelector = ref(false)
+const isCameraActive = ref(false)
+const showBackgroundSelector = ref(true)
 const frontCamera = ref(true)
 const capturedPhotos = ref([])
 const activeTab = ref('geographic')
@@ -273,11 +213,11 @@ const filteredBackgrounds = computed(() => {
   switch (activeTab.value) {
     case 'geographic':
       // Fonds géographiques (pays et villes)
-      return backgrounds.value.filter(bg => 
-        bg.id.includes('belgium') || 
-        bg.id.includes('uk') || 
-        bg.id.includes('germany') || 
-        bg.id.includes('france') || 
+      return backgrounds.value.filter(bg =>
+        bg.id.includes('belgium') ||
+        bg.id.includes('uk') ||
+        bg.id.includes('germany') ||
+        bg.id.includes('france') ||
         bg.id.includes('conflans') ||
         bg.id.includes('beach') ||
         bg.id.includes('brussels') ||
@@ -286,7 +226,7 @@ const filteredBackgrounds = computed(() => {
       )
     case 'transformed':
       // Fonds "Monde Entier" (transformation complète)
-      return backgrounds.value.filter(bg => 
+      return backgrounds.value.filter(bg =>
         bg.id.includes('pure-transformed') ||
         bg.id.includes('monde-entier') ||
         bg.name.includes('Monde Entier') ||
@@ -298,7 +238,7 @@ const filteredBackgrounds = computed(() => {
       )
     case 'original':
       // Fonds "Monde Original" (fond original conservé)
-      return backgrounds.value.filter(bg => 
+      return backgrounds.value.filter(bg =>
         bg.id.includes('pure-original') ||
         bg.id.includes('fond-original') ||
         bg.name.includes('Fond Original') ||
@@ -621,11 +561,26 @@ const backgrounds = ref([
 ])
 
 onMounted(async () => {
-  await startCamera()
+  // Ne pas démarrer la caméra automatiquement
+  // await startCamera()
+})
+
+// Watcher pour démarrer la caméra quand elle est activée
+watch(isCameraActive, async (newValue) => {
+  if (newValue && !isReady.value) {
+    console.log('👀 Watcher: isCameraActive = true, démarrage de la caméra')
+    await nextTick() // S'assurer que l'élément vidéo est dans le DOM
+    await startCamera()
+  }
 })
 
 const startCamera = async () => {
   try {
+    console.log('🎬 Démarrage de la caméra...', {
+      frontCamera: frontCamera.value,
+      videoElement: videoElement.value ? 'Présent' : 'Manquant'
+    })
+
     // Contraintes optimisées pour éviter le zoom
     const constraints = {
       video: {
@@ -640,28 +595,74 @@ const startCamera = async () => {
           ideal: 720,
           max: 1080
         },
-        aspectRatio: {ideal: 16 / 9},
-        frameRate: {ideal: 30, max: 60}
+        aspectRatio: { ideal: 16 / 9 },
+        frameRate: { ideal: 30, max: 60 }
       }
     }
 
+    console.log('📹 Contraintes caméra:', constraints)
     const stream = await navigator.mediaDevices.getUserMedia(constraints)
+    console.log('✅ Stream obtenu:', {
+      active: stream.active,
+      tracks: stream.getVideoTracks().length
+    })
 
     if (videoElement.value) {
+      console.log('📺 Assignation du stream à l\'élément vidéo')
       videoElement.value.srcObject = stream
+      console.log('✅ Stream assigné:', videoElement.value.srcObject)
+
+      // Marquer la caméra comme active immédiatement
+      isCameraActive.value = true
+      console.log('✅ Caméra marquée comme active')
+
+      // Forcer la lecture de la vidéo
+      videoElement.value.play().then(() => {
+        console.log('▶️ Vidéo en cours de lecture')
+      }).catch((playError) => {
+        console.error('❌ Erreur lecture vidéo:', playError)
+      })
 
       // Attendre que la vidéo soit chargée
       videoElement.value.onloadedmetadata = () => {
         isReady.value = true
         console.log(
-          `Caméra initialisée: ${videoElement.value.videoWidth}x${videoElement.value.videoHeight}`
+          `✅ Caméra initialisée: ${videoElement.value.videoWidth}x${videoElement.value.videoHeight}`
         )
       }
+
+      // Gérer les erreurs de lecture
+      videoElement.value.onerror = (error) => {
+        console.error('❌ Erreur vidéo:', error)
+      }
+
+      // Vérifier l'état de la vidéo après un délai
+      setTimeout(() => {
+        console.log('🔍 État vidéo après 500ms:', {
+          readyState: videoElement.value.readyState,
+          paused: videoElement.value.paused,
+          ended: videoElement.value.ended,
+          srcObject: videoElement.value.srcObject ? 'Présent' : 'Absent'
+        })
+      }, 500)
+    } else {
+      console.error('❌ Élément vidéo non trouvé lors de l\'assignation du stream')
     }
   } catch (error) {
     console.error('Erreur accès caméra:', error)
     alert("Impossible d'accéder à la caméra. Vérifiez les permissions.")
   }
+}
+
+const stopCamera = () => {
+  if (videoElement.value?.srcObject) {
+    const tracks = videoElement.value.srcObject.getTracks()
+    tracks.forEach((track) => track.stop())
+    videoElement.value.srcObject = null
+  }
+  isReady.value = false
+  isCameraActive.value = false
+  console.log('📹 Caméra arrêtée')
 }
 
 const switchCamera = async () => {
@@ -675,9 +676,15 @@ const switchCamera = async () => {
   await startCamera()
 }
 
-const selectBackground = (background) => {
+const selectBackground = async (background) => {
   selectedBackground.value = background
   showBackgroundSelector.value = false
+  
+  // Activer la caméra quand un fond est sélectionné
+  if (!isCameraActive.value) {
+    console.log('🎬 Activation de la caméra - fond sélectionné:', background.name)
+    isCameraActive.value = true
+  }
 }
 
 const openBackgroundSelector = () => {
@@ -757,13 +764,13 @@ const capturePhoto = async () => {
               // Créer un canvas pour la miniature
               const thumbnailCanvas = document.createElement('canvas')
               const thumbnailCtx = thumbnailCanvas.getContext('2d')
-              
+
               // Calculer les dimensions pour 200x200 max
               const maxSize = 200
               const ratio = Math.min(maxSize / canvas.width, maxSize / canvas.height)
               thumbnailCanvas.width = canvas.width * ratio
               thumbnailCanvas.height = canvas.height * ratio
-              
+
               // Dessiner la miniature
               if (frontCamera.value) {
                 thumbnailCtx.scale(-1, 1)
@@ -772,7 +779,7 @@ const capturePhoto = async () => {
               } else {
                 thumbnailCtx.drawImage(video, 0, 0, thumbnailCanvas.width, thumbnailCanvas.height)
               }
-              
+
               // Convertir en blob avec compression
               thumbnailBlob = await new Promise(resolve => {
                 thumbnailCanvas.toBlob(resolve, 'image/jpeg', 0.6)
@@ -781,54 +788,81 @@ const capturePhoto = async () => {
               console.warn('Erreur création miniature:', error)
             }
 
-            // Préparer FormData pour l'upload
-            const formData = new FormData()
-            formData.append('image', blob, 'photo.jpg')
-            if (thumbnailBlob) {
-              formData.append('thumbnail', thumbnailBlob, 'thumbnail.jpg')
-            }
-            formData.append('background_id', selectedBackground.value.id)
-            formData.append('background_name', selectedBackground.value.name)
-            if (currentSessionId.value) {
-              formData.append('session_id', currentSessionId.value)
-            }
-
-            // Upload vers Supabase Storage
-            const uploadResponse = await fetch('/api/photos/upload', {
-              method: 'POST',
-              body: formData
-            })
-
-            const uploadResult = await uploadResponse.json()
-            
-            if (uploadResponse.ok) {
-              console.log('Photo uploadée dans Supabase Storage:', uploadResult.photo.id)
+            // Convertir le blob en base64 pour l'upload
+            const reader = new FileReader()
+            reader.onload = async () => {
+              const base64 = reader.result.split(',')[1] // Enlever le préfixe data:image/...
               
-              // Stocker l'ID de session pour les photos suivantes
-              if (uploadResult.session_id) {
-                currentSessionId.value = uploadResult.session_id
-              }
-            } else {
-              console.error('Erreur upload Supabase:', uploadResult)
-            }
+              try {
+                // Upload vers Supabase Storage avec authentification
+                const { data: { session } } = await supabase.auth.getSession()
+                
+                console.log('🔍 Session utilisateur:', session?.user?.id ? 'Connecté' : 'Non connecté')
+                console.log('🔍 Token:', session?.access_token ? 'Présent' : 'Manquant')
+                
+                const uploadResponse = await fetch('/api/upload-photo-auth', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session?.access_token}`
+                  },
+                  body: JSON.stringify({
+                    imageBase64: base64,
+                    backgroundId: selectedBackground.value.id
+                  })
+                })
 
-            // Sauvegarder la photo traitée localement avec l'URL Supabase
+                const uploadResult = await uploadResponse.json()
+
+                if (uploadResponse.ok) {
+                  console.log('✅ Photo uploadée dans Supabase:', uploadResult.fileName)
+                  console.log('📸 Photo ID:', uploadResult.photoId)
+                  
+                  // Rediriger vers la page de visualisation de la photo
+                  if (uploadResult.photoId) {
+                    console.log('🚀 Redirection vers /galerie/' + uploadResult.photoId + '/view')
+                    
+                    // Arrêter la caméra avant la redirection
+                    console.log('📷 Arrêt de la caméra - redirection vers galerie')
+                    stopCamera()
+                    
+                    // Petit délai pour s'assurer que l'image est disponible sur Supabase
+                    console.log('⏳ Attente de 2 secondes avant redirection...')
+                    processingStep.value = 'Redirection vers la galerie...'
+                    setTimeout(async () => {
+                      await navigateTo('/galerie/' + uploadResult.photoId + '/view')
+                    }, 2000)
+                    return // Arrêter l'exécution ici pour éviter les actions suivantes
+                  }
+                } else {
+                  console.error('❌ Erreur upload Supabase:', uploadResult)
+                }
+              } catch (uploadError) {
+                console.error('❌ Erreur upload:', uploadError)
+              }
+            }
+            reader.readAsDataURL(resultBlob)
+
+            // Cette partie ne s'exécutera que si la redirection n'a pas eu lieu
+            // (en cas d'erreur d'upload par exemple)
+            
+            // Sauvegarder la photo traitée localement
             const processedPhoto = {
               id: Date.now(),
-              url: uploadResult.photo?.photo_url || photoUrl, // URL Supabase ou fallback local
+              url: photoUrl, // URL locale du blob
               originalUrl: canvas.toDataURL('image/jpeg', 0.8),
               background: selectedBackground.value.name,
               backgroundId: selectedBackground.value.id,
               timestamp: new Date().toLocaleString(),
               processed: true,
-              supabaseId: uploadResult.photo?.id || null,
-              thumbnailUrl: uploadResult.photo?.photo_thumbnail || null
+              supabaseId: null, // Pas d'ID Supabase en cas d'erreur
+              thumbnailUrl: null
             }
 
             capturedPhotos.value.unshift(processedPhoto)
 
             console.log(
-              'Photo traitée et uploadée:',
+              'Photo traitée (sans upload):',
               selectedBackground.value.name
             )
 
@@ -840,6 +874,11 @@ const capturePhoto = async () => {
             setTimeout(() => {
               isProcessing.value = false
               processingStep.value = ''
+              selectedBackground.value = null
+              
+              // Arrêter la caméra après la capture
+              console.log('📷 Arrêt de la caméra - photo terminée')
+              stopCamera()
             }, 1000)
           } else {
             throw new Error(`Erreur API: ${response.status}`)
@@ -865,6 +904,10 @@ const capturePhoto = async () => {
           alert('Erreur lors du traitement IA. Photo originale sauvegardée.')
           isProcessing.value = false
           processingStep.value = ''
+          
+          // Arrêter la caméra même en cas d'erreur
+          console.log('📷 Arrêt de la caméra - erreur de traitement')
+          stopCamera()
         }
       },
       'image/jpeg',
@@ -874,6 +917,10 @@ const capturePhoto = async () => {
     console.error('Erreur capture:', error)
     isProcessing.value = false
     processingStep.value = ''
+    
+    // Arrêter la caméra en cas d'erreur de capture
+    console.log('📷 Arrêt de la caméra - erreur de capture')
+    stopCamera()
   }
 }
 
@@ -912,11 +959,10 @@ defineExpose({
 <style scoped>
 .camera-container {
   position: relative;
-  aspect-ratio: 16/9;
+  height: 100vh;
   background: #000;
   border-radius: 0.75rem;
   overflow: hidden;
-  max-height: 70vh;
 }
 
 .mirror {
@@ -927,9 +973,11 @@ defineExpose({
   0% {
     opacity: 0;
   }
+
   50% {
     opacity: 0.8;
   }
+
   100% {
     opacity: 0;
   }
@@ -938,8 +986,7 @@ defineExpose({
 /* Responsive */
 @media (max-width: 640px) {
   .camera-container {
-    aspect-ratio: 4/3;
-    max-height: 60vh;
+    height: 100%;
   }
 }
 
@@ -949,6 +996,7 @@ defineExpose({
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -981,22 +1029,23 @@ defineExpose({
 
 /* Optimisations mobile pour événements extérieurs */
 @media (max-width: 768px) {
+
   /* Améliorer la visibilité en plein soleil */
   .camera-container {
     filter: contrast(1.1) brightness(1.05);
   }
-  
+
   /* Boutons plus gros pour usage tactile */
   button {
     min-height: 44px;
     min-width: 44px;
   }
-  
+
   /* Texte plus lisible */
   .text-sm {
     font-size: 0.95rem;
   }
-  
+
   /* Espacement optimisé pour les doigts */
   .gap-3 {
     gap: 0.75rem;
@@ -1005,20 +1054,21 @@ defineExpose({
 
 /* Amélioration de la visibilité extérieure */
 @media (max-width: 480px) {
+
   /* Contraste renforcé pour usage extérieur */
   .bg-black\/70 {
     background-color: rgba(0, 0, 0, 0.85);
   }
-  
+
   .bg-black\/95 {
     background-color: rgba(0, 0, 0, 0.98);
   }
-  
+
   /* Ombres plus prononcées */
   .shadow-xl {
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   }
-  
+
   /* Bordures plus visibles */
   .border-white\/20 {
     border-color: rgba(255, 255, 255, 0.4);
@@ -1031,7 +1081,10 @@ defineExpose({
 }
 
 /* Prévention du zoom sur double-tap */
-button, input, select, textarea {
+button,
+input,
+select,
+textarea {
   touch-action: manipulation;
 }
 
