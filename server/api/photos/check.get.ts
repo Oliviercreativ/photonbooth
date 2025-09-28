@@ -28,10 +28,29 @@ export default defineEventHandler(async (event) => {
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
-    // Chercher la photo la plus récente pour cet email
+    // 1. D'abord, chercher l'utilisateur dans newsletters pour récupérer son ID
+    const { data: user, error: userError } = await supabase
+      .from('newsletters')
+      .select('id, email, full_name_nl')
+      .eq('email', email)
+      .eq('active', true)
+      .single()
+
+    if (userError || !user) {
+      console.log('⏳ Utilisateur non trouvé dans newsletters:', email)
+      return {
+        success: true,
+        photo: null,
+        message: 'Aucune photo disponible'
+      }
+    }
+
+    console.log('👤 Utilisateur trouvé:', { id: user.id, email: user.email })
+
+    // 2. Chercher les photos pour cet utilisateur (par guest_email uniquement)
     const { data: photos, error } = await supabase
       .from('photos')
-      .select('id, url, created_at, guest_email, guest_session_id')
+      .select('id, photo_url, created_at, guest_email, guest_session_id, photo_thumbnail')
       .eq('guest_email', email)
       .eq('is_active', true)
       .order('created_at', { ascending: false })
@@ -46,7 +65,7 @@ export default defineEventHandler(async (event) => {
     }
 
     if (!photos || photos.length === 0) {
-      console.log('⏳ Aucune photo trouvée pour:', email)
+      console.log('⏳ Aucune photo trouvée pour:', email, 'user_id:', user.id)
       return {
         success: true,
         photo: null,
@@ -55,13 +74,20 @@ export default defineEventHandler(async (event) => {
     }
 
     const photo = photos[0]
-    console.log('✅ Photo trouvée:', { id: photo.id, email: photo.guest_email })
+    console.log('✅ Photo trouvée:', { 
+      id: photo.id, 
+      user_id: photo.user_id, 
+      guest_email: photo.guest_email,
+      photo_url: photo.photo_url,
+      photo_thumbnail: photo.photo_thumbnail
+    })
 
     return {
       success: true,
       photo: {
         id: photo.id,
-        url: photo.url,
+        url: photo.photo_url,
+        thumbnail: photo.photo_thumbnail,
         created_at: photo.created_at,
         guest_email: photo.guest_email,
         guest_session_id: photo.guest_session_id

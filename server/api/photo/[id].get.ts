@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
     // Récupérer la photo
     const { data: photo, error: photoError } = await supabase
       .from('photos')
-      .select('id, url, guest_email, guest_session_id, created_at, is_active')
+      .select('id, photo_url, guest_email, guest_session_id, created_at, is_active, photo_thumbnail')
       .eq('id', photoId)
       .eq('is_active', true)
       .single()
@@ -94,7 +94,7 @@ export default defineEventHandler(async (event) => {
       success: true,
       photo: {
         id: photo.id,
-        url: photo.url,
+        url: photo.photo_url,
         created_at: photo.created_at,
         guest_email: photo.guest_email,
         guest_session_id: photo.guest_session_id

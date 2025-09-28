@@ -112,33 +112,48 @@
 
         <ul v-else class="divide-y divide-gray-200">
           <li v-for="user in users" :key="user.id" class="px-4 py-4 sm:px-6">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center">
-                <div class="flex-shrink-0">
-                  <Icon name="heroicons:user-circle" class="h-10 w-10 text-gray-400" />
-                </div>
-                <div class="ml-4">
-                  <div class="flex items-center">
-                    <p class="text-sm font-medium text-gray-900">
-                      {{ user.full_name_nl || 'Nom non renseigné' }}
-                    </p>
-                    <span v-if="!user.active" class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                      Inactif
-                    </span>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    <!-- Afficher la miniature si elle existe, sinon l'icône par défaut -->
+                    <div v-if="user.photo?.thumbnail" class="h-10 w-10 rounded-full overflow-hidden">
+                      <img 
+                        :src="user.photo.thumbnail" 
+                        :alt="user.full_name_nl || user.email"
+                        class="h-full w-full object-cover"
+                        @error="user.photo = null"
+                      />
+                    </div>
+                    <Icon v-else name="heroicons:user-circle" class="h-10 w-10 text-gray-400" />
                   </div>
-                  <p class="text-sm text-gray-500">{{ user.email }}</p>
-                  <p class="text-xs text-gray-400">
-                    Inscrit le {{ formatDate(user.created_at) }}
-                  </p>
+                  <div class="ml-4">
+                    <div class="flex items-center">
+                      <p class="text-sm font-medium text-gray-900">
+                        {{ user.full_name_nl || 'Nom non renseigné' }}
+                      </p>
+                      <span v-if="!user.active" class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                        Inactif
+                      </span>
+                      <span v-if="user.photo" class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        <Icon name="heroicons:photo" class="w-3 h-3 mr-1" />
+                        Photo
+                      </span>
+                    </div>
+                    <p class="text-sm text-gray-500">{{ user.email }}</p>
+                    <p class="text-xs text-gray-400">
+                      Inscrit le {{ formatDate(user.created_at) }}
+                    </p>
+                  </div>
                 </div>
-              </div>
               <div class="flex items-center space-x-2">
                 <button
                   @click="selectUser(user)"
-                  class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  :class="user.photo 
+                    ? 'inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                    : 'inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'"
                 >
-                  <Icon name="heroicons:plus" class="w-4 h-4 mr-1" />
-                  Ajouter photo
+                  <Icon :name="user.photo ? 'heroicons:photo' : 'heroicons:plus'" class="w-4 h-4 mr-1" />
+                  {{ user.photo ? 'Modifier photo' : 'Ajouter photo' }}
                 </button>
               </div>
             </div>
@@ -224,7 +239,28 @@ const loadUsers = async () => {
   isLoading.value = true
   try {
     const response = await $fetch('/api/admin/users')
-    users.value = response.users || []
+    const usersList = response.users || []
+    
+    // Charger les photos pour chaque utilisateur
+    for (const user of usersList) {
+      try {
+        const photoResponse = await $fetch('/api/photos/check', {
+          query: { email: user.email }
+        })
+        
+        if (photoResponse.success && photoResponse.photo) {
+          user.photo = {
+            id: photoResponse.photo.id,
+            url: photoResponse.photo.url,
+            thumbnail: photoResponse.photo.thumbnail
+          }
+        }
+      } catch (error) {
+        console.log('Pas de photo pour:', user.email)
+      }
+    }
+    
+    users.value = usersList
   } catch (error) {
     console.error('Erreur chargement utilisateurs:', error)
   } finally {
@@ -259,6 +295,8 @@ const uploadPhoto = async () => {
 
   isUploading.value = true
   try {
+    console.log('📸 Upload photo pour:', selectedUser.value.email, selectedUser.value.id)
+
     const formData = new FormData()
     formData.append('photo', selectedFile.value)
     formData.append('userId', selectedUser.value.id)
@@ -271,20 +309,32 @@ const uploadPhoto = async () => {
     })
 
     if (response.success) {
-      alert('Photo envoyée avec succès ! L\'email a été envoyé à l\'utilisateur.')
+      console.log('✅ Photo uploadée avec succès:', response)
+      
+      // Ajouter la photo à l'utilisateur dans la liste
+      const userIndex = users.value.findIndex(u => u.id === selectedUser.value.id)
+      if (userIndex !== -1) {
+        users.value[userIndex].photo = {
+          id: response.photoId,
+          url: response.photoUrl,
+          thumbnail: response.thumbnailUrl
+        }
+      }
+      
       selectedUser.value = null
       selectedFile.value = null
       await loadStats()
     } else {
-      alert('Erreur lors de l\'envoi de la photo')
+      throw new Error(response.message || 'Erreur lors de l\'upload')
     }
   } catch (error) {
     console.error('Erreur upload photo:', error)
-    alert('Erreur lors de l\'envoi de la photo')
+    alert('Erreur lors de l\'envoi de la photo: ' + (error.data?.message || error.message))
   } finally {
     isUploading.value = false
   }
 }
+
 
 const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString('fr-FR')

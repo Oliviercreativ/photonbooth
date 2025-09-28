@@ -25,9 +25,16 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    console.log('📸 Upload photo admin:', { userId, email, fullName, fileName: photoFile.filename })
+    console.log('📸 Upload photo admin:', { 
+      userId, 
+      email, 
+      fullName, 
+      fileName: photoFile.filename,
+      fileSize: photoFile.data.length,
+      fileType: photoFile.type
+    })
 
-    // Configuration Supabase
+    // Configuration Supabase avec service key
     const config = useRuntimeConfig()
     const supabaseUrl = config.public.supabase.url
     const supabaseServiceKey = config.supabaseServiceKey
@@ -43,40 +50,98 @@ export default defineEventHandler(async (event) => {
 
     // Générer un nom de fichier unique
     const fileExtension = photoFile.filename?.split('.').pop() || 'jpg'
-    const fileName = `admin-${userId}-${Date.now()}.${fileExtension}`
+    const timestamp = Date.now()
+    const fileName = `admin-${userId}-${timestamp}.${fileExtension}`
+    const thumbnailName = `admin-${userId}-${timestamp}-thumb.${fileExtension}`
+    
+    // Chemin dans le bucket
     const filePath = `admin-photos/${fileName}`
+    const thumbnailPath = `admin-photos/thumbnails/${thumbnailName}`
 
-    // Upload vers Supabase Storage
+    console.log('📁 Chemins de fichiers:')
+    console.log('  📸 Photo originale:', filePath)
+    console.log('  🖼️ Thumbnail:', thumbnailPath)
+
+    // 1. Upload de la photo originale
+    console.log('🚀 Début upload photo originale...')
     const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('photobooth-images')
+      .from('photobooth')
       .upload(filePath, photoFile.data, {
         contentType: photoFile.type || 'image/jpeg',
         upsert: false
       })
 
     if (uploadError) {
-      console.error('❌ Erreur upload storage:', uploadError)
+      console.error('❌ Erreur upload photo:', uploadError)
       throw createError({
         statusCode: 500,
-        statusMessage: 'Erreur lors de l\'upload de la photo'
+        statusMessage: 'Erreur lors de l\'upload de la photo: ' + uploadError.message
       })
     }
 
-    // Récupérer l'URL publique
+    console.log('✅ Photo originale uploadée:', {
+      path: filePath,
+      size: photoFile.data.length,
+      contentType: photoFile.type
+    })
+
+    // 2. Créer une thumbnail (redimensionner l'image)
+    console.log('🖼️ Création de la thumbnail...')
+    const thumbnailBuffer = await createThumbnail(photoFile.data, 300, 300)
+    console.log('✅ Thumbnail créée:', {
+      originalSize: photoFile.data.length,
+      thumbnailSize: thumbnailBuffer.length,
+      compressionRatio: Math.round((1 - thumbnailBuffer.length / photoFile.data.length) * 100) + '%'
+    })
+    
+    // 3. Upload de la thumbnail
+    console.log('🚀 Début upload thumbnail...')
+    const { data: thumbnailUploadData, error: thumbnailError } = await supabase.storage
+      .from('photobooth')
+      .upload(thumbnailPath, thumbnailBuffer, {
+        contentType: photoFile.type || 'image/jpeg',
+        upsert: false
+      })
+
+    if (thumbnailError) {
+      console.error('❌ Erreur upload thumbnail:', thumbnailError)
+      // Pas bloquant, on continue
+    } else {
+      console.log('✅ Thumbnail uploadée:', {
+        path: thumbnailPath,
+        size: thumbnailBuffer.length
+      })
+    }
+
+    // 4. Récupérer les URLs publiques
+    console.log('🔗 Génération des URLs publiques...')
     const { data: urlData } = supabase.storage
-      .from('photobooth-images')
+      .from('photobooth')
       .getPublicUrl(filePath)
+    
+    const { data: thumbnailUrlData } = supabase.storage
+      .from('photobooth')
+      .getPublicUrl(thumbnailPath)
 
     const photoUrl = urlData.publicUrl
+    const thumbnailUrl = thumbnailUrlData.publicUrl
 
-    // Insérer dans la table photos
+    console.log('🔗 URLs générées:')
+    console.log('  📸 Photo originale:', photoUrl)
+    console.log('  🖼️ Thumbnail:', thumbnailUrl)
+
+    // 5. Insérer dans la table photos
+    console.log('💾 Sauvegarde en base de données...')
     const { data: photoRecord, error: insertError } = await supabase
       .from('photos')
       .insert({
-        url: photoUrl,
-        user_id: null, // Pas d'utilisateur connecté
+        photo_url: photoUrl,
+        photo_thumbnail: thumbnailUrl,
+        user_id: null, // Pas d'utilisateur connecté, utiliser guest_email
         guest_email: email,
         guest_session_id: `admin-${userId}`,
+        background_id: 'default', // Valeur par défaut pour les photos admin
+        background_name: 'Photo admin', // Nom par défaut
         is_active: true,
         created_at: new Date().toISOString()
       })
@@ -87,23 +152,29 @@ export default defineEventHandler(async (event) => {
       console.error('❌ Erreur insertion photo:', insertError)
       throw createError({
         statusCode: 500,
-        statusMessage: 'Erreur lors de la sauvegarde de la photo'
+        statusMessage: 'Erreur lors de la sauvegarde de la photo: ' + insertError.message
       })
     }
 
-    console.log('✅ Photo uploadée avec succès:', { photoId: photoRecord.id, url: photoUrl })
-
-    // TODO: Envoyer l'email avec la photo et le lien
-    // Pour l'instant, on simule l'envoi d'email
-    console.log('📧 Email à envoyer à:', email)
-    console.log('🔗 Lien de consultation: /photo/' + photoRecord.id + '?email=' + encodeURIComponent(email) + '&name=' + encodeURIComponent(fullName || ''))
+    console.log('✅ Photo uploadée avec succès:', {
+      photoId: photoRecord.id,
+      url: photoUrl,
+      thumbnailUrl: thumbnailUrl,
+      email: email,
+      userId: userId,
+      user_id: userId,
+      guest_email: email,
+      guest_session_id: `admin-${userId}`
+    })
 
     return {
       success: true,
-      message: 'Photo uploadée avec succès',
+      message: 'Photo envoyée avec succès',
       photoId: photoRecord.id,
       photoUrl,
-      emailSent: false // TODO: Mettre à true quand l'email sera envoyé
+      thumbnailUrl,
+      email,
+      userId
     }
 
   } catch (error) {
@@ -115,7 +186,42 @@ export default defineEventHandler(async (event) => {
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Erreur interne du serveur'
+      statusMessage: 'Erreur interne du serveur: ' + error.message
     })
   }
 })
+
+// Fonction pour créer une thumbnail côté serveur
+async function createThumbnail(buffer, maxWidth, maxHeight) {
+  // Import dynamique de sharp (si disponible) ou fallback
+  try {
+    const sharp = await import('sharp')
+    
+    const image = sharp.default(buffer)
+    const metadata = await image.metadata()
+    
+    let { width, height } = metadata
+    
+    // Calculer les nouvelles dimensions en gardant les proportions
+    if (width > height) {
+      if (width > maxWidth) {
+        height = Math.round((height * maxWidth) / width)
+        width = maxWidth
+      }
+    } else {
+      if (height > maxHeight) {
+        width = Math.round((width * maxHeight) / height)
+        height = maxHeight
+      }
+    }
+    
+    return await image
+      .resize(width, height)
+      .jpeg({ quality: 80 })
+      .toBuffer()
+      
+  } catch (error) {
+    console.warn('Sharp non disponible, retour du buffer original')
+    return buffer // Fallback si sharp n'est pas installé
+  }
+}

@@ -1,35 +1,24 @@
 <template>
   <div class="fixed inset-0 bg-black/95 backdrop-blur z-50 flex flex-col h-screen">
-      <!-- Header -->
+    <!-- Header -->
     <div class="flex justify-between items-center p-4 border-b border-white/20">
       <h2 class="text-white text-lg sm:text-xl font-bold">Choisissez un effet</h2>
-        <button @click="$emit('close')"
+      <button @click="$emit('close')"
         class="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white px-4 py-3 rounded-lg transition-colors touch-manipulation min-h-[48px] min-w-[80px] font-semibold">
         ✕ Fermer
-        </button>
-      </div>
+      </button>
+    </div>
 
     <!-- Onglets -->
     <div class="flex border-b border-white/20">
       <button @click="activeTab = 'geographic'"
-        class="flex-1 px-2 py-4 text-center transition-colors touch-manipulation min-h-[60px] flex flex-col items-center justify-center"
-        :class="activeTab === 'geographic' ? 'bg-blue-600 text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'">
-        <span class="text-xl mb-1"><Icon name="heroicons:globe-alt" /></span>
+        class="flex-1 px-2 py-4 text-center transition-colors touch-manipulation min-h-[60px] flex flex-col items-center justify-center bg-blue-600 text-white shadow-lg">
+        <span class="text-xl mb-1">
+          <Icon name="heroicons:globe-alt" />
+        </span>
         <span class="text-sm font-medium">Pays et Ville</span>
       </button>
-      <button @click="activeTab = 'transformed'"
-        class="flex-1 px-2 py-4 text-center transition-colors touch-manipulation min-h-[60px] flex flex-col items-center justify-center"
-        :class="activeTab === 'transformed' ? 'bg-blue-600 text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'">
-        <span class="text-xl mb-1"><Icon name="heroicons:globe-alt" /></span>
-        <span class="text-sm font-medium">Monde Entier</span>
-      </button>
-      <button @click="activeTab = 'original'"
-        class="flex-1 px-2 py-4 text-center transition-colors touch-manipulation min-h-[60px] flex flex-col items-center justify-center"
-        :class="activeTab === 'original' ? 'bg-blue-600 text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'">
-        <span class="text-xl mb-1"><Icon name="heroicons:camera" /></span>
-        <span class="text-sm font-medium">Monde Original</span>
-          </button>
-      </div>
+    </div>
 
     <!-- Grille des fonds -->
     <div class="flex-1 overflow-y-auto p-3 sm:p-4">
@@ -43,10 +32,10 @@
               <p class="text-white text-base sm:text-lg font-bold mb-1">{{ bg.emoji }}</p>
               <p class="text-white text-xs sm:text-sm opacity-95 leading-tight font-medium">{{ bg.name }}</p>
             </div>
-            </div>
+          </div>
 
           <!-- Indicateur de sélection -->
-            <div v-if="selectedBackground?.id === bg.id"
+          <div v-if="selectedBackground?.id === bg.id"
             class="absolute top-2 right-2 w-7 h-7 sm:w-8 sm:h-8 bg-blue-500 rounded-full flex items-center justify-center shadow-lg">
             <span class="text-white text-sm sm:text-base font-bold">✓</span>
           </div>
@@ -372,78 +361,26 @@ const backgrounds = ref([
   }
 ])
 
-// Filtrage des fonds par onglet
+// Filtrage des fonds - seulement géographiques
 const filteredBackgrounds = computed(() => {
-  switch (activeTab.value) {
-    case 'geographic':
-      // Fonds géographiques (pays et villes)
-      return backgrounds.value.filter(bg =>
-        bg.id.includes('belgium') ||
-        bg.id.includes('uk') ||
-        bg.id.includes('germany') ||
-        bg.id.includes('france') ||
-        bg.id.includes('conflans') ||
-        bg.id.includes('beach') ||
-        bg.id.includes('brussels') ||
-        bg.id.includes('chimay') ||
-        bg.id.includes('paris')
-      )
-    case 'transformed':
-      // Fonds "Monde Entier" (transformation complète)
-      return backgrounds.value.filter(bg =>
-        bg.id.includes('pure-transformed') ||
-        bg.id.includes('monde-entier') ||
-        bg.name.includes('Monde Entier') ||
-        bg.id.includes('aura-glow-dreamworks-transformed') ||
-        bg.id.includes('aura-glow-pixar-transformed') ||
-        bg.id.includes('captain-future-transformed') ||
-        bg.id.includes('kpop-pure-transformed')
-      )
-    case 'original':
-      // Fonds "Monde Original" (fond original conservé)
-      return backgrounds.value.filter(bg =>
-        bg.id.includes('pure-original') ||
-        bg.id.includes('fond-original') ||
-        bg.name.includes('Fond Original') ||
-        bg.id.includes('captain-future-original') ||
-        bg.id.includes('kpop-pure-original')
-      )
-    default:
-    return backgrounds.value
-  }
+  // Fonds géographiques (pays et villes)
+  return backgrounds.value.filter(bg =>
+    bg.id.includes('belgium') ||
+    bg.id.includes('uk') ||
+    bg.id.includes('germany') ||
+    bg.id.includes('france') ||
+    bg.id.includes('conflans') ||
+    bg.id.includes('beach') ||
+    bg.id.includes('brussels') ||
+    bg.id.includes('chimay') ||
+    bg.id.includes('paris')
+  )
 })
 
 const selectBackground = (background) => {
-  // Si le fond n'est pas dans l'onglet actuel, changer d'onglet d'abord
-  if (!filteredBackgrounds.value.some(bg => bg.id === background.id)) {
-    // Trouver dans quel onglet se trouve ce fond
-    if (background.id.includes('belgium') || background.id.includes('uk') || background.id.includes('germany') || 
-        background.id.includes('france') || background.id.includes('conflans') || background.id.includes('beach') || 
-        background.id.includes('brussels') || background.id.includes('chimay') || background.id.includes('paris')) {
-      activeTab.value = 'geographic'
-    } else if (background.id.includes('pure-transformed') || background.id.includes('monde-entier') || 
-               background.name.includes('Monde Entier') || background.id.includes('aura-glow-dreamworks-transformed') || 
-               background.id.includes('aura-glow-pixar-transformed') || background.id.includes('captain-future-transformed') || 
-               background.id.includes('kpop-pure-transformed')) {
-      activeTab.value = 'transformed'
-    } else if (background.id.includes('pure-original') || background.id.includes('fond-original') || 
-               background.name.includes('Fond Original') || background.id.includes('captain-future-original') || 
-               background.id.includes('kpop-pure-original')) {
-      activeTab.value = 'original'
-    }
-    
-    // Attendre un tick pour que l'onglet se mette à jour, puis sélectionner
-    nextTick(() => {
-      selectedBackground.value = background
-      console.log('🎬 Fond sélectionné:', background.name)
-      emit('select', background)
-    })
-  } else {
-    // Le fond est dans l'onglet actuel, le sélectionner directement
-    selectedBackground.value = background
-    console.log('🎬 Fond sélectionné:', background.name)
-    emit('select', background)
-  }
+  selectedBackground.value = background
+  console.log('🎬 Fond sélectionné:', background.name)
+  emit('select', background)
 }
 </script>
 
