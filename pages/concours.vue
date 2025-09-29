@@ -168,7 +168,7 @@ const goBackToPhoto = () => {
 
 // Meta
 definePageMeta({
-  layout: 'guest',
+  layout: 'auth',
   title: 'Concours Oktoberfest - Made in Conflans',
 })
 </script>
