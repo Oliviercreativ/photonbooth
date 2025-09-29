@@ -138,6 +138,9 @@
                         <Icon name="heroicons:photo" class="w-3 h-3 mr-1" />
                         Photo
                       </span>
+                      <span v-if="user.photo?.count" class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        Count: {{ user.photo.count }}
+                      </span>
                     </div>
                     <p class="text-sm text-gray-500">{{ user.email }}</p>
                     <p class="text-xs text-gray-400">
@@ -154,6 +157,16 @@
                 >
                   <Icon :name="user.photo ? 'heroicons:photo' : 'heroicons:plus'" class="w-4 h-4 mr-1" />
                   {{ user.photo ? 'Modifier photo' : 'Ajouter photo' }}
+                </button>
+                
+                <!-- Bouton modifier count -->
+                <button
+                  v-if="user.photo?.id"
+                  @click="editCount(user.photo)"
+                  class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  <Icon name="heroicons:pencil" class="w-4 h-4 mr-1" />
+                  Count
                 </button>
               </div>
             </div>
@@ -252,7 +265,8 @@ const loadUsers = async () => {
           user.photo = {
             id: photoResponse.photo.id,
             url: photoResponse.photo.url,
-            thumbnail: photoResponse.photo.thumbnail
+            thumbnail: photoResponse.photo.thumbnail,
+            count: photoResponse.photo.count || 0
           }
         }
       } catch (error) {
@@ -346,6 +360,47 @@ const formatFileSize = (bytes) => {
   const sizes = ['Bytes', 'KB', 'MB', 'GB']
   const i = Math.floor(Math.log(bytes) / Math.log(k))
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+}
+
+const updatePhotoCount = async (photoId, newCount) => {
+  try {
+    console.log('🔢 Mise à jour du count:', { photoId, newCount })
+    
+    const response = await $fetch('/api/admin/update-count', {
+      method: 'POST',
+      body: {
+        photoId: photoId,
+        newCount: parseInt(newCount)
+      }
+    })
+    
+    if (response.success) {
+      console.log('✅ Count mis à jour:', response)
+      alert(`Count mis à jour avec succès !\nAncien: ${response.data.old_count}\nNouveau: ${response.data.new_count}`)
+      
+      // Recharger les données pour afficher la mise à jour
+      await loadStats()
+    } else {
+      throw new Error(response.message || 'Erreur lors de la mise à jour')
+    }
+  } catch (error) {
+    console.error('❌ Erreur mise à jour count:', error)
+    alert('Erreur lors de la mise à jour du count: ' + (error.data?.message || error.message))
+  }
+}
+
+const editCount = (photo) => {
+  const currentCount = photo.count || 0
+  const newCount = prompt(`Modifier le count pour cette photo:\n\nCount actuel: ${currentCount}\n\nNouveau count:`, currentCount)
+  
+  if (newCount !== null && newCount !== '') {
+    const parsedCount = parseInt(newCount)
+    if (!isNaN(parsedCount) && parsedCount >= 0) {
+      updatePhotoCount(photo.id, parsedCount)
+    } else {
+      alert('Veuillez entrer un nombre valide (positif ou zéro)')
+    }
+  }
 }
 
 const logout = () => {

@@ -50,7 +50,7 @@ export default defineEventHandler(async (event) => {
     // 2. Chercher les photos pour cet utilisateur (par guest_email uniquement)
     const { data: photos, error } = await supabase
       .from('photos')
-      .select('id, photo_url, created_at, guest_email, guest_session_id, photo_thumbnail')
+      .select('id, photo_url, created_at, guest_email, guest_session_id, photo_thumbnail, count')
       .eq('guest_email', email)
       .eq('is_active', true)
       .order('created_at', { ascending: false })
@@ -90,7 +90,8 @@ export default defineEventHandler(async (event) => {
         thumbnail: photo.photo_thumbnail,
         created_at: photo.created_at,
         guest_email: photo.guest_email,
-        guest_session_id: photo.guest_session_id
+        guest_session_id: photo.guest_session_id,
+        count: photo.count || 0
       }
     }
 

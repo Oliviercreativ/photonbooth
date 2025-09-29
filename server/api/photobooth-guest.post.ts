@@ -4,7 +4,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 export default defineEventHandler(async (event) => {
   const contentType = getHeader(event, 'content-type') || ''
   
-  let imageFile, backgroundId, highQuality
+  let imageFile, backgroundId, highQuality, guestEmail, guestSessionId
   
   if (contentType.includes('multipart/form-data')) {
     // Gestion multipart/form-data (pour les uploads de fichiers)
@@ -12,6 +12,37 @@ export default defineEventHandler(async (event) => {
     imageFile = formData?.find(field => field.name === 'image')
     backgroundId = formData?.find(field => field.name === 'background')?.data.toString()
     highQuality = formData?.find(field => field.name === 'high_quality')?.data.toString() === 'true'
+    guestEmail = formData?.find(field => field.name === 'guest_email')?.data.toString()
+    guestSessionId = formData?.find(field => field.name === 'guest_session_id')?.data.toString()
+    
+    // Vérifier si l'utilisateur invité a déjà une photo
+    if (guestEmail) {
+      const config = useRuntimeConfig()
+      const supabaseUrl = config.supabaseUrl
+      const supabaseServiceKey = config.supabaseServiceKey
+      
+      if (supabaseServiceKey) {
+        const { createClient } = await import('@supabase/supabase-js')
+        const supabase = createClient(supabaseUrl, supabaseServiceKey)
+        
+        const { data: existingPhoto, error } = await supabase
+          .from('photos')
+          .select('id, photo_url')
+          .eq('guest_email', guestEmail)
+          .eq('is_active', true)
+          .limit(1)
+        
+        if (error) {
+          console.error('❌ Erreur vérification photo existante:', error)
+        } else if (existingPhoto && existingPhoto.length > 0) {
+          console.log('🚫 Utilisateur invité a déjà une photo:', guestEmail)
+          throw createError({
+            statusCode: 403,
+            statusMessage: 'Vous avez déjà une photo ! Les utilisateurs invités sont limités à une seule photo.'
+          })
+        }
+      }
+    }
   } else {
     // Gestion JSON (pour les changements de fond avec URL existante)
     const body = await readBody(event)
@@ -326,12 +357,14 @@ async function saveGeneratedImageToDatabase(imageBuffer: Buffer, backgroundId: s
         // Créer une miniature de l'image générée
         const thumbnailUrl = await createThumbnail(imageBuffer, supabaseUrl, supabaseServiceKey)
         
-        // Données à mettre à jour
+        // Données à mettre à jour - incrémenter le count
+        const currentCount = photoData.count || 0
         const updateData = {
           photo_url: photoUrl,
           photo_thumbnail: thumbnailUrl,
           background_id: backgroundId,
-          background_name: backgroundId.replace(/-/g, ' ')
+          background_name: backgroundId.replace(/-/g, ' '),
+          count: currentCount + 1 // Incrémenter le compteur
         }
         
         console.log('📊 Données de mise à jour photo:', {

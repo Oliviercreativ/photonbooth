@@ -130,7 +130,29 @@ export default defineEventHandler(async (event) => {
     console.log('  📸 Photo originale:', photoUrl)
     console.log('  🖼️ Thumbnail:', thumbnailUrl)
 
-    // 5. Insérer dans la table photos
+    // 5. Vérifier si l'utilisateur guest a déjà une photo
+    if (guestEmail && guestEmail !== 'anonyme@photobooth.local') {
+      console.log('🔍 Vérification photo existante pour guest:', guestEmail)
+      
+      const { data: existingPhoto, error: checkError } = await supabase
+        .from('photos')
+        .select('id, photo_url')
+        .eq('guest_email', guestEmail)
+        .eq('is_active', true)
+        .limit(1)
+      
+      if (checkError) {
+        console.error('❌ Erreur vérification photo existante:', checkError)
+      } else if (existingPhoto && existingPhoto.length > 0) {
+        console.log('🚫 Guest a déjà une photo:', guestEmail)
+        throw createError({
+          statusCode: 403,
+          statusMessage: `Cet utilisateur invité (${guestEmail}) a déjà une photo. Les utilisateurs invités sont limités à une seule photo.`
+        })
+      }
+    }
+
+    // 6. Insérer dans la table photos
     console.log('💾 Sauvegarde en base de données...')
     const { data: photoRecord, error: insertError } = await supabase
       .from('photos')
@@ -143,6 +165,7 @@ export default defineEventHandler(async (event) => {
         background_id: 'default', // Valeur par défaut pour les photos admin
         background_name: 'Photo admin', // Nom par défaut
         is_active: true,
+        count: 1, // Compter comme 1 photo
         created_at: new Date().toISOString()
       })
       .select('id')

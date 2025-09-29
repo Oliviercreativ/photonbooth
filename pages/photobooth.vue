@@ -26,6 +26,34 @@
             <div v-else-if="userPhoto" class="text-center relative">
                 <h2 class="text-xl font-bold text-gray-900 mb-4">🎉 Votre photo est prête !</h2>
                 <p class="text-gray-900/70 mb-6">Découvrez votre photo de l'Oktoberfest</p>
+                
+                <!-- Message informatif sur le count -->
+                <div v-if="userPhoto.count === 0" class="bg-orange-100 border-l-4 border-orange-500 p-4 mb-6 rounded">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <Icon name="heroicons:exclamation-triangle" class="h-5 w-5 text-orange-400" />
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-orange-700">
+                                <strong>Limite atteinte !</strong> Vous avez utilisé toutes vos modifications de fond disponibles. 
+                                Créez un compte gratuitement pour obtenir 5 photos supplémentaires !
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div v-else-if="userPhoto.count > 0" class="bg-blue-100 border-l-4 border-blue-500 p-4 mb-6 rounded">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <Icon name="heroicons:information-circle" class="h-5 w-5 text-blue-400" />
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-blue-700">
+                                <strong>{{ userPhoto.count }} modification(s) restante(s)</strong> - Vous pouvez encore changer le fond de votre photo.
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Photo en background avec protection -->
                 <div class="relative w-full max-w-xl h-[500px] mx-auto mb-6 rounded-lg shadow-lg overflow-hidden"
@@ -44,10 +72,18 @@
                 </div>
 
                 <div class="space-y-3">
-                    <button @click="changeBgPhoto" :disabled="isChangingBg"
+                    <!-- Bouton changer le fond - affiché seulement si count > 0 -->
+                    <button v-if="userPhoto.count > 0" @click="changeBgPhoto" :disabled="isChangingBg"
                         class="w-full bg-[#33cccc] text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
                         <Icon name="heroicons:sparkles" class="text-xl" :class="{ 'animate-spin': isChangingBg }" />
                         <span>{{ isChangingBg ? 'Génération...' : 'Changer le fond' }}</span>
+                    </button>
+
+                    <!-- Bouton créer un compte - affiché seulement si count = 0 -->
+                    <button v-if="userPhoto.count === 0" @click="createAccountForMorePhotos"
+                        class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-3 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-colors flex items-center justify-center space-x-2">
+                        <Icon name="heroicons:plus-circle" class="text-xl" />
+                        <span>Créer un compte pour 5 photos supplémentaires</span>
                     </button>
 
                     <button @click="viewFullPhoto"
@@ -426,6 +462,27 @@ const applyBackground = async (background) => {
       userPhoto.value.background_name = response.backgroundName || background.name
       
       console.log('✅ Fond changé avec succès:', response.url)
+      
+      // Récupérer les données mises à jour de la photo (incluant le nouveau count)
+      try {
+        console.log('🔄 Récupération des données mises à jour...')
+        const updatedPhotoResponse = await $fetch('/api/photos/check', {
+          query: { email: userEmail.value }
+        })
+        
+        if (updatedPhotoResponse.success && updatedPhotoResponse.photo) {
+          // Mettre à jour le count avec la valeur récupérée du serveur
+          userPhoto.value.count = updatedPhotoResponse.photo.count || 0
+          console.log('📊 Count mis à jour:', userPhoto.value.count)
+        }
+      } catch (error) {
+        console.error('❌ Erreur récupération données mises à jour:', error)
+        // En cas d'erreur, décrémenter manuellement le count
+        if (userPhoto.value.count > 0) {
+          userPhoto.value.count = userPhoto.value.count - 1
+          console.log('📊 Count décrémenté manuellement:', userPhoto.value.count)
+        }
+      }
     } else {
       throw new Error(response?.message || 'Erreur lors de la génération du nouveau fond')
     }
@@ -439,6 +496,12 @@ const applyBackground = async (background) => {
 
 const closeBgSelector = () => {
   showBgSelector.value = false
+}
+
+const createAccountForMorePhotos = () => {
+  console.log('🎯 Redirection vers création de compte pour plus de photos')
+  // Rediriger vers la page d'authentification
+  navigateTo('/auth')
 }
 
 const logout = () => {
