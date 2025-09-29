@@ -11,12 +11,11 @@
 </template>
 
 <script lang="ts" setup>
-
-</script>
 definePageMeta({
   layout: 'auth',
   title: 'Made in Conflans',
 })
+</script>
 <style>
 
 </style>
