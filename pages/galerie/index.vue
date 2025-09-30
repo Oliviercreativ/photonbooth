@@ -90,6 +90,18 @@
               >
                 <Icon name="heroicons:share" class="w-5 h-5" />
               </button>
+
+              <!-- Bouton admin uniquement -->
+              <button
+                v-if="isAdmin"
+                @click.stop="generatePreview(photo)"
+                :disabled="generatingPreview === photo.id"
+                class="bg-purple-500 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-purple-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                :title="`Générer preview pour ${photo.background_name}`"
+              >
+                <Icon v-if="generatingPreview !== photo.id" name="heroicons:sparkles" class="w-5 h-5" />
+                <div v-else class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+              </button>
             </div>
           </div>
 
@@ -147,6 +159,8 @@ const isLoading = ref(true)
 const activeFilter = ref('all')
 const pagination = ref(null)
 const totalPhotos = ref(0)
+const currentUserId = ref(null)
+const generatingPreview = ref(null)
 
 // Filtres disponibles
 const filters = [
@@ -162,6 +176,11 @@ const toast = ref({
 })
 
 // Computed
+const isAdmin = computed(() => {
+  const ADMIN_ID = '262af476-2407-4d63-9641-fb03ce4b784f'
+  return currentUserId.value === ADMIN_ID
+})
+
 const filteredPhotos = computed(() => {
   if (activeFilter.value === 'recent') {
     return photos.value.slice(0, 10) // 10 plus récentes
@@ -185,7 +204,9 @@ const loadPhotos = async (page = 1) => {
       return
     }
 
-    console.log('✅ Utilisateur authentifié, chargement des photos...')
+    // Stocker l'userId pour vérifier si admin
+    currentUserId.value = session.user.id
+    console.log('✅ Utilisateur authentifié:', session.user.id)
 
     const response = await $fetch('/api/photos', {
       headers: {
@@ -255,6 +276,42 @@ const openPhoto = (photo) => {
 
 const sharePhoto = (photo) => {
   navigateTo(`/galerie/${photo.id}/share`)
+}
+
+const generatePreview = async (photo) => {
+  if (!isAdmin.value) {
+    showToast('Accès refusé')
+    return
+  }
+
+  try {
+    generatingPreview.value = photo.id
+    console.log('🎨 Génération preview pour:', {
+      photoId: photo.id,
+      backgroundId: photo.background_id,
+      backgroundName: photo.background_name
+    })
+
+    const response = await $fetch('/api/admin/generate-preview', {
+      method: 'POST',
+      body: {
+        photoId: photo.id,
+        backgroundId: photo.background_id,
+        backgroundName: photo.background_name
+      }
+    })
+
+    if (response.success) {
+      console.log('✅ Preview générée:', response.previewUrl)
+      showToast(`Preview créée : ${response.backgroundName}`)
+    }
+
+  } catch (error) {
+    console.error('❌ Erreur génération preview:', error)
+    showToast('Erreur lors de la génération de la preview')
+  } finally {
+    generatingPreview.value = null
+  }
 }
 
 const formatDate = (dateString) => {

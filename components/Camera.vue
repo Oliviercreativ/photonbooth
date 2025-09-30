@@ -61,7 +61,6 @@
       <!-- Caméra éteinte -->
       <div v-else class="w-full h-full bg-gray-900 flex items-center justify-center">
         <div class="text-center text-white">
-          <div class="text-6xl mb-4">📷</div>
           <p class="text-lg font-medium mb-2">Caméra éteinte</p>
           <p class="text-sm opacity-75">Sélectionnez un fond pour activer la caméra</p>
         </div>
@@ -74,14 +73,12 @@
     <div v-if="selectedBackground && activeMobileTab === 'camera' && isCameraActive"
       class="absolute inset-8 border-2 border-white/60 pointer-events-none rounded-lg">
       <div class="absolute -top-8 left-0 bg-black/70 text-white text-xs px-2 py-1 rounded">
-        Placez-vous dans le cadre
       </div>
     </div>
 
     <!-- État de traitement -->
     <div v-if="isProcessing" class="absolute inset-0 bg-black/50 flex items-center justify-center">
       <div class="text-center text-white bg-black/80 p-6 rounded-xl">
-        <div class="text-4xl mb-3 animate-spin">⏳</div>
         <p class="text-lg font-medium">{{ processingStep }}</p>
         <p class="text-sm opacity-75 mt-2">Analyse votre photo...</p>
       </div>
@@ -115,8 +112,6 @@
             />
           </div>
         </button>
-
-
         <!-- Photos prises -->
         <div class="relative">
           <span v-if="capturedPhotos.length > 0"
@@ -125,13 +120,6 @@
           </span>
         </div>
       </div>
-
-      <!-- Status -->
-      <div class="text-center mt-3">
-        <p v-if="isProcessing" class="text-yellow-400 text-sm animate-pulse">
-          ✨ {{ processingStep }}
-        </p>
-      </div>
     </div>
   </div>
 </template>
@@ -139,6 +127,13 @@
 <script setup>
 const user = useSupabaseUser()
 const supabase = useSupabaseClient()
+
+const props = defineProps({
+  initialBackground: {
+    type: Object,
+    default: null
+  }
+})
 
 const videoElement = ref(null)
 const canvasElement = ref(null)
@@ -157,15 +152,24 @@ const emit = defineEmits(['photo-captured', 'show-gallery'])
 
 
 onMounted(async () => {
-  // Ne pas démarrer la caméra automatiquement
-  // await startCamera()
+  // Apply initial background if provided
+  if (props.initialBackground) {
+    selectedBackground.value = props.initialBackground
+    console.log('🎬 Initial background applied:', props.initialBackground.name)
+    // Activate camera when background is selected
+    if (!isCameraActive.value) {
+      console.log('🎬 Activating camera - initial background selected')
+      isCameraActive.value = true
+    }
+  }
+  // Do not start camera automatically if no background
 })
 
-// Watcher pour démarrer la caméra quand elle est activée
+// Watcher to start camera when activated
 watch(isCameraActive, async (newValue) => {
   if (newValue && !isReady.value) {
-    console.log('👀 Watcher: isCameraActive = true, démarrage de la caméra')
-    await nextTick() // S'assurer que l'élément vidéo est dans le DOM
+    console.log('👀 Watcher: isCameraActive = true, starting camera')
+    await nextTick() // Ensure video element is in DOM
   await startCamera()
   }
 })

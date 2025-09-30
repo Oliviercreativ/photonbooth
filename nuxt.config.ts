@@ -96,10 +96,10 @@ export default defineNuxtConfig({
     supabaseUrl: process.env.SUPABASE_URL,
     supabaseServiceKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
     supabaseAnonKey: process.env.SUPABASE_ANON_KEY,
-    // Configuration admin
+    // Admin configuration
     adminId: process.env.ADMIN_ID,
     adminPassword: process.env.ADMIN_PASSWORD,
-    // Côté client aussi
+    // Public client-side configuration
     public: {
       appName: 'Mon Photobooth',
       supabaseUrl: process.env.SUPABASE_URL,

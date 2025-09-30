@@ -10,7 +10,12 @@
     <!-- Caméra après sélection du fond -->
     <div v-else class="h-screen">
       <div class="bg-white/10 backdrop-blur-sm rounded-xl h-full">
-        <Camera ref="cameraRef" @photo-captured="handlePhotoCaptured" @show-gallery="showGallery = true" />
+        <Camera
+          ref="cameraRef"
+          :initialBackground="selectedBackground"
+          @photo-captured="handlePhotoCaptured"
+          @show-gallery="showGallery = true"
+        />
       </div>
     </div>
 

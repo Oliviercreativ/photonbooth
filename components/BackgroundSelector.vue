@@ -37,7 +37,12 @@
         <div v-for="bg in filteredBackgrounds" :key="bg.id" @click.stop="selectBackground(bg)"
           class="relative cursor-pointer rounded-xl overflow-hidden group active:scale-95 transition-transform duration-150 touch-manipulation"
           :class="selectedBackground?.id === bg.id ? 'ring-4 ring-blue-400 shadow-xl' : 'ring-2 ring-transparent hover:ring-white/30'">
-          <img :src="bg.preview" class="w-full h-28 sm:h-32 md:h-40 lg:h-48 object-cover" />
+          <img
+            :src="getPreviewUrl(bg.id)"
+            :alt="bg.name"
+            class="w-full h-28 sm:h-32 md:h-40 lg:h-48 object-cover"
+            @error="(e) => e.target.src = bg.preview"
+          />
           <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent">
             <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-3">
               <p class="text-white text-base sm:text-lg font-bold mb-1">{{ bg.emoji }}</p>
@@ -61,6 +66,16 @@ const emit = defineEmits(['select', 'close'])
 
 const activeTab = ref('geographic')
 const selectedBackground = ref(null)
+
+// Supabase URL for previews
+const SUPABASE_URL = 'https://ymqmrfxdmzbgfuawyegr.supabase.co'
+const SUPABASE_STORAGE_URL = `${SUPABASE_URL}/storage/v1/object/public/photobooth`
+
+// Helper to get preview URL from Supabase or fallback to local
+const getPreviewUrl = (backgroundId) => {
+  // Try Supabase first (WebP format from generated previews)
+  return `${SUPABASE_STORAGE_URL}/previews/${backgroundId}.webp`
+}
 
 // Fonds disponibles
 const backgrounds = ref([
@@ -369,6 +384,90 @@ const backgrounds = ref([
     name: 'K-pop Demon Hunter Monde Entier',
     emoji: '👹🌍',
     preview: '/previews/kpop-pure-transformed.jpg'
+  },
+  {
+    id: 'pop-art-warhol-original',
+    name: 'Pop Art Warhol Fond Original',
+    emoji: '🎨📷',
+    preview: '/previews/pop-art-warhol-original.jpg'
+  },
+  {
+    id: 'pop-art-warhol-transformed',
+    name: 'Pop Art Warhol Monde Entier',
+    emoji: '🎨🌍',
+    preview: '/previews/pop-art-warhol-transformed.jpg'
+  },
+  {
+    id: 'superhero-original',
+    name: 'Super-Héros Fond Original',
+    emoji: '🦸📷',
+    preview: '/previews/superhero-original.jpg'
+  },
+  {
+    id: 'superhero-transformed',
+    name: 'Super-Héros Monde Entier',
+    emoji: '🦸🌍',
+    preview: '/previews/superhero-transformed.jpg'
+  },
+  {
+    id: 'film-noir-original',
+    name: 'Film Noir Fond Original',
+    emoji: '🖤📷',
+    preview: '/previews/film-noir-original.jpg'
+  },
+  {
+    id: 'film-noir-transformed',
+    name: 'Film Noir Monde Entier',
+    emoji: '🖤🌍',
+    preview: '/previews/film-noir-transformed.jpg'
+  },
+  {
+    id: 'vaporwave-original',
+    name: 'Vaporwave Fond Original',
+    emoji: '🌈📷',
+    preview: '/previews/vaporwave-original.jpg'
+  },
+  {
+    id: 'vaporwave-transformed',
+    name: 'Vaporwave Monde Entier',
+    emoji: '🌈🌍',
+    preview: '/previews/vaporwave-transformed.jpg'
+  },
+  {
+    id: 'cyberpunk-original',
+    name: 'Cyberpunk Fond Original',
+    emoji: '🤖📷',
+    preview: '/previews/cyberpunk-original.jpg'
+  },
+  {
+    id: 'cyberpunk-transformed',
+    name: 'Cyberpunk Monde Entier',
+    emoji: '🤖🌍',
+    preview: '/previews/cyberpunk-transformed.jpg'
+  },
+  {
+    id: 'retro-80s-original',
+    name: 'Vintage 80s Fond Original',
+    emoji: '📼📷',
+    preview: '/previews/retro-80s-original.jpg'
+  },
+  {
+    id: 'retro-80s-transformed',
+    name: 'Vintage 80s Monde Entier',
+    emoji: '📼🌍',
+    preview: '/previews/retro-80s-transformed.jpg'
+  },
+  {
+    id: 'disco-original',
+    name: 'Disco 70s Fond Original',
+    emoji: '🕺📷',
+    preview: '/previews/disco-original.jpg'
+  },
+  {
+    id: 'disco-transformed',
+    name: 'Disco 70s Monde Entier',
+    emoji: '🕺🌍',
+    preview: '/previews/disco-transformed.jpg'
   }
 ])
 
@@ -397,7 +496,14 @@ const filteredBackgrounds = computed(() => {
         bg.id.includes('aura-glow-dreamworks-transformed') ||
         bg.id.includes('aura-glow-pixar-transformed') ||
         bg.id.includes('captain-future-transformed') ||
-        bg.id.includes('kpop-pure-transformed')
+        bg.id.includes('kpop-pure-transformed') ||
+        bg.id.includes('pop-art-warhol-transformed') ||
+        bg.id.includes('superhero-transformed') ||
+        bg.id.includes('film-noir-transformed') ||
+        bg.id.includes('vaporwave-transformed') ||
+        bg.id.includes('cyberpunk-transformed') ||
+        bg.id.includes('retro-80s-transformed') ||
+        bg.id.includes('disco-transformed')
       )
     case 'original':
       // Fonds "Monde Original" (fond original conservé)
@@ -406,7 +512,14 @@ const filteredBackgrounds = computed(() => {
         bg.id.includes('fond-original') ||
         bg.name.includes('Fond Original') ||
         bg.id.includes('captain-future-original') ||
-        bg.id.includes('kpop-pure-original')
+        bg.id.includes('kpop-pure-original') ||
+        bg.id.includes('pop-art-warhol-original') ||
+        bg.id.includes('superhero-original') ||
+        bg.id.includes('film-noir-original') ||
+        bg.id.includes('vaporwave-original') ||
+        bg.id.includes('cyberpunk-original') ||
+        bg.id.includes('retro-80s-original') ||
+        bg.id.includes('disco-original')
       )
     default:
     return backgrounds.value
@@ -421,14 +534,20 @@ const selectBackground = (background) => {
         background.id.includes('france') || background.id.includes('conflans') || background.id.includes('beach') || 
         background.id.includes('brussels') || background.id.includes('chimay') || background.id.includes('paris')) {
       activeTab.value = 'geographic'
-    } else if (background.id.includes('pure-transformed') || background.id.includes('monde-entier') || 
-               background.name.includes('Monde Entier') || background.id.includes('aura-glow-dreamworks-transformed') || 
-               background.id.includes('aura-glow-pixar-transformed') || background.id.includes('captain-future-transformed') || 
-               background.id.includes('kpop-pure-transformed')) {
+    } else if (background.id.includes('pure-transformed') || background.id.includes('monde-entier') ||
+               background.name.includes('Monde Entier') || background.id.includes('aura-glow-dreamworks-transformed') ||
+               background.id.includes('aura-glow-pixar-transformed') || background.id.includes('captain-future-transformed') ||
+               background.id.includes('kpop-pure-transformed') || background.id.includes('pop-art-warhol-transformed') ||
+               background.id.includes('superhero-transformed') || background.id.includes('film-noir-transformed') ||
+               background.id.includes('vaporwave-transformed') || background.id.includes('cyberpunk-transformed') ||
+               background.id.includes('retro-80s-transformed') || background.id.includes('disco-transformed')) {
       activeTab.value = 'transformed'
-    } else if (background.id.includes('pure-original') || background.id.includes('fond-original') || 
-               background.name.includes('Fond Original') || background.id.includes('captain-future-original') || 
-               background.id.includes('kpop-pure-original')) {
+    } else if (background.id.includes('pure-original') || background.id.includes('fond-original') ||
+               background.name.includes('Fond Original') || background.id.includes('captain-future-original') ||
+               background.id.includes('kpop-pure-original') || background.id.includes('pop-art-warhol-original') ||
+               background.id.includes('superhero-original') || background.id.includes('film-noir-original') ||
+               background.id.includes('vaporwave-original') || background.id.includes('cyberpunk-original') ||
+               background.id.includes('retro-80s-original') || background.id.includes('disco-original')) {
       activeTab.value = 'original'
     }
     

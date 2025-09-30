@@ -531,6 +531,146 @@ export default defineEventHandler(async (event) => {
       preview: '/previews/kpop-pure-transformed.jpg',
       featured: true
     },
+    {
+      id: 'pop-art-warhol-original',
+      name: 'Pop Art Warhol Fond Original',
+      emoji: '🎨📷',
+      description: 'Portrait Pop Art style Andy Warhol avec fond original',
+      country: 'Pop Art',
+      category: 'artistique',
+      preview: '/previews/pop-art-warhol-original.jpg',
+      featured: true
+    },
+    {
+      id: 'pop-art-warhol-transformed',
+      name: 'Pop Art Warhol Monde Entier',
+      emoji: '🎨🌍',
+      description: 'Personnage et fond entièrement transformés en Pop Art Warhol',
+      country: 'Pop Art',
+      category: 'artistique',
+      preview: '/previews/pop-art-warhol-transformed.jpg',
+      featured: true
+    },
+    {
+      id: 'superhero-original',
+      name: 'Super-Héros Fond Original',
+      emoji: '🦸📷',
+      description: 'Personnage super-héros avec costume et cape, fond original',
+      country: 'Comics',
+      category: 'artistique',
+      preview: '/previews/superhero-original.jpg',
+      featured: true
+    },
+    {
+      id: 'superhero-transformed',
+      name: 'Super-Héros Monde Entier',
+      emoji: '🦸🌍',
+      description: 'Personnage et fond transformés en comics super-héros',
+      country: 'Comics',
+      category: 'artistique',
+      preview: '/previews/superhero-transformed.jpg',
+      featured: true
+    },
+    {
+      id: 'film-noir-original',
+      name: 'Film Noir Fond Original',
+      emoji: '🖤📷',
+      description: 'Style noir et blanc Film Noir années 40-50, fond original',
+      country: 'Cinéma Classique',
+      category: 'artistique',
+      preview: '/previews/film-noir-original.jpg',
+      featured: true
+    },
+    {
+      id: 'film-noir-transformed',
+      name: 'Film Noir Monde Entier',
+      emoji: '🖤🌍',
+      description: 'Personnage et fond transformés en Film Noir noir et blanc',
+      country: 'Cinéma Classique',
+      category: 'artistique',
+      preview: '/previews/film-noir-transformed.jpg',
+      featured: true
+    },
+    {
+      id: 'vaporwave-original',
+      name: 'Vaporwave Fond Original',
+      emoji: '🌈📷',
+      description: 'Style Vaporwave aesthetic rétro 80s-90s, fond original',
+      country: 'Rétro Digital',
+      category: 'artistique',
+      preview: '/previews/vaporwave-original.jpg',
+      featured: true
+    },
+    {
+      id: 'vaporwave-transformed',
+      name: 'Vaporwave Monde Entier',
+      emoji: '🌈🌍',
+      description: 'Personnage et fond transformés en Vaporwave aesthetic',
+      country: 'Rétro Digital',
+      category: 'artistique',
+      preview: '/previews/vaporwave-transformed.jpg',
+      featured: true
+    },
+    {
+      id: 'cyberpunk-original',
+      name: 'Cyberpunk Fond Original',
+      emoji: '🤖📷',
+      description: 'Style Cyberpunk futuriste avec néons, fond original',
+      country: 'Futuriste',
+      category: 'artistique',
+      preview: '/previews/cyberpunk-original.jpg',
+      featured: true
+    },
+    {
+      id: 'cyberpunk-transformed',
+      name: 'Cyberpunk Monde Entier',
+      emoji: '🤖🌍',
+      description: 'Personnage et fond transformés en Cyberpunk dystopique',
+      country: 'Futuriste',
+      category: 'artistique',
+      preview: '/previews/cyberpunk-transformed.jpg',
+      featured: true
+    },
+    {
+      id: 'retro-80s-original',
+      name: 'Vintage 80s Fond Original',
+      emoji: '📼📷',
+      description: 'Style vintage années 1980 authentique, fond original',
+      country: 'Rétro',
+      category: 'artistique',
+      preview: '/previews/retro-80s-original.jpg',
+      featured: true
+    },
+    {
+      id: 'retro-80s-transformed',
+      name: 'Vintage 80s Monde Entier',
+      emoji: '📼🌍',
+      description: 'Personnage et fond transformés en vintage années 80',
+      country: 'Rétro',
+      category: 'artistique',
+      preview: '/previews/retro-80s-transformed.jpg',
+      featured: true
+    },
+    {
+      id: 'disco-original',
+      name: 'Disco 70s Fond Original',
+      emoji: '🕺📷',
+      description: 'Style Disco années 1970 avec paillettes, fond original',
+      country: 'Rétro',
+      category: 'artistique',
+      preview: '/previews/disco-original.jpg',
+      featured: true
+    },
+    {
+      id: 'disco-transformed',
+      name: 'Disco 70s Monde Entier',
+      emoji: '🕺🌍',
+      description: 'Personnage et fond transformés en disco années 70',
+      country: 'Rétro',
+      category: 'artistique',
+      preview: '/previews/disco-transformed.jpg',
+      featured: true
+    },
   ]
 
   const query = getQuery(event)
