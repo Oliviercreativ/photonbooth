@@ -469,7 +469,7 @@ const capturePhoto = async () => {
             emit('photo-captured', processedPhoto)
 
             // Succès!
-            processingStep.value = 'Photo terminée !'
+            processingStep.value = 'Photo terminée !' 
             setTimeout(() => {
               isProcessing.value = false
               processingStep.value = ''

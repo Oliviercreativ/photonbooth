@@ -41,7 +41,7 @@
             :src="getPreviewUrl(bg.id)"
             :alt="bg.name"
             class="w-full h-28 sm:h-32 md:h-40 lg:h-48 object-cover"
-            @error="(e) => e.target.src = bg.preview"
+            @error="(e) => handleImageError(e, bg)"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent">
             <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-3">
@@ -75,6 +75,24 @@ const SUPABASE_STORAGE_URL = `${SUPABASE_URL}/storage/v1/object/public/photoboot
 const getPreviewUrl = (backgroundId) => {
   // Try Supabase first (WebP format from generated previews)
   return `${SUPABASE_STORAGE_URL}/previews/${backgroundId}.webp`
+}
+
+// Handle image error with cascading fallbacks
+const handleImageError = (event, bg) => {
+  const img = event.target
+
+  // First fallback: try local preview
+  if (img.src !== bg.preview && bg.preview) {
+    console.warn(`Preview Supabase manquante pour ${bg.id}, fallback vers ${bg.preview}`)
+    img.src = bg.preview
+    return
+  }
+
+  // Second fallback: use placeholder
+  if (!img.src.includes('placeholder.jpg')) {
+    console.warn(`Preview locale manquante pour ${bg.id}, utilisation du placeholder`)
+    img.src = '/previews/placeholder.jpg'
+  }
 }
 
 // Fonds disponibles

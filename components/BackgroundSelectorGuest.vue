@@ -26,7 +26,12 @@
         <div v-for="bg in filteredBackgrounds" :key="bg.id" @click.stop="selectBackground(bg)"
           class="relative cursor-pointer rounded-xl overflow-hidden group active:scale-95 transition-transform duration-150 touch-manipulation"
           :class="selectedBackground?.id === bg.id ? 'ring-4 ring-blue-400 shadow-xl' : 'ring-2 ring-transparent hover:ring-white/30'">
-          <img :src="bg.preview" class="w-full h-28 sm:h-32 md:h-40 lg:h-48 object-cover" />
+          <img
+            :src="bg.preview"
+            :alt="bg.name"
+            class="w-full h-28 sm:h-32 md:h-40 lg:h-48 object-cover"
+            @error="(e) => handleImageError(e, bg)"
+          />
           <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent">
             <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-3">
               <p class="text-white text-base sm:text-lg font-bold mb-1">{{ bg.emoji }}</p>
@@ -50,6 +55,17 @@ const emit = defineEmits(['select', 'close'])
 
 const activeTab = ref('geographic')
 const selectedBackground = ref(null)
+
+// Handle image error with placeholder fallback
+const handleImageError = (event, bg) => {
+  const img = event.target
+
+  // Fallback to placeholder if preview is missing
+  if (!img.src.includes('placeholder.jpg')) {
+    console.warn(`Preview manquante pour ${bg.id}, utilisation du placeholder`)
+    img.src = '/previews/placeholder.jpg'
+  }
+}
 
 // Fonds disponibles
 const backgrounds = ref([
