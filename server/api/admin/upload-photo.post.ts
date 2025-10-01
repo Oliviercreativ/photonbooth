@@ -131,23 +131,23 @@ export default defineEventHandler(async (event) => {
     console.log('  🖼️ Thumbnail:', thumbnailUrl)
 
     // 5. Vérifier si l'utilisateur guest a déjà une photo
-    if (guestEmail && guestEmail !== 'anonyme@photobooth.local') {
-      console.log('🔍 Vérification photo existante pour guest:', guestEmail)
-      
+    if (email && email !== 'anonyme@photobooth.local') {
+      console.log('🔍 Vérification photo existante pour guest:', email)
+
       const { data: existingPhoto, error: checkError } = await supabase
         .from('photos')
         .select('id, photo_url')
-        .eq('guest_email', guestEmail)
+        .eq('guest_email', email)
         .eq('is_active', true)
         .limit(1)
-      
+
       if (checkError) {
         console.error('❌ Erreur vérification photo existante:', checkError)
       } else if (existingPhoto && existingPhoto.length > 0) {
-        console.log('🚫 Guest a déjà une photo:', guestEmail)
+        console.log('🚫 Guest a déjà une photo:', email)
         throw createError({
           statusCode: 403,
-          statusMessage: `Cet utilisateur invité (${guestEmail}) a déjà une photo. Les utilisateurs invités sont limités à une seule photo.`
+          statusMessage: `Cet utilisateur invité (${email}) a déjà une photo. Les utilisateurs invités sont limités à une seule photo.`
         })
       }
     }

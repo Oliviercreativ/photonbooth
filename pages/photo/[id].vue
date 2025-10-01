@@ -72,10 +72,10 @@
             <div class="relative bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-2xl">
               <div class="relative overflow-hidden rounded-2xl">
                 <!-- Photo en background avec protection, comme dans photobooth.vue -->
-                <div 
+                <div
                   class="relative w-full max-w-xl h-[500px] mx-auto mb-6 rounded-lg shadow-lg overflow-hidden"
-                  :style="{ 
-                    backgroundImage: `url(${photo.url})`,
+                  :style="{
+                    backgroundImage: sanitizedPhotoUrl ? `url(${sanitizedPhotoUrl})` : 'none',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat'
@@ -181,6 +181,23 @@ const userEmail = ref('')
 const userFullName = ref('')
 const isChangingBg = ref(false)
 const showBgSelector = ref(false)
+
+// Sanitize photo URL for XSS protection
+const sanitizedPhotoUrl = computed(() => {
+  if (!photo.value?.url) return ''
+  try {
+    const url = new URL(photo.value.url)
+    // Only allow http/https protocols
+    if (!['https:', 'http:'].includes(url.protocol)) {
+      console.warn('Invalid protocol:', url.protocol)
+      return ''
+    }
+    return photo.value.url
+  } catch (err) {
+    console.error('Invalid URL:', photo.value.url)
+    return ''
+  }
+})
 
 // Récupérer les paramètres de l'URL
 const email = route.query.email

@@ -483,7 +483,7 @@ const capturePhoto = async () => {
             throw new Error(`Erreur API: ${response.status}`)
           }
         } catch (error) {
-          console.error('Erreur traitement Gemini:', error)
+          console.error('Erreur traitement:', error)
 
           // Fallback: sauvegarder la photo originale
           const originalPhoto = {

@@ -31,5 +31,9 @@
     "vue-draggable-next": "^2.3.0",
     "vue-router": "^4.4.0",
     "vue-toastification": "^2.0.0-rc.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vue-tsc": "^3.1.0"
   }
 }

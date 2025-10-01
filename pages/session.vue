@@ -113,7 +113,7 @@ const favoriteBackground = computed(() => {
 const handlePhotoCaptured = (photoData) => {
   photos.value.unshift(photoData)
   showToast(
-    `Photo ${photoData.processed ? 'traitée par Gemini' : 'capturée'} !`
+    `Photo ${photoData.processed ? 'traitée' : 'capturée'} !`
   )
 }
 

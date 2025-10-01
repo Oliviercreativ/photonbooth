@@ -340,9 +340,332 @@ const styles = [
 
 ---
 
+## 🏆 Paliers et Récompenses Fidélité
+
+### Paliers (Tiers)
+```javascript
+const loyaltyTiers = [
+  {
+    tier: 'bronze',
+    name: 'Bronze',
+    minPoints: 0,
+    maxPoints: 24,
+    benefits: ['5 photos gratuites', 'Galerie sauvegardée']
+  },
+  {
+    tier: 'silver',
+    name: 'Argent',
+    minPoints: 25,
+    maxPoints: 49,
+    benefits: ['10 photos gratuites', '1 fond exclusif', 'Priorité support']
+  },
+  {
+    tier: 'gold',
+    name: 'Or',
+    minPoints: 50,
+    maxPoints: 99,
+    benefits: ['20 photos gratuites', '3 fonds exclusifs', 'Watermark supprimé', 'Beta testeur']
+  },
+  {
+    tier: 'platinum',
+    name: 'Platine',
+    minPoints: 100,
+    benefits: ['Photos illimitées', 'Tous fonds exclusifs', 'Accès anticipé', 'Badge platine']
+  }
+]
+```
+
+### Catalogue de récompenses
+```javascript
+const rewards = [
+  // Photos supplémentaires
+  { id: 'photos-5', name: '+5 photos', cost: 10, type: 'photos' },
+  { id: 'photos-10', name: '+10 photos', cost: 18, type: 'photos' },
+
+  // Fonctionnalités premium
+  { id: 'remove-watermark-1', name: 'Supprimer watermark (1 photo)', cost: 5, type: 'feature' },
+  { id: 'remove-watermark-all', name: 'Supprimer watermark (permanent)', cost: 25, type: 'feature' },
+  { id: 'unlock-exclusive-bg', name: 'Débloquer fond exclusif', cost: 15, type: 'unlock' },
+
+  // Avantages commerces
+  { id: 'coffee-conflans', name: 'Café offert chez partenaire', cost: 20, type: 'partner' },
+  { id: 'discount-10', name: '-10% chez commerçants Made in Conflans', cost: 30, type: 'partner' },
+
+  // Événements spéciaux
+  { id: 'vip-event', name: 'Accès VIP prochain événement', cost: 50, type: 'event' },
+  { id: 'early-access', name: 'Accès anticipé nouveaux styles', cost: 40, type: 'event' }
+]
+```
+
+---
+
 ## 🎯 Priorité des étapes
 
-### Phase 1 - Prototype (1-2 jours)
+### PRIORITÉ IMMÉDIATE - Fonctionnalités Événement Oktoberfest (2-3 jours)
+
+**Pour la journée événement - Fonctionnalités essentielles :**
+
+#### 1. Avant la capture photo
+- [ ] **Compte à rebours visuel** : Animation 3...2...1... avant déclenchement
+  - Animation plein écran avec cercle qui se remplit
+  - Son optionnel "bip bip bip"
+  - Permet à l'utilisateur de se préparer
+
+#### 2. Formats de sortie photo (après capture)
+- [ ] **Format strip classique** : 3-4 photos verticales côte à côte
+  - Comme les vraies cabines photo
+  - Taille : 2x6 pouces (5x15cm)
+  - Fond blanc entre les photos
+  - Logo Made in Conflans en bas
+
+- [ ] **Collage 2×2** : 4 photos différentes en grille carrée
+  - Format carré Instagram-friendly
+  - 4 variations du même style OU 4 styles différents
+  - Bordures blanches entre les photos
+
+- [ ] **Format Polaroid** : Photo avec cadre blanc en bas
+  - Espace blanc de 20% en bas
+  - Possibilité d'ajouter texte manuscrit virtuel
+  - Look vintage authentique
+
+- [ ] **Format Instagram carré** : 1:1 parfait
+  - 1080x1080px
+  - Optimisé pour feed Instagram
+  - Avec ou sans cadre
+
+- [ ] **Format Instagram Story** : Vertical 9:16
+  - 1080x1920px
+  - Optimisé pour stories/reels
+  - Espace pour stickers et texte
+
+#### 3. Informations automatiques sur la photo
+- [ ] **Date et lieu** : Ajout automatique en overlay
+  - Texte : "Oktoberfest Conflans - [Date du jour]"
+  - Position configurable (bas, coin)
+  - Police élégante, couleur contrastée
+  - Optionnel (peut être désactivé par utilisateur)
+
+- [ ] **QR Code intégré** : Vers site Made in Conflans
+  - QR code dans un coin de la photo
+  - Taille : ~15% de la photo
+  - Lien vers : https://madeinconflans.fr ou app store
+  - Réutiliser la fonctionnalité existante de génération QR
+  - Alternative : QR code vers téléchargement HD de la photo
+
+#### 4. Mode aléatoire
+- [ ] **Bouton "Surprise-moi !"** : Fond aléatoire
+  - Sélectionne un fond au hasard parmi tous disponibles
+  - Animation roulette de casino avant révélation
+  - Message : "Vous avez obtenu : [Nom du style] !"
+  - Parfait pour les indécis ou pour créer du fun
+
+---
+
+## 🔧 Implémentation Fonctionnalités Événement
+
+### 1. Compte à rebours visuel
+
+**Composant à créer : `/components/CameraCountdown.vue`**
+
+```vue
+<template>
+  <div v-if="isCountingDown" class="countdown-overlay">
+    <div class="countdown-circle">
+      <span class="countdown-number">{{ count }}</span>
+    </div>
+    <p class="countdown-text">Préparez-vous !</p>
+  </div>
+</template>
+
+Fonctionnalités :
+- Animation cercle SVG qui se remplit en 3 secondes
+- Son "bip" à chaque seconde (optionnel)
+- Vibration mobile (si supporté)
+- Déclenchement auto de la capture à 0
+```
+
+### 2. Formats de sortie photo
+
+**API à créer : `/server/api/photo/format.post.ts`**
+
+```typescript
+POST /api/photo/format
+Body: {
+  photoUrl: string,
+  format: 'strip' | 'grid' | 'polaroid' | 'square' | 'story',
+  options: {
+    includeDate: boolean,
+    includeQR: boolean,
+    eventName: string
+  }
+}
+
+Utiliser `sharp` pour :
+- Créer canvas aux bonnes dimensions
+- Positionner photo(s)
+- Ajouter bordures blanches
+- Ajouter texte date/lieu
+- Générer et insérer QR code
+- Export final
+```
+
+**Dimensions à utiliser :**
+```javascript
+const formats = {
+  strip: { width: 500, height: 1500 }, // 3 photos de 500x500
+  grid: { width: 1080, height: 1080 }, // 2x2 de 540x540 chacune
+  polaroid: { width: 800, height: 1000 }, // Photo 800x800 + 200px bas
+  square: { width: 1080, height: 1080 }, // Instagram feed
+  story: { width: 1080, height: 1920 }  // Instagram story
+}
+```
+
+### 3. Génération QR Code
+
+**Librairie à utiliser : `qrcode`**
+
+```bash
+npm install qrcode
+```
+
+```typescript
+// server/utils/qrGenerator.ts
+import QRCode from 'qrcode'
+
+export async function generateQRCode(url: string) {
+  const qrDataUrl = await QRCode.toDataURL(url, {
+    width: 200,
+    margin: 1,
+    color: {
+      dark: '#000000',
+      light: '#FFFFFF'
+    }
+  })
+  return qrDataUrl // Base64 image
+}
+
+// Utilisation dans format.post.ts
+const qrImage = await generateQRCode('https://madeinconflans.fr')
+// Puis insérer avec sharp.composite()
+```
+
+### 4. Mode aléatoire
+
+**Modifier : `/components/BackgroundSelector.vue`**
+
+```vue
+<!-- Nouveau bouton dans le header -->
+<button @click="selectRandomBackground" class="btn-surprise">
+  <Icon name="heroicons:sparkles" />
+  🎲 Surprise-moi !
+</button>
+
+<script>
+const selectRandomBackground = () => {
+  // Animation roulette
+  showRoulette.value = true
+
+  // Sélection aléatoire après 2 secondes
+  setTimeout(() => {
+    const randomIndex = Math.floor(Math.random() * backgrounds.value.length)
+    const randomBg = backgrounds.value[randomIndex]
+
+    selectBackground(randomBg)
+    showRoulette.value = false
+
+    // Notification
+    showToast(`🎉 Style obtenu : ${randomBg.name} !`)
+  }, 2000)
+}
+</script>
+```
+
+### 5. Date et lieu automatique
+
+**Overlay avec `sharp` lors de la génération finale :**
+
+```typescript
+// server/api/photo/format.post.ts
+import sharp from 'sharp'
+
+async function addEventOverlay(imageBuffer: Buffer, eventName: string) {
+  const date = new Date().toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  })
+
+  const text = `${eventName} - ${date}`
+
+  // Créer SVG avec texte
+  const svgText = `
+    <svg width="1080" height="100">
+      <style>
+        .title {
+          font-family: Arial, sans-serif;
+          font-size: 32px;
+          font-weight: bold;
+          fill: white;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+      </style>
+      <text x="50%" y="50%" text-anchor="middle" class="title">${text}</text>
+    </svg>
+  `
+
+  const textBuffer = Buffer.from(svgText)
+
+  // Composite sur l'image
+  return await sharp(imageBuffer)
+    .composite([{
+      input: textBuffer,
+      gravity: 'south'
+    }])
+    .toBuffer()
+}
+```
+
+---
+
+## 📋 Plan d'implémentation Événement (Ordre recommandé)
+
+### Jour 1 - Fonctionnalités de base
+1. ✅ Compte à rebours visuel (2h)
+2. ✅ Mode aléatoire avec animation (1h)
+3. ✅ Date/lieu automatique overlay (2h)
+
+### Jour 2 - Formats de sortie
+4. ✅ Format Instagram carré (1h)
+5. ✅ Format Instagram story (1h)
+6. ✅ Format Polaroid (2h)
+7. ✅ Génération QR Code + intégration (2h)
+
+### Jour 3 - Formats avancés + tests
+8. ✅ Format strip 3 photos (3h)
+9. ✅ Format collage 2×2 (2h)
+10. ✅ Tests complets tous formats (2h)
+
+### Installation dépendances
+```bash
+npm install qrcode
+npm install --save-dev @types/qrcode
+```
+
+---
+
+### PRIORITÉ HAUTE - Programme Fidélité (3-5 jours)
+- [ ] Créer tables `loyalty_points` et `loyalty_transactions`
+- [ ] Modifier table `profiles` avec colonnes fidélité
+- [ ] Créer API `award-signup-bonus.post.ts`
+- [ ] Créer API `award-photo-points.post.ts`
+- [ ] Créer API `get-balance.get.ts`
+- [ ] Modifier `pages/auth.vue` pour bonus inscription
+- [ ] Créer composant `LoyaltyBadge.vue`
+- [ ] Afficher points en temps réel dans navbar
+- [ ] Tester workflow complet inscription → bonus → photos
+- [ ] Documentation utilisateur
+
+### Phase 1 - Mode Paysage + Style - Prototype (1-2 jours)
 - [ ] Créer `BackgroundLocationSelector.vue` avec 5 lieux test
 - [ ] Créer `BackgroundStyleSelector.vue` avec 5 styles test
 - [ ] Modifier `index.vue` pour workflow en 2 étapes
@@ -384,6 +707,141 @@ const styles = [
 ### Partage
 - [ ] "J'ai créé ma photo [Style] à [Lieu] !"
 - [ ] Templates de partage social
+
+---
+
+## 🔗 Intégration avec l'App Made in Conflans
+
+### API externe Made in Conflans (à définir)
+
+**Endpoints supposés de l'app Made in Conflans :**
+
+```typescript
+// 1. Vérifier si utilisateur existe dans l'app fidélité
+GET https://api.madeinconflans.fr/v1/loyalty/user/:email
+Response: {
+  exists: boolean,
+  card_number: string,
+  current_points: number
+}
+
+// 2. Ajouter points sur la carte fidélité
+POST https://api.madeinconflans.fr/v1/loyalty/points/add
+Body: {
+  card_number: string,
+  points: number,
+  source: 'photobooth',
+  event: 'oktoberfest_2025'
+}
+Response: {
+  success: boolean,
+  new_balance: number
+}
+
+// 3. Synchroniser compte photobooth avec app fidélité
+POST https://api.madeinconflans.fr/v1/loyalty/link-account
+Body: {
+  email: string,
+  photobooth_user_id: uuid,
+  event: 'oktoberfest_2025'
+}
+Response: {
+  success: boolean,
+  card_number: string
+}
+```
+
+### Workflow de synchronisation
+
+```typescript
+// composables/useLoyaltySync.ts
+export const useLoyaltySync = () => {
+  // Vérifier si l'utilisateur a déjà une carte Made in Conflans
+  const checkExistingCard = async (email: string) => {
+    try {
+      const response = await $fetch('https://api.madeinconflans.fr/v1/loyalty/user/' + email)
+      return response.exists ? response : null
+    } catch (error) {
+      return null
+    }
+  }
+
+  // Synchroniser points photobooth → App fidélité
+  const syncPoints = async (cardNumber: string, points: number) => {
+    try {
+      await $fetch('https://api.madeinconflans.fr/v1/loyalty/points/add', {
+        method: 'POST',
+        body: {
+          card_number: cardNumber,
+          points: points,
+          source: 'photobooth',
+          event: 'oktoberfest_2025'
+        }
+      })
+      return true
+    } catch (error) {
+      console.error('Erreur sync points:', error)
+      return false
+    }
+  }
+
+  return { checkExistingCard, syncPoints }
+}
+```
+
+### Workflow utilisateur complet
+
+```
+1. Utilisateur invité prend 1 photo gratuite
+   ↓
+2. Incitation inscription : "Créez un compte pour +5 photos !"
+   ↓
+3. Utilisateur entre email + mot de passe
+   ↓
+4. Vérification : Email existe déjà dans l'app Made in Conflans ?
+   ↓
+   OUI → Récupérer card_number existant
+   ↓     Lier compte photobooth ↔ carte fidélité
+   ↓     Attribution bonus : +5 photos + +5 points
+   ↓     Synchronisation points vers app Made in Conflans
+   ↓
+   NON → Création nouveau compte photobooth
+   ↓     Attribution bonus : +5 photos + +5 points
+   ↓     Message : "Téléchargez l'app Made in Conflans pour profiter
+                    de vos points chez les commerçants !"
+   ↓
+5. Utilisateur continue à prendre des photos
+   ↓
+6. Chaque photo = +1 point (synchro automatique si carte liée)
+```
+
+### Affichage dans l'interface
+
+```vue
+<!-- components/LoyaltyStatus.vue -->
+<template>
+  <div class="loyalty-status">
+    <!-- Photobooth points -->
+    <div class="photobooth-points">
+      <Icon name="heroicons:camera" />
+      <span>{{ photoboothPoints }} pts Photobooth</span>
+    </div>
+
+    <!-- Made in Conflans points (si carte liée) -->
+    <div v-if="hasLinkedCard" class="mic-points">
+      <Icon name="heroicons:sparkles" />
+      <span>{{ micPoints }} pts Made in Conflans</span>
+      <button @click="openMicApp">Voir avantages</button>
+    </div>
+
+    <!-- Incitation si pas de carte -->
+    <div v-else class="link-card-cta">
+      <p>Téléchargez l'app Made in Conflans pour utiliser vos points !</p>
+      <button @click="showLinkCardModal">Lier ma carte</button>
+    </div>
+  </div>
+</template>
+```
 
 ---
 

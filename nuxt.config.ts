@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
+  compatibilityDate: '2024-07-15',
   devtools: {enabled: false},
 
   // Configuration Vercel optimisée
@@ -46,7 +46,7 @@ export default defineNuxtConfig({
   },
 
   typescript: {
-    typeCheck: false,
+    typeCheck: true,
     strict: false,
     shim: false
   },
@@ -78,7 +78,6 @@ export default defineNuxtConfig({
     '/api/**': {
       cors: true,
       headers: {
-        'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       }
