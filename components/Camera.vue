@@ -44,7 +44,7 @@
         </div>
 
         <!-- Message si pas de photos -->
-        <div v-else class="flex flex-col items-center justify-center h-64 text-gray-800/70">
+        <div v-else class="flex flex-col items-center justify-center h-64 text-white">
           <span class="text-6xl mb-4">📷</span>
           <p class="text-lg font-medium">Aucune photo prise</p>
           <p class="text-sm text-center mt-2">Prenez votre première photo avec la caméra !</p>
@@ -55,12 +55,12 @@
     <!-- Vidéo avec contraintes de résolution -->
     <div v-if="activeMobileTab === 'camera'" class="fixed inset-0 z-0">
       <!-- Caméra active -->
-      <video v-if="isCameraActive" ref="videoElement" autoplay playsinline muted class="w-full h-full object-cover"
+      <video v-if="isCameraActive" ref="videoElement" autoplay playsinline muted class="w-full h-full object-contain"
         :class="{ mirror: frontCamera }"></video>
       
       <!-- Caméra éteinte -->
       <div v-else class="w-full h-full bg-gray-900 flex items-center justify-center">
-        <div class="text-center text-gray-800">
+        <div class="text-center text-white">
           <p class="text-lg font-medium mb-2">Caméra éteinte</p>
           <p class="text-sm opacity-75">Sélectionnez un fond pour activer la caméra</p>
         </div>

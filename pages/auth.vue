@@ -17,7 +17,7 @@
         <button @click="activeTab = 'login'" :class="[
             'flex-1 py-2 px-4 border-2 rounded-md text-sm font-medium transition-colors',
             activeTab === 'login' 
-              ? 'bg-[#33cccc] text-gray-800 font-bold' 
+              ? 'bg-[#33cccc] text-white font-bold' 
               : 'text-gray-900 hover:text-gray-900'
           ]">
           Connexion
@@ -25,7 +25,7 @@
         <button @click="activeTab = 'register'" :class="[
             'flex-1 py-2 px-4 border-2 rounded-md text-sm font-medium transition-colors',
             activeTab === 'register' 
-              ? 'bg-[#33cccc] text-gray-800 font-bold' 
+              ? 'bg-[#33cccc] text-white font-bold' 
               : 'text-gray-900 hover:text-gray-900'
           ]">
           Créer un compte
