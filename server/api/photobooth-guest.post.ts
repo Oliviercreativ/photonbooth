@@ -413,8 +413,17 @@ async function saveGeneratedImageToDatabase(imageBuffer: Buffer, backgroundId: s
         // Créer une miniature de l'image générée
         const thumbnailUrl = await createThumbnail(imageBuffer, supabaseUrl, supabaseServiceKey)
         
-        // Données à mettre à jour - incrémenter le count
+        // Vérifier la limite de changements de fond (5 maximum)
         const currentCount = photoData.count || 0
+        if (currentCount >= 5) {
+          console.log('🚫 Limite de 5 changements de fond atteinte pour l\'utilisateur invité:', guestEmail)
+          throw createError({
+            statusCode: 403,
+            statusMessage: 'Vous avez atteint la limite de 5 changements de fond. Les utilisateurs invités sont limités à 5 fonds différents.'
+          })
+        }
+
+        // Données à mettre à jour - incrémenter le count
         const updateData = {
           photo_url: photoUrl,
           photo_thumbnail: thumbnailUrl,

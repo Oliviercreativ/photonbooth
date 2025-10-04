@@ -1,32 +1,29 @@
 <template>
-  <div class="fixed inset-0 bg-black/95 backdrop-blur z-50 flex flex-col h-screen">
+  <div class="fixed inset-0 bg-[#f7f5f2] backdrop-blur z-50 flex flex-col h-screen pb-24">
       <!-- Header -->
     <div class="flex justify-between items-center p-4 border-b border-white/20">
-      <h2 class="text-white text-lg sm:text-xl font-bold">Choisissez un effet</h2>
+      <h2 class="text-gray-800 text-lg sm:text-xl font-bold">Choisissez un effet</h2>
         <button @click="$emit('close')"
-        class="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white px-4 py-3 rounded-lg transition-colors touch-manipulation min-h-[48px] min-w-[80px] font-semibold">
+        class="text-gray-800 px-4 py-2 rounded-lg touch-manipulation min-h-[48px] min-w-[80px] font-medium">
         ✕ Fermer
         </button>
       </div>
 
     <!-- Onglets -->
-    <div class="flex border-b border-white/20">
+    <div class="flex border-b border-white/20 gap-2 items-center">
       <button @click="activeTab = 'geographic'"
-        class="flex-1 px-2 py-4 text-center transition-colors touch-manipulation min-h-[60px] flex flex-col items-center justify-center"
-        :class="activeTab === 'geographic' ? 'bg-blue-600 text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'">
-        <span class="text-xl mb-1"><Icon name="heroicons:globe-alt" /></span>
+        class="flex-1 px-2 text-center transition-colors touch-manipulation min-h-[60px] flex flex-col items-center justify-center"
+        :class="activeTab === 'geographic' ? 'bg-[#33cccc] text-white' : 'text-gray-800 border border-[#33cccc]'">
         <span class="text-sm font-medium">Pays et Ville</span>
       </button>
       <button @click="activeTab = 'transformed'"
-        class="flex-1 px-2 py-4 text-center transition-colors touch-manipulation min-h-[60px] flex flex-col items-center justify-center"
-        :class="activeTab === 'transformed' ? 'bg-blue-600 text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'">
-        <span class="text-xl mb-1"><Icon name="heroicons:globe-alt" /></span>
+        class="flex-1 px-2 text-center transition-colors touch-manipulation min-h-[60px] flex flex-col items-center justify-center"
+        :class="activeTab === 'transformed' ? 'bg-[#33cccc] text-white' : 'text-gray-800 border border-[#33cccc]'">
         <span class="text-sm font-medium">Monde Entier</span>
       </button>
       <button @click="activeTab = 'original'"
-        class="flex-1 px-2 py-4 text-center transition-colors touch-manipulation min-h-[60px] flex flex-col items-center justify-center"
-        :class="activeTab === 'original' ? 'bg-blue-600 text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'">
-        <span class="text-xl mb-1"><Icon name="heroicons:camera" /></span>
+        class="flex-1 px-2 text-center transition-colors touch-manipulation min-h-[60px] flex flex-col items-center justify-center"
+        :class="activeTab === 'original' ? 'bg-[#33cccc] text-white' : 'text-gray-800 border border-[#33cccc]'">
         <span class="text-sm font-medium">Monde Original</span>
           </button>
       </div>

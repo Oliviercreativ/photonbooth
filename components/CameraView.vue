@@ -18,14 +18,14 @@
 
       <!-- Guide de positionnement -->
       <div v-if="selectedBackground" class="absolute inset-4 border-2 border-white/40 rounded-xl pointer-events-none">
-        <div class="absolute -top-8 left-0 bg-black/50 text-white text-xs px-2 py-1 rounded backdrop-blur">
+        <div class="absolute -top-8 left-0 bg-black/50 text-gray-800 text-xs px-2 py-1 rounded backdrop-blur">
           {{ selectedBackground ? 'Parfait ! Prêt à capturer' : 'Placez-vous dans le cadre' }}
         </div>
       </div>
 
       <!-- Instructions -->
       <div v-if="!selectedBackground" class="absolute inset-0 flex items-center justify-center">
-        <div class="text-center text-white bg-black/50 p-6 rounded-xl backdrop-blur">
+        <div class="text-center text-gray-800 bg-black/50 p-6 rounded-xl backdrop-blur">
           <div class="text-4xl mb-3">📸</div>
           <p class="text-lg font-medium mb-2">Bienvenue !</p>
           <p class="text-sm opacity-80">Choisissez un fond d'écran en haut pour commencer</p>
@@ -38,7 +38,7 @@
       <div class="flex items-center justify-between max-w-sm mx-auto">
         <!-- Switch Camera -->
         <button @click="$emit('switch-camera')" :disabled="!isActive"
-          class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white text-xl backdrop-blur disabled:opacity-50 transition-all active:scale-95">
+          class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-gray-800 text-xl backdrop-blur disabled:opacity-50 transition-all active:scale-95">
           🔄
         </button>
 
@@ -47,21 +47,21 @@
           class="w-20 h-20 bg-white border-4 border-gray-300 rounded-full flex items-center justify-center shadow-lg transition-transform disabled:opacity-50"
           :class="capturing ? 'animate-pulse' : 'active:scale-95'">
           <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center">
-            <span v-if="capturing" class="text-white text-xs animate-spin">⏳</span>
-            <span v-else class="text-white text-2xl">📷</span>
+            <span v-if="capturing" class="text-gray-800 text-xs animate-spin">⏳</span>
+            <span v-else class="text-gray-800 text-2xl">📷</span>
           </div>
         </button>
 
         <!-- Gallery -->
         <button @click="$emit('open-gallery')"
-          class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white text-xl backdrop-blur transition-all active:scale-95">
+          class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-gray-800 text-xl backdrop-blur transition-all active:scale-95">
           🖼️
         </button>
       </div>
 
       <!-- Status -->
       <div class="text-center mt-4 max-w-sm mx-auto">
-        <p v-if="!selectedBackground" class="text-white/70 text-sm">
+        <p v-if="!selectedBackground" class="text-gray-800/70 text-sm">
           👆 Choisissez un fond d'écran
         </p>
         <p v-else-if="error" class="text-red-400 text-sm">

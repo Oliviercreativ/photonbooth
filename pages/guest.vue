@@ -75,7 +75,7 @@
         <button 
           @click="handleGuestContinue"
           :disabled="isLoading"
-          class="w-full bg-[#33cccc] text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          class="w-full bg-[#33cccc] text-gray-800 font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {{ isLoading ? 'Enregistrement...' : 'Continuer vers le photobooth' }}
         </button>

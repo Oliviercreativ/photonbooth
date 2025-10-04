@@ -1,104 +1,136 @@
 <template>
-  <div class="min-h-screen bg-gray-900 p-4 pb-20">
+  <div class="min-h-screen p-4 pb-24">
     <div class="max-w-6xl mx-auto">
       <!-- Header -->
       <div class="flex justify-between items-center mb-6">
         <div>
-          <h1 class="text-3xl font-bold text-white">Ma Galerie</h1>
-          <p class="text-white/60 mt-1">{{ totalPhotos }} photo{{ totalPhotos > 1 ? 's' : '' }}</p>
-        </div>
-        <NuxtLink
-          to="/"
-          class="text-white/80 hover:text-white transition-colors flex items-center gap-2"
-        >
-          <Icon name="heroicons:arrow-left" class="w-5 h-5" />
-          Retour
-        </NuxtLink>
-      </div>
-
-      <!-- Filtres -->
-      <div class="mb-6">
-        <div class="flex gap-2 overflow-x-auto pb-2">
-          <button
-            v-for="filter in filters"
-            :key="filter.value"
-            @click="activeFilter = filter.value"
-            class="px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors"
-            :class="activeFilter === filter.value
-              ? 'bg-blue-500 text-white'
-              : 'bg-white/10 text-white/70 hover:bg-white/20'"
-          >
-            {{ filter.label }}
-          </button>
+          <h1 class="text-3xl font-bold text-gray-800">Ma Galerie</h1>
+          <div class="flex items-center gap-3 mt-1">
+            <div class="flex items-center gap-2">
+              <span class="px-3 py-1 rounded-full text-sm font-medium"
+                :class="totalPhotos >= 5 ? 'bg-red-700 text-white' : 'bg-[#33cccc] text-white'">
+                {{ totalPhotos }}/5 photo{{ totalPhotos > 1 ? 's' : '' }}
+              </span>
+              <span v-if="totalPhotos >= 5" class="text-gray-800 text-xs">Limite atteinte</span>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- État de chargement -->
       <div v-if="isLoading" class="text-center py-12">
         <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-        <p class="text-white/60 mt-4">Chargement des photos...</p>
+        <p class="text-gray-800/60 mt-4">Chargement des photos...</p>
       </div>
 
       <!-- État vide -->
       <div v-else-if="photos.length === 0" class="text-center py-12">
         <div class="text-6xl mb-4">📸</div>
-        <p class="text-white/70 text-lg mb-2">Aucune photo dans votre galerie</p>
-        <p class="text-white/50 text-sm mb-6">Prenez votre première photo pour commencer !</p>
-        <NuxtLink
-          to="/"
-          class="inline-flex items-center gap-2 bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors"
-        >
+        <p class="text-gray-800/70 text-lg mb-2">Aucune photo dans votre galerie</p>
+        <p class="text-gray-800/50 text-sm mb-6">Prenez votre première photo pour commencer !</p>
+        <NuxtLink to="/"
+          class="inline-flex items-center gap-2 bg-blue-500 text-gray-800 px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors">
           <Icon name="heroicons:camera" class="w-5 h-5" />
           Prendre une photo
         </NuxtLink>
       </div>
 
+      <!-- Modal limite atteinte -->
+      <div v-if="totalPhotos >= 5 && showLimitModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+        <div class="bg-white rounded-xl p-6 max-w-lg w-full relative shadow-2xl">
+          <!-- Bouton fermer -->
+          <button
+            @click="showLimitModal = false"
+            class="absolute top-3 right-3 text-gray-800 text-2xl hover:text-red-500 transition-colors"
+            aria-label="Fermer la fenêtre"
+          >
+            ✕
+          </button>
+          <div class="text-6xl mb-4 flex justify-center">
+            <Icon name="heroicons:photo" />
+          </div>
+          <h2 class="text-2xl font-bold text-[#33cccc] mb-2 text-center">
+            Super vous avez utilisé vos photo gratuites !
+          </h2>
+          <p class="text-gray-700 mb-4 text-center">
+            Vous souhaitez participer au jeu concours pour gagner un bon d'achat
+            de 20€ à utiliser dans un commerce partenaire de notre appli de fidélité
+          </p>
+
+          <div class="bg-white/80 backdrop-blur rounded-lg p-4 mb-6">
+            <p class="text-gray-800 font-semibold mb-6 flex items-center justify-center gap-2">
+              <Icon name="heroicons:light-bulb" class="w-5 h-5" />
+              Vous souhaitez plus de photos ?
+            </p>
+            <div class="grid grid-cols-2 gap-3 mb-2">
+              <div class="bg-[#33cccc]/10 border border-[#33cccc] rounded-lg p-3 flex flex-col items-center">
+                <span class="text-lg font-bold text-[#33cccc]">5 photos</span>
+                <span class="text-gray-700 font-semibold mt-1">3€</span>
+              </div>
+              <div class="bg-[#33cccc]/10 border border-[#33cccc] rounded-lg p-3 flex flex-col items-center">
+                <span class="text-lg font-bold text-[#33cccc]">10 photos</span>
+                <span class="text-gray-700 font-semibold mt-1">5</span>
+              </div>
+              <div class="bg-[#33cccc]/10 border border-[#33cccc] rounded-lg p-3 flex flex-col items-center">
+                <span class="text-lg font-bold text-[#33cccc]">15 photos</span>
+                <span class="text-gray-700 font-semibold mt-1">7,50€</span>
+              </div>
+              <div class="bg-[#33cccc]/10 border border-[#33cccc] rounded-lg p-3 flex flex-col items-center">
+                <span class="text-lg font-bold text-[#33cccc]">20 photos</span>
+                <span class="text-gray-700 font-semibold mt-1">10€</span>
+              </div>
+            </div>
+            <p class="text-gray-600 text-sm text-center pt-2">
+              Choisissez le pack qui vous convient et venez payer sur le
+              stand de made in Conflans & l'atelier de la fête
+            </p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <NuxtLink to="/acheter"
+              class="bg-pink-500 text-white px-6 py-3 rounded-lg hover:bg-pink-600 transition-colors shadow-lg font-semibold flex items-center justify-center gap-2">
+              <Icon name="heroicons:shopping-cart" class="w-5 h-5" />
+              Acheter des photos
+            </NuxtLink>
+            <NuxtLink to="/galerie"
+              class="inline-block bg-[#33cccc] text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors font-semibold flex items-center justify-center gap-2">
+              <Icon name="heroicons:folder" class="w-5 h-5" />
+              Voir ma galerie
+            </NuxtLink>
+          </div>
+        </div>
+      </div>
+
       <!-- Grid des photos -->
-      <div v-else class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-        <div
-          v-for="photo in filteredPhotos"
-          :key="photo.id"
-          class="relative group cursor-pointer"
-          @click="openPhoto(photo)"
-        >
-          <img
-            :src="photo.photo_url"
-            :alt="photo.background_name"
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div v-for="photo in filteredPhotos" :key="photo.id" class="relative group cursor-pointer"
+          @click="openPhoto(photo)">
+          <img :src="photo.photo_url" :alt="photo.background_name"
             class="w-full aspect-square object-cover rounded-lg transition-transform group-hover:scale-105"
-            loading="lazy"
-          />
+            loading="lazy" />
 
           <!-- Badge de fond -->
-          <div class="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded backdrop-blur">
+          <div class="absolute top-2 left-2 bg-black/50 text-gray-800 text-xs px-2 py-1 rounded backdrop-blur">
             {{ photo.background_name }}
           </div>
 
           <!-- Actions au hover -->
           <div
-            class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center"
-          >
+            class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
             <div class="flex gap-2">
-              <button
-                @click.stop="openPhoto(photo)"
-                class="bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
-              >
+              <button @click.stop="openPhoto(photo)"
+                class="bg-blue-500 text-gray-800 w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
                 <Icon name="heroicons:eye" class="w-5 h-5" />
               </button>
-              <button
-                @click.stop="sharePhoto(photo)"
-                class="bg-green-500 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-green-600 transition-colors"
-              >
+              <button @click.stop="sharePhoto(photo)"
+                class="bg-green-500 text-gray-800 w-10 h-10 rounded-full flex items-center justify-center hover:bg-green-600 transition-colors">
                 <Icon name="heroicons:share" class="w-5 h-5" />
               </button>
 
               <!-- Bouton admin uniquement -->
-              <button
-                v-if="isAdmin"
-                @click.stop="generatePreview(photo)"
-                :disabled="generatingPreview === photo.id"
-                class="bg-purple-500 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-purple-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                :title="`Générer preview pour ${photo.background_name}`"
-              >
+              <button v-if="isAdmin" @click.stop="generatePreview(photo)" :disabled="generatingPreview === photo.id"
+                class="bg-purple-500 text-gray-800 w-10 h-10 rounded-full flex items-center justify-center hover:bg-purple-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                :title="`Générer preview pour ${photo.background_name}`">
                 <Icon v-if="generatingPreview !== photo.id" name="heroicons:sparkles" class="w-5 h-5" />
                 <div v-else class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
               </button>
@@ -106,7 +138,7 @@
           </div>
 
           <!-- Date -->
-          <div class="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded backdrop-blur">
+          <div class="absolute bottom-2 right-2 bg-black/50 text-gray-800 text-xs px-2 py-1 rounded backdrop-blur">
             {{ formatDate(photo.created_at) }}
           </div>
         </div>
@@ -114,33 +146,25 @@
 
       <!-- Pagination -->
       <div v-if="pagination && pagination.totalPages > 1" class="flex justify-center items-center gap-4 mt-8">
-        <button
-          @click="loadPage(pagination.page - 1)"
-          :disabled="!pagination.hasPrevPage"
-          class="px-4 py-2 bg-white/10 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/20 transition-colors"
-        >
+        <button @click="loadPage(pagination.page - 1)" :disabled="!pagination.hasPrevPage"
+          class="px-4 py-2 bg-white/10 text-gray-800 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/20 transition-colors">
           <Icon name="heroicons:chevron-left" class="w-5 h-5" />
         </button>
-        
-        <span class="text-white/70">
+
+        <span class="text-gray-800/70">
           Page {{ pagination.page }} sur {{ pagination.totalPages }}
         </span>
-        
-        <button
-          @click="loadPage(pagination.page + 1)"
-          :disabled="!pagination.hasNextPage"
-          class="px-4 py-2 bg-white/10 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/20 transition-colors"
-        >
+
+        <button @click="loadPage(pagination.page + 1)" :disabled="!pagination.hasNextPage"
+          class="px-4 py-2 bg-white/10 text-gray-800 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/20 transition-colors">
           <Icon name="heroicons:chevron-right" class="w-5 h-5" />
         </button>
       </div>
     </div>
 
     <!-- Toast de notification -->
-    <div
-      v-if="toast.show"
-      class="fixed bottom-20 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-40"
-    >
+    <div v-if="toast.show"
+      class="fixed bottom-20 right-4 bg-green-600 text-gray-800 px-6 py-3 rounded-lg shadow-lg z-40">
       {{ toast.message }}
     </div>
   </div>

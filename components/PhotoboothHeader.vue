@@ -4,21 +4,21 @@
       <!-- Logo/Titre -->
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-          <span class="text-white text-sm font-bold">📸</span>
+          <span class="text-gray-800 text-sm font-bold">📸</span>
         </div>
         <div>
-          <h1 class="text-white font-bold text-lg">Photobooth</h1>
-          <p v-if="currentStep === 'camera'" class="text-white/70 text-xs">
+          <h1 class="text-gray-800 font-bold text-lg">Photobooth</h1>
+          <p v-if="currentStep === 'camera'" class="text-gray-800/70 text-xs">
             {{ selectedBackground ? 'Prêt à capturer' : 'Choisissez un fond' }}
           </p>
-          <p v-else-if="currentStep === 'edit'" class="text-white/70 text-xs">Personnalisation</p>
-          <p v-else-if="currentStep === 'result'" class="text-white/70 text-xs">Photo terminée</p>
+          <p v-else-if="currentStep === 'edit'" class="text-gray-800/70 text-xs">Personnalisation</p>
+          <p v-else-if="currentStep === 'result'" class="text-gray-800/70 text-xs">Photo terminée</p>
         </div>
       </div>
 
       <!-- Sélecteur de fond (seulement sur caméra) -->
       <button v-if="currentStep === 'camera'" @click="$emit('toggle-background-selector')"
-        class="bg-white/20 text-white px-3 py-2 rounded-full text-sm font-medium backdrop-blur flex items-center gap-1">
+        class="bg-white/20 text-gray-800 px-3 py-2 rounded-full text-sm font-medium backdrop-blur flex items-center gap-1">
         <span v-if="selectedBackground">{{ selectedBackground.emoji }}</span>
         <span v-else>🌍</span>
         {{ selectedBackground?.name || 'Choisir fond' }}

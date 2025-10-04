@@ -1,13 +1,13 @@
 <template>
   <div class="photo-gallery fixed inset-0 z-30 bg-black/90 backdrop-blur">
     <!-- Header -->
-    <div class="flex justify-between items-center p-4 text-white">
+    <div class="flex justify-between items-center p-4 text-gray-800">
       <div>
         <h3 class="text-lg font-semibold">Vos photos</h3>
-        <p class="text-sm text-white/70">{{ photos.length }} photo{{ photos.length > 1 ? 's' : '' }}</p>
+        <p class="text-sm text-gray-800/70">{{ photos.length }} photo{{ photos.length > 1 ? 's' : '' }}</p>
       </div>
       <button @click="$emit('close')"
-        class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-white">
+        class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-gray-800">
         ✕
       </button>
     </div>
@@ -16,8 +16,8 @@
     <div class="px-4 pb-20 overflow-y-auto max-h-[calc(100vh-120px)]">
       <div v-if="photos.length === 0" class="text-center py-12">
         <div class="text-6xl mb-4">📸</div>
-        <p class="text-white/70 text-lg mb-2">Aucune photo encore</p>
-        <p class="text-white/50 text-sm">Vos photos apparaîtront ici après capture</p>
+        <p class="text-gray-800/70 text-lg mb-2">Aucune photo encore</p>
+        <p class="text-gray-800/50 text-sm">Vos photos apparaîtront ici après capture</p>
       </div>
 
       <div v-else class="grid grid-cols-2 gap-3">
@@ -30,13 +30,13 @@
 
             <!-- Overlay info -->
             <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2">
-              <p class="text-white text-xs font-medium truncate">{{ photo.backgroundName }}</p>
-              <p class="text-white/70 text-xs">{{ formatDate(photo.timestamp) }}</p>
+              <p class="text-gray-800 text-xs font-medium truncate">{{ photo.backgroundName }}</p>
+              <p class="text-gray-800/70 text-xs">{{ formatDate(photo.timestamp) }}</p>
             </div>
 
             <!-- Badge qualité -->
             <div v-if="photo.isHighQuality"
-              class="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded font-medium">
+              class="absolute top-2 left-2 bg-blue-500 text-gray-800 text-xs px-2 py-1 rounded font-medium">
               HD
             </div>
 
@@ -44,15 +44,15 @@
             <div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
               <button
                 @click.stop="$emit('download', photo.url, `photobooth-${photo.background}-${photo.timestamp}.png`)"
-                class="w-8 h-8 bg-blue-500 rounded-full text-white text-xs flex items-center justify-center backdrop-blur">
+                class="w-8 h-8 bg-blue-500 rounded-full text-gray-800 text-xs flex items-center justify-center backdrop-blur">
                 📥
               </button>
               <button @click.stop="$emit('share', photo.url, photo)"
-                class="w-8 h-8 bg-green-500 rounded-full text-white text-xs flex items-center justify-center backdrop-blur">
+                class="w-8 h-8 bg-green-500 rounded-full text-gray-800 text-xs flex items-center justify-center backdrop-blur">
                 📤
               </button>
               <button @click.stop="confirmDelete(photo)"
-                class="w-8 h-8 bg-red-500 rounded-full text-white text-xs flex items-center justify-center backdrop-blur">
+                class="w-8 h-8 bg-red-500 rounded-full text-gray-800 text-xs flex items-center justify-center backdrop-blur">
                 🗑️
               </button>
             </div>

@@ -62,11 +62,11 @@ const filteredBackgrounds = computed(() => {
 ### **Onglets**
 ```css
 .onglet-actif {
-  @apply bg-blue-600 text-white;
+  @apply bg-blue-600 text-gray-800;
 }
 
 .onglet-inactif {
-  @apply text-white/70 hover:text-white hover:bg-white/10;
+  @apply text-gray-800/70 hover:text-gray-800 hover:bg-white/10;
 }
 ```
 

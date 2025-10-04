@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-900">
+  <div class="min-h-screen bg-[#f7f5f2]">
     <!-- Sélection de fonds -->
     <BackgroundSelector 
       v-if="showBackgroundSelector" 
@@ -8,11 +8,53 @@
     />
 
     <!-- Caméra après sélection du fond -->
-    <div v-else class="h-screen">
-      <div class="bg-white/10 backdrop-blur-sm rounded-xl h-full">
+    <div v-else class="h-screen max-w-6xl mx-auto">
+      <!-- Message limite atteinte -->
+      <div v-if="isPhotoLimitReached" class="p-8 flex flex-col items-center justify-center">
+        <div class="text-6xl mb-4"><Icon name="heroicons:photo" /></div>
+        <h2 class="text-2xl font-bold text-[#33cccc] mb-2 text-center">Super vous avez utilisé vos photo gratuites !</h2>
+        <p class="text-gray-700 mb-4  text-center">Vous souhaitez participer au jeu concous pour gagner un bon d'achat de 20€ à utiliser dans un commerce partenaire de notre appli de fidélité</p>
+
+        <div class="bg-white/80 backdrop-blur rounded-lg p-4 mb-6">
+          <p class="text-gray-800 font-semibold mb-6 flex items-center justify-center gap-2">
+            <Icon name="heroicons:light-bulb" class="w-5 h-5" />
+            Vous souhaitez plus de photos ?
+          </p>
+          <div class="grid grid-cols-2 gap-3 mb-2">
+            <div class="bg-[#33cccc]/10 border border-[#33cccc] rounded-lg p-3 flex flex-col items-center">
+              <span class="text-lg font-bold text-[#33cccc]">5 photos</span>
+              <span class="text-gray-700 font-semibold mt-1">3€</span>
+            </div>
+            <div class="bg-[#33cccc]/10 border border-[#33cccc] rounded-lg p-3 flex flex-col items-center">
+              <span class="text-lg font-bold text-[#33cccc]">10 photos</span>
+              <span class="text-gray-700 font-semibold mt-1">5</span>
+            </div>
+            <div class="bg-[#33cccc]/10 border border-[#33cccc] rounded-lg p-3 flex flex-col items-center">
+              <span class="text-lg font-bold text-[#33cccc]">15 photos</span>
+              <span class="text-gray-700 font-semibold mt-1">7,50€</span>
+            </div>
+            <div class="bg-[#33cccc]/10 border border-[#33cccc] rounded-lg p-3 flex flex-col items-center">
+              <span class="text-lg font-bold text-[#33cccc]">20 photos</span>
+              <span class="text-gray-700 font-semibold mt-1">10€</span>
+            </div>
+          </div>
+          <p class="text-gray-600 text-sm text-center pt-2">Choisissez le pack qui vous convient et venez payer sur le stand de made in Conflans & l'atelier de la  fête</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <NuxtLink to="/galerie" class="inline-block bg-[#33cccc] text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors font-semibold flex items-center justify-center gap-2">
+            <Icon name="heroicons:folder" class="w-5 h-5" />
+            Voir ma galerie
+          </NuxtLink>
+        </div>
+      </div>
+
+      <!-- Caméra normale -->
+      <div v-else class="bg-white/10 backdrop-blur-sm rounded-xl h-full">
         <Camera
           ref="cameraRef"
           :initialBackground="selectedBackground"
+          :isPhotoLimitReached="isPhotoLimitReached"
           @photo-captured="handlePhotoCaptured"
           @show-gallery="showGallery = true"
         />
@@ -24,10 +66,10 @@
       @click="showGallery = false">
       <div class="bg-gray-900 rounded-xl p-6 max-w-4xl max-h-[90vh] overflow-y-auto m-4" @click.stop>
         <div class="flex justify-between items-center mb-6">
-          <h3 class="text-2xl font-bold text-white">
+          <h3 class="text-2xl font-bold text-gray-800">
             Galerie de photos ({{ photos.length }})
           </h3>
-          <button @click="showGallery = false" class="text-white text-2xl hover:text-red-400 transition-colors">
+          <button @click="showGallery = false" class="text-gray-800 text-2xl hover:text-red-400 transition-colors">
             ✕
           </button>
         </div>
@@ -40,19 +82,19 @@
             <!-- Infos photo -->
             <div
               class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2 rounded-b-lg">
-              <p class="text-white text-xs">{{ photo.background }}</p>
-              <p class="text-white/60 text-xs">{{ photo.timestamp }}</p>
+              <p class="text-gray-800 text-xs">{{ photo.background }}</p>
+              <p class="text-gray-800/60 text-xs">{{ photo.timestamp }}</p>
             </div>
 
             <!-- Actions -->
             <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
               <div class="flex gap-1">
                 <button @click="downloadPhoto(photo)"
-                  class="bg-blue-500 text-white w-8 h-8 rounded-full text-xs flex items-center justify-center">
+                  class="bg-blue-500 text-gray-800 w-8 h-8 rounded-full text-xs flex items-center justify-center">
 
                 </button>
                 <button @click="removePhoto(photos.indexOf(photo))"
-                  class="bg-red-500 text-white w-8 h-8 rounded-full text-xs flex items-center justify-center">
+                  class="bg-red-500 text-gray-800 w-8 h-8 rounded-full text-xs flex items-center justify-center">
                   🗑️
                 </button>
               </div>
@@ -63,7 +105,7 @@
     </div>
 
     <!-- Toast de notification -->
-    <div v-if="toast.show" class="fixed bottom-20 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-40">
+    <div v-if="toast.show" class="fixed bottom-20 right-4 bg-green-600 text-gray-800 px-6 py-3 rounded-lg shadow-lg z-40">
       {{ toast.message }}
     </div>
 
@@ -90,10 +132,17 @@ const showGallery = ref(false)
 const cameraRef = ref(null)
 const selectedBackground = ref(null)
 const showBackgroundSelector = ref(true)
+const userPhotosCount = ref(0)
+const isLoadingPhotosCount = ref(true)
 
 const toast = ref({
   show: false,
   message: ''
+})
+
+// Computed pour vérifier si la limite est atteinte
+const isPhotoLimitReached = computed(() => {
+  return userPhotosCount.value >= 5
 })
 
 
@@ -224,6 +273,36 @@ const showToast = (message) => {
   }, 3000)
 }
 
+// Charger le nombre de photos de l'utilisateur
+const loadUserPhotosCount = async () => {
+  try {
+    isLoadingPhotosCount.value = true
+    const supabase = useSupabaseClient()
+    const { data: { session } } = await supabase.auth.getSession()
+
+    if (session) {
+      const response = await $fetch('/api/photos', {
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`
+        },
+        query: {
+          page: 1,
+          limit: 1
+        }
+      })
+
+      if (response.success && response.pagination) {
+        userPhotosCount.value = response.pagination.total
+        console.log('📊 Nombre de photos utilisateur:', userPhotosCount.value)
+      }
+    }
+  } catch (error) {
+    console.error('❌ Erreur chargement compteur photos:', error)
+  } finally {
+    isLoadingPhotosCount.value = false
+  }
+}
+
 // Nettoyage au démontage
 onUnmounted(() => {
   photos.value.forEach((photo) => {
@@ -231,6 +310,11 @@ onUnmounted(() => {
       URL.revokeObjectURL(photo.url)
     }
   })
+})
+
+// Charger le compteur au montage
+onMounted(() => {
+  loadUserPhotosCount()
 })
 </script>
 

@@ -16,7 +16,7 @@
         <button @click="$emit('cancel')" class="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl font-medium">
           Annuler
         </button>
-        <button @click="$emit('confirm')" class="flex-1 bg-red-500 text-white py-3 rounded-xl font-medium">
+        <button @click="$emit('confirm')" class="flex-1 bg-red-500 text-gray-800 py-3 rounded-xl font-medium">
           Supprimer
         </button>
       </div>

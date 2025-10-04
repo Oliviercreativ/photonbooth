@@ -20,7 +20,7 @@
     <!-- Tooltip -->
     <div 
       v-if="showTooltip && hovered"
-      class="absolute bottom-16 right-0 bg-black/80 text-white text-xs px-2 py-1 rounded whitespace-nowrap"
+      class="absolute bottom-16 right-0 bg-black/80 text-gray-800 text-xs px-2 py-1 rounded whitespace-nowrap"
     >
       Powered by Grinch
     </div>

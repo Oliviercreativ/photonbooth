@@ -1,13 +1,13 @@
 <template>
   <Transition name="toast">
     <div class="error-toast fixed top-4 left-4 right-4 z-50 max-w-sm mx-auto">
-      <div class="bg-red-500 text-white p-4 rounded-xl shadow-lg flex items-center gap-3">
+      <div class="bg-red-500 text-gray-800 p-4 rounded-xl shadow-lg flex items-center gap-3">
         <div class="text-xl">⚠️</div>
         <div class="flex-1">
           <p class="font-medium text-sm">Erreur</p>
           <p class="text-xs text-red-100">{{ message }}</p>
         </div>
-        <button @click="$emit('dismiss')" class="text-white/80 hover:text-white">
+        <button @click="$emit('dismiss')" class="text-gray-800/80 hover:text-gray-800">
           ✕
         </button>
       </div>

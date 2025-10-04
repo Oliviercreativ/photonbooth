@@ -14,7 +14,7 @@
             </span>
             <button
               @click="logout"
-              class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2"
+              class="bg-red-600 hover:bg-red-700 text-gray-800 px-4 py-2 rounded-lg flex items-center space-x-2"
             >
               <Icon name="heroicons:arrow-right-on-rectangle" class="w-4 h-4" />
               <span>Déconnexion</span>
@@ -152,8 +152,8 @@
                 <button
                   @click="selectUser(user)"
                   :class="user.photo 
-                    ? 'inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
-                    : 'inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'"
+                    ? 'inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-800 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                    : 'inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-800 bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'"
                 >
                   <Icon :name="user.photo ? 'heroicons:photo' : 'heroicons:plus'" class="w-4 h-4 mr-1" />
                   {{ user.photo ? 'Modifier photo' : 'Ajouter photo' }}
@@ -163,7 +163,7 @@
                 <button
                   v-if="user.photo?.id"
                   @click="editCount(user.photo)"
-                  class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-800 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   <Icon name="heroicons:pencil" class="w-4 h-4 mr-1" />
                   Count
@@ -219,7 +219,7 @@
               <button
                 @click="uploadPhoto"
                 :disabled="!selectedFile || isUploading"
-                class="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                class="px-4 py-2 bg-indigo-600 text-gray-800 rounded-md text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
               >
                 <Icon v-if="isUploading" name="heroicons:arrow-path" class="w-4 h-4 animate-spin" />
                 <Icon v-else name="heroicons:paper-airplane" class="w-4 h-4" />

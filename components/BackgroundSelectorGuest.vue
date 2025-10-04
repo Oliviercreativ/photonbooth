@@ -1,10 +1,10 @@
 <template>
-  <div class="fixed inset-0 bg-black/95 backdrop-blur z-50 flex flex-col h-screen">
+  <div class="fixed inset-0 bg-black/95 backdrop-blur z-50 flex flex-col h-screen pb-24">
     <!-- Header -->
     <div class="flex justify-between items-center p-4 border-b border-white/20">
-      <h2 class="text-white text-lg sm:text-xl font-bold">Choisissez un effet</h2>
+      <h2 class="text-gray-800 text-lg sm:text-xl font-bold">Choisissez un effet</h2>
       <button @click="$emit('close')"
-        class="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white px-4 py-3 rounded-lg transition-colors touch-manipulation min-h-[48px] min-w-[80px] font-semibold">
+        class="text-gray-800 px-4 py-2 rounded-lg touch-manipulation min-h-[48px] min-w-[80px] font-medium">
         ✕ Fermer
       </button>
     </div>
@@ -12,7 +12,7 @@
     <!-- Onglets -->
     <div class="flex border-b border-white/20">
       <button @click="activeTab = 'geographic'"
-        class="flex-1 px-2 py-4 text-center transition-colors touch-manipulation min-h-[60px] flex flex-col items-center justify-center bg-blue-600 text-white shadow-lg">
+        class="flex-1 px-2 py-4 text-center transition-colors touch-manipulation min-h-[60px] flex flex-col items-center justify-center bg-blue-600 text-gray-800 shadow-lg">
         <span class="text-xl mb-1">
           <Icon name="heroicons:globe-alt" />
         </span>
@@ -26,23 +26,19 @@
         <div v-for="bg in filteredBackgrounds" :key="bg.id" @click.stop="selectBackground(bg)"
           class="relative cursor-pointer rounded-xl overflow-hidden group active:scale-95 transition-transform duration-150 touch-manipulation"
           :class="selectedBackground?.id === bg.id ? 'ring-4 ring-blue-400 shadow-xl' : 'ring-2 ring-transparent hover:ring-white/30'">
-          <img
-            :src="bg.preview"
-            :alt="bg.name"
-            class="w-full h-28 sm:h-32 md:h-40 lg:h-48 object-cover"
-            @error="(e) => handleImageError(e, bg)"
-          />
+          <img :src="bg.preview" :alt="bg.name" class="w-full h-28 sm:h-32 md:h-40 lg:h-48 object-cover"
+            @error="(e) => handleImageError(e, bg)" />
           <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent">
             <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-3">
-              <p class="text-white text-base sm:text-lg font-bold mb-1">{{ bg.emoji }}</p>
-              <p class="text-white text-xs sm:text-sm opacity-95 leading-tight font-medium">{{ bg.name }}</p>
+              <p class="text-gray-800 text-base sm:text-lg font-bold mb-1">{{ bg.emoji }}</p>
+              <p class="text-gray-800 text-xs sm:text-sm opacity-95 leading-tight font-medium">{{ bg.name }}</p>
             </div>
           </div>
 
           <!-- Indicateur de sélection -->
           <div v-if="selectedBackground?.id === bg.id"
             class="absolute top-2 right-2 w-7 h-7 sm:w-8 sm:h-8 bg-blue-500 rounded-full flex items-center justify-center shadow-lg">
-            <span class="text-white text-sm sm:text-base font-bold">✓</span>
+            <span class="text-gray-800 text-sm sm:text-base font-bold">✓</span>
           </div>
         </div>
       </div>

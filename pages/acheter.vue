@@ -44,7 +44,7 @@
         </div>
       </div>
       <a href="https://madeinconflans.fr/giagia-cafe" target="_blank" rel="noopener"
-        class="mt-4 inline-block w-full bg-pink-400 text-white font-bold py-2 rounded-lg hover:bg-pink-500 transition-colors text-center">
+        class="mt-4 inline-block w-full bg-pink-400 text-gray-800 font-bold py-2 rounded-lg hover:bg-pink-500 transition-colors text-center">
         Rendez-vous sur le stand de made in Conflans
       </a>
     </div>

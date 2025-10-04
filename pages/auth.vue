@@ -17,7 +17,7 @@
         <button @click="activeTab = 'login'" :class="[
             'flex-1 py-2 px-4 border-2 rounded-md text-sm font-medium transition-colors',
             activeTab === 'login' 
-              ? 'bg-[#33cccc] text-white font-bold' 
+              ? 'bg-[#33cccc] text-gray-800 font-bold' 
               : 'text-gray-900 hover:text-gray-900'
           ]">
           Connexion
@@ -25,7 +25,7 @@
         <button @click="activeTab = 'register'" :class="[
             'flex-1 py-2 px-4 border-2 rounded-md text-sm font-medium transition-colors',
             activeTab === 'register' 
-              ? 'bg-[#33cccc] text-white font-bold' 
+              ? 'bg-[#33cccc] text-gray-800 font-bold' 
               : 'text-gray-900 hover:text-gray-900'
           ]">
           Créer un compte
@@ -51,7 +51,7 @@
         </div>
 
         <button @click="handleLogin" :disabled="isLoading"
-          class="w-full bg-[#33cccc] text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          class="w-full bg-[#33cccc] text-gray-800 font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
           {{ isLoading ? 'Connexion...' : 'Se connecter' }}
         </button>
 
@@ -94,7 +94,7 @@
         </div>
 
         <button @click="handleRegister" :disabled="isLoading"
-          class="w-full bg-[#33cccc] text-white font-bold py-3 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          class="w-full bg-[#33cccc] text-gray-800 font-bold py-3 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
           {{ isLoading ? 'Création...' : 'Créer mon compte' }}
         </button>
       </div>
@@ -111,7 +111,7 @@
         </div>
 
         <button @click="handleForgotPassword" :disabled="isLoading"
-          class="w-full bg-[#33cccc] text-white font-bold py-3 rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          class="w-full bg-[#33cccc] text-gray-800 font-bold py-3 rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
           {{ isLoading ? 'Envoi...' : 'Envoyer le lien' }}
         </button>
 

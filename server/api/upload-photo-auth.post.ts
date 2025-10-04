@@ -56,9 +56,31 @@ export default defineEventHandler(async (event) => {
 
     console.log('✅ Utilisateur authentifié:', user.id)
 
+    // Vérifier le nombre de photos existantes pour cet utilisateur
+    const { data: existingPhotos, error: countError } = await supabaseWithAuth
+      .from('photos')
+      .select('id', { count: 'exact' })
+      .eq('user_id', user.id)
+      .eq('is_active', true)
+
+    if (countError) {
+      console.error('❌ Erreur vérification compteur photos:', countError)
+    } else {
+      const photoCount = existingPhotos?.length || 0
+      console.log('📊 Nombre de photos existantes:', photoCount)
+
+      if (photoCount >= 5) {
+        console.log('🚫 Limite de 5 photos atteinte pour l\'utilisateur:', user.id)
+        throw createError({
+          statusCode: 403,
+          statusMessage: 'Vous avez atteint la limite de 5 photos. Supprimez une photo existante pour en créer une nouvelle.'
+        })
+      }
+    }
+
     const body = await readBody(event)
     const { imageBase64, backgroundId } = body
-    
+
     if (!imageBase64 || !backgroundId) {
       throw createError({
         statusCode: 400,

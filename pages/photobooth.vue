@@ -65,7 +65,7 @@
                     }" @contextmenu.prevent @dragstart.prevent @selectstart.prevent>
                     <!-- Overlay de protection -->
                     <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
-                        <div class="text-white text-center">
+                        <div class="text-gray-800 text-center">
                             <p class="text-sm opacity-80">Votre photo de l'Oktoberfest</p>
                         </div>
                     </div>
@@ -74,32 +74,32 @@
                 <div class="space-y-3">
                     <!-- Bouton changer le fond - affiché seulement si count > 0 -->
                     <button v-if="userPhoto.count > 0" @click="changeBgPhoto" :disabled="isChangingBg"
-                        class="w-full bg-[#33cccc] text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        class="w-full bg-[#33cccc] text-gray-800 font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
                         <Icon name="heroicons:sparkles" class="text-xl" :class="{ 'animate-spin': isChangingBg }" />
                         <span>{{ isChangingBg ? 'Génération...' : 'Changer le fond' }}</span>
                     </button>
 
                     <!-- Bouton créer un compte - affiché seulement si count = 0 -->
                     <button v-if="userPhoto.count === 0" @click="createAccountForMorePhotos"
-                        class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-3 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-colors flex items-center justify-center space-x-2">
+                        class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-gray-800 font-bold py-3 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-colors flex items-center justify-center space-x-2">
                         <Icon name="heroicons:plus-circle" class="text-xl" />
                         <span>Créer un compte pour 5 photos supplémentaires</span>
                     </button>
 
                     <button @click="viewFullPhoto"
-                        class="hidden w-full bg-[#33cccc] text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2">
+                        class="hidden w-full bg-[#33cccc] text-gray-800 font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2">
                         <Icon name="heroicons:eye" class="text-xl" />
                         <span>Voir ma photo en grand</span>
                     </button>
 
                     <button @click="downloadPhoto"
-                        class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center space-x-2">
+                        class="w-full bg-green-600 text-gray-800 font-bold py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center space-x-2">
                         <Icon name="heroicons:arrow-down-tray" class="text-xl" />
                         <span>Télécharger ma photo</span>
                     </button>
 
                     <button @click="sharePhoto"
-                        class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2">
+                        class="w-full bg-blue-600 text-gray-800 font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2">
                         <Icon name="heroicons:share" class="text-xl" />
                         <span>Partager ma photo</span>
                     </button>
@@ -118,7 +118,7 @@
 
 
                 <button @click="refreshPhoto" :disabled="isRefreshing"
-                    class="bg-[#33cccc] text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center space-x-2 mx-auto">
+                    class="bg-[#33cccc] text-gray-800 font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center space-x-2 mx-auto">
                     <Icon name="heroicons:arrow-path" class="w-5 h-5" :class="{ 'animate-spin': isRefreshing }" />
                     <span>{{ isRefreshing ? 'Vérification...' : 'Actualiser' }}</span>
                 </button>
@@ -131,17 +131,18 @@
                 Créez un compte gratuitement sur notre application de fidélité <a href="https://madeinconflans.grinch.fr" target="_blank" class="text-blue-600">madeinconflans.grinch.fr</a> et profitez de <span class="font-semibold">5 photos offertes</span> et gagner des points fidélités sur carte " made in Conflans "
             </p>
             <button @click="navigateTo('/auth')"
-                class="mt-4 w-full bg-yellow-400 text-white font-bold py-2 rounded-lg hover:bg-yellow-500 transition-colors">
+                class="mt-4 w-full bg-yellow-400 text-gray-800 font-bold py-2 rounded-lg hover:bg-yellow-500 transition-colors">
                 Créer mon compte
             </button>
         </div>
 
-        <div class="mt-8 bg-blue-100 rounded-xl text-gray-900 flex flex-row items-center gap-4">
-            <div class="flex flex-col items-center justify-center w-1/3">
-                <NuxtLink to="https://madeinconflans.grinch.fr/" target="_blank"></NuxtLink>
-                <img src="https://madeinconflans.vercel.app/images/fidelite-conflans.webp" class="w-full rounded-lg" />
+        <div class="mt-8 bg-blue-100 rounded-xl text-gray-900 flex flex-col items-center gap-4">
+            <div class="flex flex-col items-center justify-center">
+                <NuxtLink to="https://madeinconflans.grinch.fr/" target="_blank">
+                  <img src="https://madeinconflans.vercel.app/images/fidelite-conflans.webp" class="w-full rounded-lg" />
+                </NuxtLink>
             </div>
-            <div class="flex flex-col items-start justify-center w-2/3 p-2">
+            <div class="flex flex-col items-start justify-center p-2">
                 <h3 class="font-medium mb-2 text-center">Rejoignez l'appli de fidélité Made in Conflans !</h3>
                 <p class="mb-4 text-sm">
                     Cumulez des points à chaque achat, profitez d'offres exclusives et suivez vos avantages directement
@@ -151,34 +152,34 @@
                 </p>
                 <!-- Ici vous pourrez ajouter une photo ou un visuel plus tard -->
                 <a href="https://madeinconflans.grinch.fr" target="_blank" rel="noopener"
-                    class="mt-2 text-sm w-full bg-blue-500 text-white font-bold py-2 rounded-lg hover:bg-blue-600 transition-colors text-center block">
+                    class="mt-2 text-sm w-full bg-blue-500 text-gray-800 font-bold py-2 rounded-lg hover:bg-blue-600 transition-colors text-center block">
                     Je découvre l'appli fidélité
                 </a>
             </div>
         </div>
 
-        <div class="mt-8 bg-blue-100 rounded-xl text-gray-900 flex flex-row items-center gap-4">
-            <div class="flex flex-col items-center justify-center w-1/3">
+        <div class="mt-8 bg-blue-100 rounded-xl text-gray-900 flex flex-col items-center gap-4">
+            <div class="flex flex-col items-center justify-center">
                 <NuxtLink to="https://madeinconflans.fr/" target="_blank">
                     <img src="https://madeinconflans.vercel.app/images/fidelite-conflans.webp" class="w-full rounded-lg" />
                 </NuxtLink>
             </div>
-            <div class="flex flex-col items-start justify-center w-2/3 p-2">
-                <h3 class="font-medium mb-2 text-center">Découvrez plus de 80 commerçants, artisans de Conflans et
+            <div class="flex flex-col items-start justify-center p-2">
+                <h3 class="font-medium mb-2 text-left">Découvrez plus de 80 commerçants, artisans de Conflans et
                     environs</h3>
                 <p class="mb-4 text-sm">
                     Découvrez les commerçants, artisans, boutiques, restaurants, cafés, bars, hôtels, etc. de Conflans
                 </p>
                 <!-- Ici vous pourrez ajouter une photo ou un visuel plus tard -->
                 <a href="https://madeinconflans.fr/annuaire" target="_blank" rel="noopener"
-                    class="mt-2 text-sm w-full bg-blue-500 text-white font-bold py-2 rounded-lg hover:bg-blue-600 transition-colors text-center block">
+                    class="mt-2 text-sm w-full bg-blue-500 text-gray-800 font-bold py-2 rounded-lg hover:bg-blue-600 transition-colors text-center block">
                     Découvrir l'annuaire
                 </a>
             </div>
         </div>
 
         <!-- Bouton Concours -->
-        <div class="mt-8 p-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl text-white text-center">
+        <div class="mt-8 p-6 bg-orange-500 rounded-xl text-gray-800 text-center">
             <div class="flex items-center justify-center mb-4">
                 <Icon name="heroicons:trophy" class="w-8 h-8 mr-3" />
                 <h3 class="text-xl font-bold">Participez au concours photo !</h3>
@@ -444,7 +445,14 @@ const applyBackground = async (background) => {
     }
   } catch (error) {
     console.error('❌ Erreur changement de fond:', error)
-    alert('❌ Erreur lors du changement de fond. Veuillez réessayer.')
+
+    // Gestion spécifique de la limite atteinte
+    if (error.statusCode === 403 || error.data?.statusCode === 403) {
+      const message = error.data?.statusMessage || error.statusMessage || 'Vous avez atteint la limite de changements de fond.'
+      alert('🚫 ' + message)
+    } else {
+      alert('❌ Erreur lors du changement de fond. Veuillez réessayer.')
+    }
   } finally {
     isChangingBg.value = false
   }

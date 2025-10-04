@@ -17,10 +17,10 @@
       @click="showGallery = false">
       <div class="bg-gray-900 rounded-xl p-6 max-w-4xl max-h-[90vh] overflow-y-auto m-4" @click.stop>
         <div class="flex justify-between items-center mb-6">
-          <h3 class="text-2xl font-bold text-white">
+          <h3 class="text-2xl font-bold text-gray-800">
             Galerie de photos ({{ photos.length }})
           </h3>
-          <button @click="showGallery = false" class="text-white text-2xl hover:text-red-400 transition-colors">
+          <button @click="showGallery = false" class="text-gray-800 text-2xl hover:text-red-400 transition-colors">
             ✕
           </button>
         </div>
@@ -33,19 +33,19 @@
             <!-- Infos photo -->
             <div
               class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2 rounded-b-lg">
-              <p class="text-white text-xs">{{ photo.background }}</p>
-              <p class="text-white/60 text-xs">{{ photo.timestamp }}</p>
+              <p class="text-gray-800 text-xs">{{ photo.background }}</p>
+              <p class="text-gray-800/60 text-xs">{{ photo.timestamp }}</p>
             </div>
 
             <!-- Actions -->
             <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
               <div class="flex gap-1">
                 <button @click="downloadPhoto(photo)"
-                  class="bg-blue-500 text-white w-8 h-8 rounded-full text-xs flex items-center justify-center">
+                  class="bg-blue-500 text-gray-800 w-8 h-8 rounded-full text-xs flex items-center justify-center">
 
                 </button>
                 <button @click="removePhoto(photos.indexOf(photo))"
-                  class="bg-red-500 text-white w-8 h-8 rounded-full text-xs flex items-center justify-center">
+                  class="bg-red-500 text-gray-800 w-8 h-8 rounded-full text-xs flex items-center justify-center">
                   🗑️
                 </button>
               </div>
@@ -56,7 +56,7 @@
     </div>
 
     <!-- Toast de notification -->
-    <div v-if="toast.show" class="fixed bottom-20 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-40">
+    <div v-if="toast.show" class="fixed bottom-20 right-4 bg-green-600 text-gray-800 px-6 py-3 rounded-lg shadow-lg z-40">
       {{ toast.message }}
     </div>
 

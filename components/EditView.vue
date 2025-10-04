@@ -17,7 +17,7 @@
           class="w-full h-48 object-cover rounded-lg"
           alt="Photo capturée"
         />
-        <div class="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded backdrop-blur">
+        <div class="absolute top-2 left-2 bg-black/50 text-gray-800 text-xs px-2 py-1 rounded backdrop-blur">
           Photo originale
         </div>
       </div>
@@ -43,7 +43,7 @@
     <div v-if="selectedBackground" class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4">
       <div class="flex items-center gap-3 mb-3">
         <div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
-          <span class="text-white text-sm">✨</span>
+          <span class="text-gray-800 text-sm">✨</span>
         </div>
         <div>
           <h4 class="font-medium text-gray-800">Destination sélectionnée</h4>
@@ -71,7 +71,7 @@
       <button 
         @click="$emit('process-photo')"
         :disabled="!selectedBackground || isProcessing"
-        class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-4 rounded-xl font-semibold text-lg disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+        class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-gray-800 py-4 rounded-xl font-semibold text-lg disabled:opacity-50 transition-all flex items-center justify-center gap-2"
       >
         <span v-if="isProcessing" class="animate-spin">⏳</span>
         <span v-else>✨</span>

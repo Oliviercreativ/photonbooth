@@ -17,13 +17,13 @@
         />
         
         <!-- Badge destination -->
-        <div class="absolute top-6 left-6 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1">
+        <div class="absolute top-6 left-6 bg-gradient-to-r from-blue-500 to-purple-500 text-gray-800 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1">
           {{ selectedBackground?.emoji }}
           {{ selectedBackground?.name }}
         </div>
         
         <!-- Timestamp -->
-        <div class="absolute bottom-6 right-6 bg-black/50 text-white text-xs px-2 py-1 rounded backdrop-blur">
+        <div class="absolute bottom-6 right-6 bg-black/50 text-gray-800 text-xs px-2 py-1 rounded backdrop-blur">
           {{ formatTimestamp(Date.now()) }}
         </div>
       </div>
@@ -34,7 +34,7 @@
       <!-- Download principal -->
       <button 
         @click="$emit('download')"
-        class="w-full bg-blue-500 text-white py-4 rounded-xl font-semibold text-lg flex items-center justify-center gap-2 transition-all active:scale-95"
+        class="w-full bg-blue-500 text-gray-800 py-4 rounded-xl font-semibold text-lg flex items-center justify-center gap-2 transition-all active:scale-95"
       >
         <span class="text-xl">📥</span>
         Télécharger en HD
@@ -44,14 +44,14 @@
       <div class="grid grid-cols-2 gap-3">
         <button 
           @click="$emit('share')"
-          class="bg-green-500 text-white py-3 rounded-xl font-medium flex items-center justify-center gap-2 transition-all active:scale-95"
+          class="bg-green-500 text-gray-800 py-3 rounded-xl font-medium flex items-center justify-center gap-2 transition-all active:scale-95"
         >
           <span>📤</span>
           Partager
         </button>
         <button 
           @click="$emit('try-another-background')"
-          class="bg-purple-500 text-white py-3 rounded-xl font-medium flex items-center justify-center gap-2 transition-all active:scale-95"
+          class="bg-purple-500 text-gray-800 py-3 rounded-xl font-medium flex items-center justify-center gap-2 transition-all active:scale-95"
         >
           <span>🌍</span>
           Autre fond
@@ -108,7 +108,7 @@
             :alt="bg.name"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end">
-            <p class="text-white text-xs p-2 font-medium">{{ bg.emoji }}</p>
+            <p class="text-gray-800 text-xs p-2 font-medium">{{ bg.emoji }}</p>
           </div>
         </button>
       </div>

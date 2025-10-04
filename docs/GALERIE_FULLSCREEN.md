@@ -73,7 +73,7 @@ hover:scale-105 transition-transform duration-200
 - **Layout** : `fixed inset-0`, `flex flex-col`
 - **Grid** : `grid grid-cols-*` avec breakpoints
 - **Spacing** : `gap-4`, `p-4`, `m-*`
-- **Colors** : `bg-black/95`, `text-white`, `ring-blue-400`
+- **Colors** : `bg-black/95`, `text-gray-800`, `ring-blue-400`
 - **Effects** : `backdrop-blur`, `shadow-lg`, `transition-*`
 
 ### **🎯 Structure HTML**

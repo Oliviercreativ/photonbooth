@@ -1,20 +1,6 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-[#f7f5f2] to-[#e8e5e1] py-12 px-4">
 
-    <!-- Header -->
-    <div class=" backdrop-blur-sm rounded-xl p-4 mb-4">
-      <div class="flex justify-between items-center flex-col">
-        <div class="flex items-center space-x-2 flex-col">
-          <NuxtLink to="https://madeinconflans.fr/fidelite"><img src="/logo-mic.svg" alt="Made in Conflans"
-              class="w-24" /></NuxtLink>
-          <div class="flex flex-col items-center justify-center">
-            <h1 class="text-2xl font-bold text-gray-900">Photobooth de l'Oktoberfest 2025</h1>
-            <p class="text-gray-900/70">Samedi 4 octobre 2025</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Contenu principal -->
     <div class="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
       <!-- Message de chargement -->
@@ -30,7 +16,7 @@
         <p class="mt-2 text-gray-500">{{ error }}</p>
         <div class="mt-6">
           <button @click="goHome"
-            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#33cccc]">
             <Icon name="heroicons:home" class="w-4 h-4 mr-2" />
             Retour à l'accueil
           </button>
@@ -86,7 +72,7 @@
                 >
                   <!-- Overlay de protection -->
                   <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
-                    <div class="text-white text-center">
+                    <div class="text-gray-800 text-center">
                       <p class="text-sm opacity-80">Votre photo de l'Oktoberfest</p>
                     </div>
                   </div>
@@ -118,13 +104,13 @@
           <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
             <button @click="changeBgPhoto"
               :disabled="isChangingBg"
-              class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-xl text-white bg-gradient-to-r from-[#33cccc] to-[#2bb3b3] hover:from-[#2bb3b3] hover:to-[#26a0a0] transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed">
+              class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-xl text-gray-800 bg-gradient-to-r from-[#33cccc] to-[#2bb3b3] hover:from-[#2bb3b3] hover:to-[#26a0a0] transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed">
               <Icon name="heroicons:sparkles" class="w-6 h-6 mr-3" :class="{ 'animate-spin': isChangingBg }" />
               {{ isChangingBg ? 'Génération...' : 'Changer le fond' }}
             </button>
 
             <button @click="sharePhoto"
-              class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-xl text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+              class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-xl text-gray-800 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
               <Icon name="heroicons:share" class="w-6 h-6 mr-3" />
               Partager cette photo
             </button>

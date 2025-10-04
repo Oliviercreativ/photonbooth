@@ -29,7 +29,7 @@
                     <div class="bg-white/20 backdrop-blur-sm rounded-xl p-6 text-left">
                         <div class="flex items-center mb-4">
                             <div
-                                class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">
+                                class="bg-blue-600 text-gray-800 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">
                                 1</div>
                             <h3 class="text-lg font-bold text-gray-900">Ajoutez-nous</h3>
                         </div>
@@ -38,12 +38,12 @@
                         </p>
                         <div class="flex space-x-3">
                             <a href="https://facebook.com/madeinconflans" target="_blank"
-                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
+                                class="bg-blue-600 text-gray-800 px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
                                 <Icon name="heroicons:user-group" class="w-4 h-4" />
                                 <span>Facebook</span>
                             </a>
                             <a href="https://instagram.com/madeinconflans" target="_blank"
-                                class="bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700 transition-colors flex items-center space-x-2">
+                                class="bg-pink-600 text-gray-800 px-4 py-2 rounded-lg hover:bg-pink-700 transition-colors flex items-center space-x-2">
                                 <Icon name="heroicons:photo" class="w-4 h-4" />
                                 <span>Instagram</span>
                             </a>
@@ -54,7 +54,7 @@
                     <div class="bg-white/20 backdrop-blur-sm rounded-xl p-6 text-left">
                         <div class="flex items-center mb-4">
                             <div
-                                class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">
+                                class="bg-blue-600 text-gray-800 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">
                                 2</div>
                             <h3 class="text-lg font-bold text-gray-900">Partagez votre photo</h3>
                         </div>
@@ -73,7 +73,7 @@
                     <div class="bg-white/20 backdrop-blur-sm rounded-xl p-6 text-left">
                         <div class="flex items-center mb-4">
                             <div
-                                class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">
+                                class="bg-blue-600 text-gray-800 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">
                                 3</div>
                             <h3 class="text-lg font-bold text-gray-900">Mentionnez-nous</h3>
                         </div>
@@ -91,7 +91,7 @@
                     <div class="bg-white/20 backdrop-blur-sm rounded-xl p-6 text-left">
                         <div class="flex items-center mb-4">
                             <div
-                                class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">
+                                class="bg-blue-600 text-gray-800 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">
                                 4</div>
                             <h3 class="text-lg font-bold text-gray-900">Hashtags obligatoires</h3>
                         </div>
@@ -110,7 +110,7 @@
                 <!-- Bouton retour à la photo -->
                 <div class="mb-6">
                     <button @click="goBackToPhoto"
-                        class="bg-[#33cccc] text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2 mx-auto">
+                        class="bg-[#33cccc] text-gray-800 font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2 mx-auto">
                         <Icon name="heroicons:arrow-left" class="w-5 h-5" />
                         <span>Retour à ma photo</span>
                     </button>
@@ -129,7 +129,7 @@
                 <!-- 1er prix -->
                 <div class="bg-pink-100 border-2 border-pink-400 rounded-xl p-6 text-center">
                     <div
-                        class="bg-pink-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl mx-auto mb-4">
+                        class="bg-pink-500 text-gray-800 rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl mx-auto mb-4">
                         1</div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2">1er Prix</h3>
                     <p class="text-gray-700 font-semibold">Un bon d'achat de 30€</p>

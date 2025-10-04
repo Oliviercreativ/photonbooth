@@ -81,7 +81,7 @@ const downloadPhoto = (photo) => {
 
 /* Onglets actifs */
 .text-blue-400 { /* Onglet sélectionné */ }
-.text-white\/70 { /* Onglets inactifs */ }
+.text-gray-800\/70 { /* Onglets inactifs */ }
 ```
 
 #### **Boutons Tactiles**

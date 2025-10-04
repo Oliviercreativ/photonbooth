@@ -4,12 +4,12 @@
       <!-- Header -->
       <div class="flex justify-between items-center mb-6">
         <div>
-          <h1 class="text-2xl font-bold text-white">Partager votre photo</h1>
-          <p class="text-white/60 mt-1">Choisissez le format adapté à votre réseau social</p>
+          <h1 class="text-2xl font-bold text-gray-800">Partager votre photo</h1>
+          <p class="text-gray-800/60 mt-1">Choisissez le format adapté à votre réseau social</p>
         </div>
         <button
           @click="$router.back()"
-          class="flex items-center gap-2 text-white/80 hover:text-white transition-colors"
+          class="flex items-center gap-2 text-gray-800/80 hover:text-gray-800 transition-colors"
         >
           <Icon name="heroicons:arrow-left" class="w-5 h-5" />
           <span class="hidden sm:inline">Retour</span>
@@ -19,13 +19,13 @@
       <!-- État de chargement -->
       <div v-if="isLoading" class="text-center py-12">
         <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-        <p class="text-white/60 mt-4">Chargement de la photo...</p>
+        <p class="text-gray-800/60 mt-4">Chargement de la photo...</p>
       </div>
 
       <!-- État d'erreur -->
       <div v-else-if="error" class="text-center py-12">
         <div class="text-6xl mb-4">😞</div>
-        <p class="text-white/70 text-lg mb-2">{{ error }}</p>
+        <p class="text-gray-800/70 text-lg mb-2">{{ error }}</p>
         <button
           @click="$router.back()"
           class="text-blue-400 hover:text-blue-300 transition-colors"
@@ -48,7 +48,7 @@
               :alt="photo.background_name"
               class="w-full max-w-md mx-auto rounded-lg shadow-lg"
             />
-            <div class="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded backdrop-blur">
+            <div class="absolute top-2 left-2 bg-black/50 text-gray-800 text-xs px-2 py-1 rounded backdrop-blur">
               {{ photo.background_name }}
             </div>
           </div>
@@ -56,7 +56,7 @@
 
         <!-- Formats de partage -->
         <div class="space-y-6">
-          <h2 class="text-xl font-bold text-white">Formats de partage</h2>
+          <h2 class="text-xl font-bold text-gray-800">Formats de partage</h2>
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Stories Instagram & Facebook -->
@@ -76,7 +76,7 @@
                   height="1920"
                   class="w-32 h-56 mx-auto border border-gray-200 rounded-lg"
                 ></canvas>
-                <div class="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded backdrop-blur">
+                <div class="absolute top-2 left-2 bg-black/50 text-gray-800 text-xs px-2 py-1 rounded backdrop-blur">
                   Stories
                 </div>
               </div>
@@ -84,14 +84,14 @@
               <div class="flex gap-2">
                 <button
                   @click="generateFormat('stories')"
-                  class="flex-1 bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition-colors text-sm"
+                  class="flex-1 bg-pink-500 text-gray-800 px-4 py-2 rounded-lg hover:bg-pink-600 transition-colors text-sm"
                 >
                   <Icon name="heroicons:sparkles" class="w-4 h-4 inline mr-1" />
                   Générer
                 </button>
                 <button
                   @click="downloadFormat('stories')"
-                  class="flex-1 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors text-sm"
+                  class="flex-1 bg-gray-500 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors text-sm"
                   :disabled="!generatedFormats.stories"
                 >
                   <Icon name="heroicons:arrow-down-tray" class="w-4 h-4 inline mr-1" />
@@ -117,7 +117,7 @@
                   height="1080"
                   class="w-32 h-32 mx-auto border border-gray-200 rounded-lg"
                 ></canvas>
-                <div class="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded backdrop-blur">
+                <div class="absolute top-2 left-2 bg-black/50 text-gray-800 text-xs px-2 py-1 rounded backdrop-blur">
                   Instagram
                 </div>
               </div>
@@ -125,14 +125,14 @@
               <div class="flex gap-2">
                 <button
                   @click="generateFormat('instagram')"
-                  class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-colors text-sm"
+                  class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-gray-800 px-4 py-2 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-colors text-sm"
                 >
                   <Icon name="heroicons:sparkles" class="w-4 h-4 inline mr-1" />
                   Générer
                 </button>
                 <button
                   @click="downloadFormat('instagram')"
-                  class="flex-1 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors text-sm"
+                  class="flex-1 bg-gray-500 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors text-sm"
                   :disabled="!generatedFormats.instagram"
                 >
                   <Icon name="heroicons:arrow-down-tray" class="w-4 h-4 inline mr-1" />
@@ -158,7 +158,7 @@
                   height="630"
                   class="w-40 h-21 mx-auto border border-gray-200 rounded-lg"
                 ></canvas>
-                <div class="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded backdrop-blur">
+                <div class="absolute top-2 left-2 bg-black/50 text-gray-800 text-xs px-2 py-1 rounded backdrop-blur">
                   Facebook
                 </div>
               </div>
@@ -166,14 +166,14 @@
               <div class="flex gap-2">
                 <button
                   @click="generateFormat('facebook')"
-                  class="flex-1 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm"
+                  class="flex-1 bg-blue-500 text-gray-800 px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm"
                 >
                   <Icon name="heroicons:sparkles" class="w-4 h-4 inline mr-1" />
                   Générer
                 </button>
                 <button
                   @click="downloadFormat('facebook')"
-                  class="flex-1 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors text-sm"
+                  class="flex-1 bg-gray-500 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors text-sm"
                   :disabled="!generatedFormats.facebook"
                 >
                   <Icon name="heroicons:arrow-down-tray" class="w-4 h-4 inline mr-1" />
@@ -199,7 +199,7 @@
                   height="630"
                   class="w-40 h-21 mx-auto border border-gray-200 rounded-lg"
                 ></canvas>
-                <div class="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded backdrop-blur">
+                <div class="absolute top-2 left-2 bg-black/50 text-gray-800 text-xs px-2 py-1 rounded backdrop-blur">
                   LinkedIn
                 </div>
               </div>
@@ -207,14 +207,14 @@
               <div class="flex gap-2">
                 <button
                   @click="generateFormat('linkedin')"
-                  class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                  class="flex-1 bg-blue-600 text-gray-800 px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
                 >
                   <Icon name="heroicons:sparkles" class="w-4 h-4 inline mr-1" />
                   Générer
                 </button>
                 <button
                   @click="downloadFormat('linkedin')"
-                  class="flex-1 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors text-sm"
+                  class="flex-1 bg-gray-500 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors text-sm"
                   :disabled="!generatedFormats.linkedin"
                 >
                   <Icon name="heroicons:arrow-down-tray" class="w-4 h-4 inline mr-1" />
@@ -231,14 +231,14 @@
           <div class="flex flex-wrap gap-3">
             <button
               @click="generateAllFormats"
-              class="flex items-center gap-2 bg-gradient-to-r from-green-500 to-blue-500 text-white px-6 py-3 rounded-lg hover:from-green-600 hover:to-blue-600 transition-colors"
+              class="flex items-center gap-2 bg-gradient-to-r from-green-500 to-blue-500 text-gray-800 px-6 py-3 rounded-lg hover:from-green-600 hover:to-blue-600 transition-colors"
             >
               <Icon name="heroicons:sparkles" class="w-5 h-5" />
               Générer tous les formats
             </button>
             <button
               @click="downloadAllFormats"
-              class="flex items-center gap-2 bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors"
+              class="flex items-center gap-2 bg-gray-600 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors"
               :disabled="!hasGeneratedFormats"
             >
               <Icon name="heroicons:arrow-down-tray" class="w-5 h-5" />
@@ -252,7 +252,7 @@
     <!-- Toast de notification -->
     <div
       v-if="toast.show"
-      class="fixed bottom-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-40"
+      class="fixed bottom-4 right-4 bg-green-600 text-gray-800 px-6 py-3 rounded-lg shadow-lg z-40"
     >
       {{ toast.message }}
     </div>

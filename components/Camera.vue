@@ -22,7 +22,7 @@
     <!-- Onglet Photos -->
     <div v-if="activeMobileTab === 'photos'" class="h-full w-full relative pb-20">
       <div class="p-4 pt-16">
-        <h2 class="text-white text-2xl font-bold mb-6 text-center">Mes Photos</h2>
+        <h2 class="text-gray-800 text-2xl font-bold mb-6 text-center">Mes Photos</h2>
 
         <!-- Galerie des photos -->
         <div v-if="capturedPhotos.length > 0" class="grid grid-cols-2 gap-4">
@@ -31,20 +31,20 @@
             <img :src="photo.processedImage" class="w-full h-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent">
               <div class="absolute bottom-2 left-2 right-2">
-                <p class="text-white text-sm font-medium truncate">{{ photo.backgroundName }}</p>
-                <p class="text-white/80 text-xs">{{ new Date(photo.timestamp).toLocaleTimeString() }}</p>
+                <p class="text-gray-800 text-sm font-medium truncate">{{ photo.backgroundName }}</p>
+                <p class="text-gray-800/80 text-xs">{{ new Date(photo.timestamp).toLocaleTimeString() }}</p>
               </div>
             </div>
             <!-- Bouton de téléchargement -->
             <button @click="downloadPhoto(photo)"
               class="absolute top-2 right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg touch-manipulation">
-              <span class="text-white text-sm">⬇️</span>
+              <span class="text-gray-800 text-sm">⬇️</span>
         </button>
           </div>
         </div>
 
         <!-- Message si pas de photos -->
-        <div v-else class="flex flex-col items-center justify-center h-64 text-white/70">
+        <div v-else class="flex flex-col items-center justify-center h-64 text-gray-800/70">
           <span class="text-6xl mb-4">📷</span>
           <p class="text-lg font-medium">Aucune photo prise</p>
           <p class="text-sm text-center mt-2">Prenez votre première photo avec la caméra !</p>
@@ -60,7 +60,7 @@
       
       <!-- Caméra éteinte -->
       <div v-else class="w-full h-full bg-gray-900 flex items-center justify-center">
-        <div class="text-center text-white">
+        <div class="text-center text-gray-800">
           <p class="text-lg font-medium mb-2">Caméra éteinte</p>
           <p class="text-sm opacity-75">Sélectionnez un fond pour activer la caméra</p>
         </div>
@@ -72,13 +72,13 @@
     <!-- Guide de positionnement -->
     <div v-if="selectedBackground && activeMobileTab === 'camera' && isCameraActive"
       class="absolute inset-8 border-2 border-white/60 pointer-events-none rounded-lg">
-      <div class="absolute -top-8 left-0 bg-black/70 text-white text-xs px-2 py-1 rounded">
+      <div class="absolute -top-8 left-0 bg-black/70 text-gray-800 text-xs px-2 py-1 rounded">
       </div>
     </div>
 
     <!-- État de traitement -->
     <div v-if="isProcessing" class="absolute inset-0 bg-black/50 flex items-center justify-center">
-      <div class="text-center text-white bg-black/80 p-6 rounded-xl">
+      <div class="text-center text-gray-800 bg-black/80 p-6 rounded-xl">
         <p class="text-lg font-medium">{{ processingStep }}</p>
         <p class="text-sm opacity-75 mt-2">Analyse votre photo...</p>
       </div>
@@ -89,7 +89,7 @@
       <div class="flex items-center justify-between">
         <!-- Switch Camera -->
         <button @click="switchCamera"
-          class="w-12 h-12 bg-black/50 rounded-full flex items-center justify-center text-white text-xl backdrop-blur touch-manipulation"
+          class="w-12 h-12 bg-black/50 rounded-full flex items-center justify-center text-gray-800 text-xl backdrop-blur touch-manipulation"
           :disabled="!isReady || isProcessing || !isCameraActive">
           <Icon name="heroicons:arrow-path" />
         </button>
@@ -97,25 +97,34 @@
         <!-- Capture Button -->
         <button @click="capturePhoto"
           class="w-24 h-24 bg-white border-4 border-gray-300 rounded-full flex items-center justify-center shadow-xl transition-transform touch-manipulation"
-          :disabled="!isReady || !selectedBackground || isProcessing || !isCameraActive"
-          :class="isProcessing ? 'animate-pulse' : 'active:scale-95'">
-          <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center">
-            <Icon 
-              v-if="isProcessing" 
-              name="heroicons:clock" 
-              class="text-white text-sm"
+          :disabled="!isReady || !selectedBackground || isProcessing || !isCameraActive || isPhotoLimitReached"
+          :class="[
+            isProcessing ? 'animate-pulse' : 'active:scale-95',
+            isPhotoLimitReached ? 'opacity-50 cursor-not-allowed' : ''
+          ]">
+          <div class="w-16 h-16 rounded-full flex items-center justify-center"
+            :class="isPhotoLimitReached ? 'bg-gray-400' : 'bg-red-500'">
+            <Icon
+              v-if="isProcessing"
+              name="heroicons:clock"
+              class="text-gray-800 text-sm"
             />
-            <Icon 
-              v-else 
-              name="heroicons:camera" 
-              class="text-white text-2xl"
+            <Icon
+              v-else-if="isPhotoLimitReached"
+              name="heroicons:x-mark"
+              class="text-gray-800 text-2xl"
+            />
+            <Icon
+              v-else
+              name="heroicons:camera"
+              class="text-gray-800 text-2xl"
             />
           </div>
         </button>
         <!-- Photos prises -->
         <div class="relative">
           <span v-if="capturedPhotos.length > 0"
-            class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">
+            class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-xs text-gray-800 flex items-center justify-center">
             {{ capturedPhotos.length }}
           </span>
         </div>
@@ -132,6 +141,10 @@ const props = defineProps({
   initialBackground: {
     type: Object,
     default: null
+  },
+  isPhotoLimitReached: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -416,15 +429,15 @@ const capturePhoto = async () => {
                 if (uploadResponse.ok) {
                   console.log('✅ Photo uploadée dans Supabase:', uploadResult.fileName)
                   console.log('📸 Photo ID:', uploadResult.photoId)
-                  
+
                   // Rediriger vers la page de visualisation de la photo
                   if (uploadResult.photoId) {
                     console.log('🚀 Redirection vers /galerie/' + uploadResult.photoId + '/view')
-                    
+
                     // Arrêter la caméra avant la redirection
                     console.log('📷 Arrêt de la caméra - redirection vers galerie')
                     stopCamera()
-                    
+
                     // Petit délai pour s'assurer que l'image est disponible sur Supabase
                     console.log('⏳ Attente de 2 secondes avant redirection...')
                     processingStep.value = 'Redirection vers la galerie...'
@@ -433,6 +446,14 @@ const capturePhoto = async () => {
                     }, 2000)
                     return // Arrêter l'exécution ici pour éviter les actions suivantes
                   }
+                } else if (uploadResponse.status === 403) {
+                  // Gestion de la limite de photos atteinte
+                  console.log('🚫 Limite de photos atteinte')
+                  isProcessing.value = false
+                  processingStep.value = ''
+                  stopCamera()
+                  alert(uploadResult.statusMessage || 'Vous avez atteint la limite de 5 photos. Supprimez une photo existante pour en créer une nouvelle.')
+                  return
                 } else {
                   console.error('❌ Erreur upload Supabase:', uploadResult)
                 }
