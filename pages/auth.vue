@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen  flex items-center justify-center p-4">
+  <div class="min-h-screen  flex items-center justify-center flex-col p-4">
     <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 w-full max-w-md">
       <!-- Logo/Titre -->
         <div class="flex flex-col items-center justify-center mb-4">
