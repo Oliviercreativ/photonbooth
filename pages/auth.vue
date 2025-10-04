@@ -51,7 +51,7 @@
         </div>
 
         <button @click="handleLogin" :disabled="isLoading"
-          class="w-full bg-[#33cccc] text-gray-800 font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          class="w-full bg-[#33cccc] text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
           {{ isLoading ? 'Connexion...' : 'Se connecter' }}
         </button>
 
@@ -94,7 +94,7 @@
         </div>
 
         <button @click="handleRegister" :disabled="isLoading"
-          class="w-full bg-[#33cccc] text-gray-800 font-bold py-3 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          class="w-full bg-[#33cccc] text-white font-bold py-3 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
           {{ isLoading ? 'Création...' : 'Créer mon compte' }}
         </button>
       </div>

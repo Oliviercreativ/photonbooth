@@ -5,13 +5,20 @@
       <div class="flex justify-between items-center mb-6">
         <div>
           <h1 class="text-3xl font-bold text-gray-800">Ma Galerie</h1>
+          <p class="text-lg text-gray-600 mt-2">
+            Bonjour <span class="font-semibold">{{ userProfile?.full_name || 'utilisateur' }}</span> 👋
+          </p>
           <div class="flex items-center gap-3 mt-1">
             <div class="flex items-center gap-2">
               <span class="px-3 py-1 rounded-full text-sm font-medium"
-                :class="totalPhotos >= 5 ? 'bg-red-700 text-white' : 'bg-[#33cccc] text-white'">
-                {{ totalPhotos }}/5 photo{{ totalPhotos > 1 ? 's' : '' }}
+                :class="hasReachedLimit ? 'bg-red-700 text-white' : 'bg-[#33cccc] text-white'">
+                {{ totalPhotos }}/{{ photoLimit }} photo{{ totalPhotos > 1 ? 's' : '' }}
               </span>
-              <span v-if="totalPhotos >= 5" class="text-gray-800 text-xs">Limite atteinte</span>
+              <span v-if="hasReachedLimit" class="text-gray-800 text-xs">Limite atteinte</span>
+              <span v-if="userCredits > 0" class="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 flex items-center gap-1">
+                <Icon name="heroicons:star" class="w-3 h-3" />
+                +{{ userCredits }} crédits
+              </span>
             </div>
           </div>
         </div>
@@ -36,7 +43,7 @@
       </div>
 
       <!-- Modal limite atteinte -->
-      <div v-if="totalPhotos >= 5 && showLimitModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+      <div v-if="hasReachedLimit && showLimitModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70">
         <div class="bg-white rounded-xl p-6 max-w-lg w-full relative shadow-2xl">
           <!-- Bouton fermer -->
           <button
@@ -113,32 +120,8 @@
           <div class="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded backdrop-blur">
             {{ photo.background_name }}
           </div>
-
-          <!-- Actions au hover -->
-          <div
-            class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-            <div class="flex gap-2">
-              <button @click.stop="openPhoto(photo)"
-                class="bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
-                <Icon name="heroicons:eye" class="w-5 h-5" />
-              </button>
-              <button @click.stop="sharePhoto(photo)"
-                class="bg-green-500 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-green-600 transition-colors">
-                <Icon name="heroicons:share" class="w-5 h-5" />
-              </button>
-
-              <!-- Bouton admin uniquement -->
-              <button v-if="isAdmin" @click.stop="generatePreview(photo)" :disabled="generatingPreview === photo.id"
-                class="bg-purple-500 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-purple-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                :title="`Générer preview pour ${photo.background_name}`">
-                <Icon v-if="generatingPreview !== photo.id" name="heroicons:sparkles" class="w-5 h-5" />
-                <div v-else class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-              </button>
-            </div>
-          </div>
-
           <!-- Date -->
-          <div class="absolute bottom-2 right-2 bg-black/50 text-gray-800 text-xs px-2 py-1 rounded backdrop-blur">
+          <div class="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded backdrop-blur">
             {{ formatDate(photo.created_at) }}
           </div>
         </div>
@@ -185,6 +168,8 @@ const pagination = ref(null)
 const totalPhotos = ref(0)
 const currentUserId = ref(null)
 const generatingPreview = ref(null)
+const userCredits = ref(0)
+const userProfile = ref(null)
 
 // Filtres disponibles
 const filters = [
@@ -203,6 +188,12 @@ const toast = ref({
 const isAdmin = computed(() => {
   const ADMIN_ID = 'd04dad76-47de-468b-ba95-b5269b1d5385'
   return currentUserId.value === ADMIN_ID
+})
+
+const photoLimit = ref(5) // Valeur par défaut
+
+const hasReachedLimit = computed(() => {
+  return totalPhotos.value >= photoLimit.value
 })
 
 const filteredPhotos = computed(() => {
@@ -232,6 +223,55 @@ const loadPhotos = async (page = 1) => {
     currentUserId.value = session.user.id
     console.log('✅ Utilisateur authentifié:', session.user.id)
 
+    // Charger le profil depuis profiles
+    try {
+      const supabase = useSupabaseClient()
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('full_name')
+        .eq('id', session.user.id)
+        .single()
+
+      if (!profileError && profileData) {
+        userProfile.value = profileData
+        console.log('👤 Profil utilisateur:', profileData.full_name)
+      }
+    } catch (error) {
+      console.log('❌ Erreur chargement profil:', error)
+    }
+
+    // Charger la limite depuis photobooth_sessions
+    try {
+      const supabase = useSupabaseClient()
+      const { data: sessionData, error: sessionError } = await supabase
+        .from('photobooth_sessions')
+        .select('photos_count')
+        .eq('user_id', session.user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single()
+
+      if (!sessionError && sessionData) {
+        photoLimit.value = sessionData.photos_count || 5
+        console.log('📊 Limite photos depuis session:', photoLimit.value)
+      }
+    } catch (error) {
+      console.log('❌ Erreur chargement limite:', error)
+      photoLimit.value = 5
+    }
+
+    // Charger les crédits de l'utilisateur (pour affichage du badge)
+    try {
+      const creditsResponse = await $fetch('/api/user/credits')
+      if (creditsResponse.success) {
+        userCredits.value = creditsResponse.credits || 0
+        console.log('💳 Crédits utilisateur:', userCredits.value)
+      }
+    } catch (error) {
+      console.log('❌ Erreur chargement crédits:', error)
+      userCredits.value = 0
+    }
+
     const response = await $fetch('/api/photos', {
       headers: {
         'Authorization': `Bearer ${session.access_token}`
@@ -253,6 +293,7 @@ const loadPhotos = async (page = 1) => {
       pagination.value = response.pagination
       totalPhotos.value = response.pagination.total
       console.log('✅ Photos chargées:', photos.value.length)
+      console.log('📊 Total photos:', totalPhotos.value)
       console.log('📸 Première photo:', photos.value[0] ? {
         id: photos.value[0].id,
         url: photos.value[0].photo_url,

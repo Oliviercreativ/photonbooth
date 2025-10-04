@@ -112,10 +112,10 @@
             <div class="flex justify-between items-center">
               <div>
                 <h3 class="text-lg leading-6 font-medium text-gray-900">
-                  Utilisateurs inscrits
+                  Utilisateurs fidélité
                 </h3>
                 <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                  Liste des utilisateurs ayant souscrit à la newsletter
+                  Liste des utilisateurs inscrits à l'application de fidélité
                 </p>
               </div>
               <div class="flex items-center gap-4">
@@ -178,7 +178,7 @@
                   <div class="ml-4">
                     <div class="flex items-center">
                       <p class="text-sm font-medium text-gray-900">
-                        {{ user.full_name_nl || 'Nom non renseigné' }}
+                        {{ user.full_name || 'Nom non renseigné' }}
                       </p>
                       <span v-if="!user.active" class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                         Inactif
@@ -189,10 +189,6 @@
                       </span>
                       <span v-if="user.photo?.count" class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                         Count: {{ user.photo.count }}
-                      </span>
-                      <span v-if="user.credits" class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                        <Icon name="heroicons:star" class="w-3 h-3 mr-1" />
-                        {{ user.credits }} crédits
                       </span>
                     </div>
                     <p class="text-sm text-gray-500">{{ user.email }}</p>
@@ -369,7 +365,7 @@ const totalPhotos = ref(0)
 const emailsSent = ref(0)
 
 // Filtrage et pagination
-const selectedDate = ref('2025-10-04')
+const selectedDate = ref('') // Toutes les dates par défaut
 const searchQuery = ref('')
 const currentPage = ref(1)
 const itemsPerPage = 20
@@ -390,7 +386,7 @@ const filteredUsers = computed(() => {
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase()
     filtered = filtered.filter(user => {
-      const name = (user.full_name_nl || '').toLowerCase()
+      const name = (user.full_name || '').toLowerCase()
       const email = (user.email || '').toLowerCase()
       return name.includes(query) || email.includes(query)
     })
@@ -452,8 +448,18 @@ onMounted(async () => {
 const loadUsers = async () => {
   isLoading.value = true
   try {
-    const response = await $fetch('/api/admin/users')
-    const usersList = response.users || []
+    // Charger depuis la table profiles au lieu de newsletter_subscribers
+    const supabase = useSupabaseClient()
+    const { data: profilesList, error: profilesError } = await supabase
+      .from('profiles')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    if (profilesError) {
+      throw profilesError
+    }
+
+    const usersList = profilesList || []
 
     // Charger les photos et crédits pour chaque utilisateur
     for (const user of usersList) {
@@ -473,25 +479,11 @@ const loadUsers = async () => {
       } catch (error) {
         console.log('Pas de photo pour:', user.email)
       }
-
-      // Charger les crédits
-      try {
-        const creditsResponse = await $fetch('/api/admin/credits', {
-          query: { userId: user.id }
-        })
-
-        if (creditsResponse.success && creditsResponse.credits !== undefined) {
-          user.credits = creditsResponse.credits
-        }
-      } catch (error) {
-        console.log('Pas de crédits pour:', user.email)
-        user.credits = 0
-      }
     }
 
     users.value = usersList
   } catch (error) {
-    console.error('Erreur chargement utilisateurs:', error)
+    console.error('Erreur chargement utilisateurs fidélité:', error)
   } finally {
     isLoading.value = false
   }
@@ -619,11 +611,10 @@ const editCount = (photo) => {
 }
 
 const editCredits = async (user) => {
-  const currentCredits = user.credits || 0
-  const newCredits = prompt(`Modifier les crédits pour ${user.full_name_nl || user.email}:\n\nCrédits actuels: ${currentCredits}\n\nNouveaux crédits:`, currentCredits)
+  const addCredits = prompt(`Ajouter des crédits pour ${user.full_name || user.email}:\n\nNombre de crédits à ajouter:`, 0)
 
-  if (newCredits !== null && newCredits !== '') {
-    const parsedCredits = parseInt(newCredits)
+  if (addCredits !== null && addCredits !== '') {
+    const parsedCredits = parseInt(addCredits)
     if (!isNaN(parsedCredits) && parsedCredits >= 0) {
       await updateUserCredits(user.id, parsedCredits)
     } else {
@@ -646,10 +637,7 @@ const updateUserCredits = async (userId, newCredits) => {
 
     if (response.success) {
       console.log('✅ Crédits mis à jour:', response)
-      alert(`Crédits mis à jour avec succès !\nAncien: ${response.data.old_credits || 0}\nNouveau: ${response.data.new_credits}`)
-
-      // Recharger les utilisateurs pour afficher la mise à jour
-      await loadUsers()
+      alert(`Crédits ajoutés avec succès !\nAncienne limite: ${response.data.old_limit} photos\nCrédits ajoutés: +${response.data.credits_added}\nNouvelle limite: ${response.data.new_limit} photos`)
     } else {
       throw new Error(response.message || 'Erreur lors de la mise à jour')
     }
@@ -665,7 +653,7 @@ const logout = () => {
 
 definePageMeta({
   layout: false,
-  title: 'Dashboard Admin - Photobooth',
+  title: 'Fidélité Admin - Photobooth',
   middleware: 'admin'
 })
 </script>

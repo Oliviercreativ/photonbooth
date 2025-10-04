@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#f7f5f2]">
+  <div class="min-h-screen bg-[#f7f5f2] pb-24">
     <!-- Sélection de fonds -->
     <BackgroundSelector 
       v-if="showBackgroundSelector" 
@@ -47,6 +47,7 @@
             Voir ma galerie
           </NuxtLink>
         </div>
+        <ContestPromo />
       </div>
 
       <!-- Caméra normale -->
@@ -134,6 +135,8 @@ const selectedBackground = ref(null)
 const showBackgroundSelector = ref(true)
 const userPhotosCount = ref(0)
 const isLoadingPhotosCount = ref(true)
+const userCredits = ref(0)
+const photoLimit = ref(5) // Valeur par défaut
 
 const toast = ref({
   show: false,
@@ -142,7 +145,7 @@ const toast = ref({
 
 // Computed pour vérifier si la limite est atteinte
 const isPhotoLimitReached = computed(() => {
-  return userPhotosCount.value >= 5
+  return userPhotosCount.value >= photoLimit.value
 })
 
 
@@ -281,6 +284,38 @@ const loadUserPhotosCount = async () => {
     const { data: { session } } = await supabase.auth.getSession()
 
     if (session) {
+      // Charger la limite depuis photobooth_sessions
+      try {
+        const supabase = useSupabaseClient()
+        const { data: sessionData, error: sessionError } = await supabase
+          .from('photobooth_sessions')
+          .select('photos_count')
+          .eq('user_id', session.user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single()
+
+        if (!sessionError && sessionData) {
+          photoLimit.value = sessionData.photos_count || 5
+          console.log('📊 Limite photos depuis session:', photoLimit.value)
+        }
+      } catch (error) {
+        console.log('❌ Erreur chargement limite:', error)
+        photoLimit.value = 5
+      }
+
+      // Charger les crédits de l'utilisateur (pour affichage du badge si besoin)
+      try {
+        const creditsResponse = await $fetch('/api/user/credits')
+        if (creditsResponse.success) {
+          userCredits.value = creditsResponse.credits || 0
+          console.log('💳 Crédits utilisateur:', userCredits.value)
+        }
+      } catch (error) {
+        console.log('❌ Erreur chargement crédits:', error)
+        userCredits.value = 0
+      }
+
       const response = await $fetch('/api/photos', {
         headers: {
           'Authorization': `Bearer ${session.access_token}`
@@ -293,7 +328,7 @@ const loadUserPhotosCount = async () => {
 
       if (response.success && response.pagination) {
         userPhotosCount.value = response.pagination.total
-        console.log('📊 Nombre de photos utilisateur:', userPhotosCount.value)
+        console.log('📊 Nombre de photos utilisateur:', userPhotosCount.value, '/ Limite:', photoLimit.value)
       }
     }
   } catch (error) {

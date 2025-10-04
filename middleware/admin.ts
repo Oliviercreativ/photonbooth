@@ -1,8 +1,14 @@
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware(async (to) => {
   // Vérifier si on accède à une route admin
   if (to.path.startsWith('/admin')) {
-    // Récupérer l'ID depuis les paramètres de requête
-    const adminId = to.query.id as string
+    const supabase = useSupabaseClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    // Vérifier si l'utilisateur est connecté
+    if (!user) {
+      console.log('❌ Utilisateur non connecté - redirection vers /auth')
+      return navigateTo('/auth')
+    }
 
     // IDs admin autorisés
     const authorizedAdminIds = [
@@ -10,13 +16,15 @@ export default defineNuxtRouteMiddleware((to) => {
       'd56db8f1-aa15-4394-b872-5ee566c919f7'
     ]
 
-    if (!authorizedAdminIds.includes(adminId)) {
+    // Vérifier si l'utilisateur connecté est un admin
+    if (!authorizedAdminIds.includes(user.id)) {
+      console.log('❌ Accès refusé - utilisateur non admin:', user.id)
       throw createError({
         statusCode: 403,
-        statusMessage: 'Accès non autorisé - ID admin requis'
+        statusMessage: 'Accès non autorisé - Vous devez être administrateur'
       })
     }
 
-    console.log('✅ Accès admin autorisé avec ID:', adminId)
+    console.log('✅ Accès admin autorisé pour:', user.id)
   }
 })

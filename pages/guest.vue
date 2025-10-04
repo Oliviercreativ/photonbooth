@@ -11,40 +11,28 @@
           <span>Mode Invité</span>
         </h1>
         <p class="text-sm text-center text-gray-900">
-          Vous pouvez utiliser le photobooth sans compte
+          « En vous inscrivant à la newsletter, vous bénéficiez d’une photo offerte sur le photobooth. On prend la photo
+          et elle est ajoutée automatiquement dans votre galerie. Pas besoin de créer de compte ! »
         </p>
       </div>
 
       <!-- Formulaire email pour actualités -->
       <div class="space-y-4">
-        <h2 class="text-lg font-semibold text-gray-900 mb-4 text-center flex items-center justify-center space-x-2">
-          <Icon name="heroicons:envelope" class="text-xl" />
-          <span>Recevez nos actualités</span>
-        </h2>
-        
         <div>
           <label class="block text-sm font-medium text-gray-900/80 mb-2">
             Prénom et Nom
           </label>
-          <input 
-            v-model="guestForm.fullName"
-            type="text" 
+          <input v-model="guestForm.fullName" type="text"
             class="w-full px-4 py-3 bg-white/20 border border-gray-800 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#33cccc]"
-            placeholder="Jean Dupont"
-            required
-          />
+            placeholder="Jean Dupont" required />
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-900/80 mb-2">
             Email
           </label>
-          <input 
-            v-model="guestForm.email"
-            type="email" 
+          <input v-model="guestForm.email" type="email"
             class="w-full px-4 py-3 bg-white/20 border border-gray-800 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#33cccc]"
-            placeholder="votre@email.com"
-            required
-          />
+            placeholder="votre@email.com" required />
         </div>
 
         <div class="text-xs text-gray-900/70 bg-blue-50 p-3 rounded-lg">
@@ -72,11 +60,8 @@
           </ul>
         </div>
 
-        <button 
-          @click="handleGuestContinue"
-          :disabled="isLoading"
-          class="w-full bg-[#33cccc] text-gray-800 font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
+        <button @click="handleGuestContinue" :disabled="isLoading"
+          class="w-full bg-[#33cccc] text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
           {{ isLoading ? 'Enregistrement...' : 'Continuer vers le photobooth' }}
         </button>
       </div>
@@ -89,10 +74,7 @@
 
       <!-- Retour à la connexion -->
       <div class="mt-6 pt-6 border-t border-white/20 text-center">
-        <button 
-          @click="goBackToAuth"
-          class="text-gray-900/70 hover:text-gray-900 text-sm transition-colors"
-        >
+        <button @click="goBackToAuth" class="text-gray-900/70 hover:text-gray-900 text-sm transition-colors">
           ← Retour à la connexion
         </button>
       </div>

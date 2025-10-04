@@ -130,13 +130,14 @@ export default defineEventHandler(async (event) => {
     console.log('  📸 Photo originale:', photoUrl)
     console.log('  🖼️ Thumbnail:', thumbnailUrl)
 
-    // 5. Vérifier si l'utilisateur guest a déjà une photo
+    // 5. Vérifier si l'utilisateur guest a déjà une photo et la mettre à jour
+    let photoId = null
     if (email && email !== 'anonyme@photobooth.local') {
       console.log('🔍 Vérification photo existante pour guest:', email)
 
       const { data: existingPhoto, error: checkError } = await supabase
         .from('photos')
-        .select('id, photo_url')
+        .select('id, photo_url, photo_thumbnail')
         .eq('guest_email', email)
         .eq('is_active', true)
         .limit(1)
@@ -144,35 +145,74 @@ export default defineEventHandler(async (event) => {
       if (checkError) {
         console.error('❌ Erreur vérification photo existante:', checkError)
       } else if (existingPhoto && existingPhoto.length > 0) {
-        console.log('🚫 Guest a déjà une photo:', email)
-        throw createError({
-          statusCode: 403,
-          statusMessage: `Cet utilisateur invité (${email}) a déjà une photo. Les utilisateurs invités sont limités à une seule photo.`
-        })
+        console.log('🔄 Mise à jour de la photo existante:', email)
+        photoId = existingPhoto[0].id
+
+        // Supprimer les anciennes photos du storage
+        if (existingPhoto[0].photo_url) {
+          const oldPath = existingPhoto[0].photo_url.split('/photobooth/')[1]
+          if (oldPath) {
+            await supabase.storage.from('photobooth').remove([oldPath])
+            console.log('🗑️ Ancienne photo supprimée:', oldPath)
+          }
+        }
+        if (existingPhoto[0].photo_thumbnail) {
+          const oldThumbPath = existingPhoto[0].photo_thumbnail.split('/photobooth/')[1]
+          if (oldThumbPath) {
+            await supabase.storage.from('photobooth').remove([oldThumbPath])
+            console.log('🗑️ Ancien thumbnail supprimé:', oldThumbPath)
+          }
+        }
       }
     }
 
-    // 6. Insérer dans la table photos
+    // 6. Insérer ou mettre à jour dans la table photos
     console.log('💾 Sauvegarde en base de données...')
-    const { data: photoRecord, error: insertError } = await supabase
-      .from('photos')
-      .insert({
-        photo_url: photoUrl,
-        photo_thumbnail: thumbnailUrl,
-        user_id: null, // Pas d'utilisateur connecté, utiliser guest_email
-        guest_email: email,
-        guest_session_id: `admin-${userId}`,
-        background_id: 'default', // Valeur par défaut pour les photos admin
-        background_name: 'Photo admin', // Nom par défaut
-        is_active: true,
-        count: 1, // Compter comme 1 photo
-        created_at: new Date().toISOString()
-      })
-      .select('id')
-      .single()
+    let photoRecord
+    let insertError
+
+    if (photoId) {
+      // Mise à jour de la photo existante
+      const { data, error } = await supabase
+        .from('photos')
+        .update({
+          photo_url: photoUrl,
+          photo_thumbnail: thumbnailUrl,
+          background_id: 'default',
+          background_name: 'Photo admin',
+          is_active: true
+        })
+        .eq('id', photoId)
+        .select('id')
+        .single()
+
+      photoRecord = data
+      insertError = error
+    } else {
+      // Insertion d'une nouvelle photo
+      const { data, error } = await supabase
+        .from('photos')
+        .insert({
+          photo_url: photoUrl,
+          photo_thumbnail: thumbnailUrl,
+          user_id: null,
+          guest_email: email,
+          guest_session_id: `admin-${userId}`,
+          background_id: 'default',
+          background_name: 'Photo admin',
+          is_active: true,
+          count: 1,
+          created_at: new Date().toISOString()
+        })
+        .select('id')
+        .single()
+
+      photoRecord = data
+      insertError = error
+    }
 
     if (insertError) {
-      console.error('❌ Erreur insertion photo:', insertError)
+      console.error('❌ Erreur sauvegarde photo:', insertError)
       throw createError({
         statusCode: 500,
         statusMessage: 'Erreur lors de la sauvegarde de la photo: ' + insertError.message

@@ -56,30 +56,46 @@ export default defineEventHandler(async (event) => {
     })
     
     console.log('✅ Upload réussi')
-    
-    // Étape 1: Créer une session dans photobooth_sessions
-    const { data: sessionData, error: sessionError } = await $fetch(`${supabaseUrl}/rest/v1/photobooth_sessions`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${supabaseServiceKey}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
-      },
-      body: {
-        user_id: finalUserId,
-        photos_count: 1
+
+    // Étape 1: Récupérer ou créer une session (SANS toucher à photos_count si elle existe)
+    const { createClient } = await import('@supabase/supabase-js')
+    const supabase = createClient(supabaseUrl, supabaseServiceKey)
+
+    // Vérifier si une session existe déjà
+    const { data: existingSessions } = await supabase
+      .from('photobooth_sessions')
+      .select('id, photos_count')
+      .eq('user_id', finalUserId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+
+    let sessionData
+
+    if (existingSessions && existingSessions.length > 0) {
+      // Utiliser la session existante SANS MODIFICATION
+      sessionData = existingSessions
+      console.log('✅ Session existante utilisée:', sessionData[0].id, '- Limite:', sessionData[0].photos_count)
+    } else {
+      // Créer nouvelle session UNIQUEMENT si elle n'existe pas
+      const { data: newSession, error: sessionError } = await supabase
+        .from('photobooth_sessions')
+        .insert({
+          user_id: finalUserId,
+          photos_count: 5 // Limite par défaut
+        })
+        .select()
+
+      if (sessionError) {
+        console.error('❌ Erreur création session:', sessionError)
+        throw createError({
+          statusCode: 500,
+          statusMessage: `Erreur création session: ${sessionError.message}`
+        })
       }
-    })
-    
-    if (sessionError) {
-      console.error('❌ Erreur création session:', sessionError)
-      throw createError({
-        statusCode: 500,
-        statusMessage: `Erreur création session: ${sessionError.message}`
-      })
+
+      sessionData = newSession
+      console.log('✅ Nouvelle session créée:', sessionData[0].id, '- Limite par défaut: 5')
     }
-    
-    console.log('✅ Session créée avec ID:', sessionData[0].id)
     
     // Étape 2: Enregistrer la photo avec le session_id
     const photoUrl = `${supabaseUrl}/storage/v1/object/public/photobooth/${fileName}`

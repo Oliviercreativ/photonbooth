@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-[#f7f5f2] pb-12">
     <slot />
-    <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-lg z-50 md:hidden">
+    <nav class="hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-lg z-50 md:hidden">
       <div class="flex justify-around items-center py-2">
         <NuxtLink to="/photobooth"
           class="flex flex-col items-center text-xs text-gray-700 hover:text-[#33cccc] transition-colors"

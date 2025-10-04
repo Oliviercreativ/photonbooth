@@ -56,7 +56,7 @@ export default defineEventHandler(async (event) => {
 
     console.log('✅ Utilisateur authentifié:', user.id)
 
-    // Vérifier le nombre de photos existantes pour cet utilisateur
+    // Compter le nombre de photos réelles dans la table photos
     const { data: existingPhotos, error: countError } = await supabaseWithAuth
       .from('photos')
       .select('id', { count: 'exact' })
@@ -65,17 +65,32 @@ export default defineEventHandler(async (event) => {
 
     if (countError) {
       console.error('❌ Erreur vérification compteur photos:', countError)
-    } else {
-      const photoCount = existingPhotos?.length || 0
-      console.log('📊 Nombre de photos existantes:', photoCount)
+    }
 
-      if (photoCount >= 5) {
-        console.log('🚫 Limite de 5 photos atteinte pour l\'utilisateur:', user.id)
-        throw createError({
-          statusCode: 403,
-          statusMessage: 'Vous avez atteint la limite de 5 photos. Supprimez une photo existante pour en créer une nouvelle.'
-        })
-      }
+    const currentPhotoCount = existingPhotos?.length || 0
+
+    // Récupérer ou créer la session active de l'utilisateur
+    const { data: existingSessions, error: sessionFetchError } = await supabaseWithAuth
+      .from('photobooth_sessions')
+      .select('id, photos_count')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+
+    let currentSession = existingSessions?.[0]
+
+    // photos_count dans la session stocke la LIMITE de l'utilisateur
+    const userLimit = currentSession?.photos_count || 5 // Par défaut 5 si pas de session
+
+    console.log('📊 Photos actuelles:', currentPhotoCount, '/ Limite:', userLimit)
+
+    // Vérifier si la limite est atteinte
+    if (currentPhotoCount >= userLimit) {
+      console.log(`🚫 Limite de ${userLimit} photos atteinte pour l'utilisateur:`, user.id)
+      throw createError({
+        statusCode: 403,
+        statusMessage: `Vous avez atteint la limite de ${userLimit} photos. Contactez l'administration pour obtenir plus de crédits.`
+      })
     }
 
     const body = await readBody(event)
@@ -122,34 +137,37 @@ export default defineEventHandler(async (event) => {
     
     console.log('✅ Upload Storage réussi')
     
-    // 2. Créer session avec Supabase client
-    console.log('🚀 Étape 2: Création session...')
-    const sessionStartTime = new Date().toISOString()
-    const sessionEndTime = new Date().toISOString()
-    
-    console.log('📊 Données session:', { 
-      user_id: user.id, 
-      photos_count: 1,
-      created_at: sessionStartTime,
-      ended_at: sessionEndTime
-    })
-    
-    const { data: sessionData, error: sessionError } = await supabaseWithAuth
-      .from('photobooth_sessions')
-      .insert({
-        user_id: user.id,
-        photos_count: 1,
-        created_at: sessionStartTime,
-        ended_at: sessionEndTime
-      })
-      .select()
-    
-    if (sessionError) {
-      console.log('❌ Erreur création session:', sessionError)
-      throw sessionError
+    // 2. Récupérer ou créer la session (SANS toucher à photos_count)
+    console.log('🚀 Étape 2: Gestion session...')
+    let sessionData
+
+    if (currentSession) {
+      // La session existe, on l'utilise telle quelle (SANS MODIFICATION)
+      sessionData = [currentSession]
+      console.log('✅ Session existante utilisée:', currentSession.id, '- Limite:', currentSession.photos_count)
+    } else {
+      // Créer nouvelle session UNIQUEMENT si elle n'existe pas (limite par défaut = 5)
+      const sessionStartTime = new Date().toISOString()
+      const sessionEndTime = new Date().toISOString()
+
+      const { data: newSession, error: sessionError } = await supabaseWithAuth
+        .from('photobooth_sessions')
+        .insert({
+          user_id: user.id,
+          photos_count: 5, // Limite par défaut - sera modifiée UNIQUEMENT par l'admin via dashboard
+          created_at: sessionStartTime,
+          ended_at: sessionEndTime
+        })
+        .select()
+
+      if (sessionError) {
+        console.log('❌ Erreur création session:', sessionError)
+        throw sessionError
+      }
+
+      sessionData = newSession
+      console.log('✅ Nouvelle session créée:', sessionData[0].id, '- Limite par défaut: 5')
     }
-    
-    console.log('✅ Session créée:', sessionData[0].id)
     
     // 3. Enregistrer photo avec Supabase client
     console.log('🚀 Étape 3: Enregistrement photo...')

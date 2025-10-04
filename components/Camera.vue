@@ -4,7 +4,7 @@
     <!-- Onglet Caméra -->
     <div v-if="activeMobileTab === 'camera'" class="h-full w-full relative pb-20">
       <!-- Bouton choisir fond en haut -->
-    <div class="absolute top-4 left-4 right-4 z-20">
+      <div class="absolute top-4 left-4 right-4 z-20">
         <button @click="openBackgroundSelector"
           class="w-full bg-white/50 text-gray-900 px-6 py-2 rounded-full text-lg font-semibold backdrop-blur shadow-lg min-h-[56px] touch-manipulation">
           {{ selectedBackground?.name || 'Choisir un effet' }}
@@ -12,11 +12,8 @@
       </div>
 
       <!-- Sélecteur de fond -->
-      <BackgroundSelector 
-        v-if="showBackgroundSelector"
-        @select="handleBackgroundSelect"
-        @close="showBackgroundSelector = false"
-      />
+      <BackgroundSelector v-if="showBackgroundSelector" @select="handleBackgroundSelect"
+        @close="showBackgroundSelector = false" />
     </div>
 
     <!-- Onglet Photos -->
@@ -39,7 +36,7 @@
             <button @click="downloadPhoto(photo)"
               class="absolute top-2 right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg touch-manipulation">
               <span class="text-gray-800 text-sm">⬇️</span>
-        </button>
+            </button>
           </div>
         </div>
 
@@ -57,9 +54,9 @@
       <!-- Caméra active -->
       <video v-if="isCameraActive" ref="videoElement" autoplay playsinline muted class="w-full h-full object-contain"
         :class="{ mirror: frontCamera }"></video>
-      
+
       <!-- Caméra éteinte -->
-      <div v-else class="w-full h-full bg-gray-900 flex items-center justify-center">
+      <div v-else class="w-full h-full bg-gray-900 flex items-center justify-center -mt-16">
         <div class="text-center text-white">
           <p class="text-lg font-medium mb-2">Caméra éteinte</p>
           <p class="text-sm opacity-75">Sélectionnez un fond pour activer la caméra</p>
@@ -78,56 +75,35 @@
 
     <!-- État de traitement -->
     <div v-if="isProcessing" class="absolute inset-0 bg-black/50 flex items-center justify-center">
-      <div class="text-center text-gray-800 bg-black/80 p-6 rounded-xl">
+      <div class="text-center text-white bg-black/80 p-6 rounded-xl">
         <p class="text-lg font-medium">{{ processingStep }}</p>
         <p class="text-sm opacity-75 mt-2">Analyse votre photo...</p>
       </div>
     </div>
 
     <!-- Contrôles -->
-    <div v-if="activeMobileTab === 'camera'" class="absolute bottom-24 left-0 right-0 px-4">
-      <div class="flex items-center justify-between">
-        <!-- Switch Camera -->
-        <button @click="switchCamera"
-          class="w-12 h-12 bg-black/50 rounded-full flex items-center justify-center text-gray-800 text-xl backdrop-blur touch-manipulation"
-          :disabled="!isReady || isProcessing || !isCameraActive">
-          <Icon name="heroicons:arrow-path" />
-        </button>
-
+    <div v-if="activeMobileTab === 'camera'" class="absolute bottom-64 left-0 right-0 px-4">
+      <div class="flex items-center justify-center flex-col gap-4">
         <!-- Capture Button -->
         <button @click="capturePhoto"
           class="w-24 h-24 bg-white border-4 border-gray-300 rounded-full flex items-center justify-center shadow-xl transition-transform touch-manipulation"
-          :disabled="!isReady || !selectedBackground || isProcessing || !isCameraActive || isPhotoLimitReached"
-          :class="[
+          :disabled="!isReady || !selectedBackground || isProcessing || !isCameraActive || isPhotoLimitReached" :class="[
             isProcessing ? 'animate-pulse' : 'active:scale-95',
             isPhotoLimitReached ? 'opacity-50 cursor-not-allowed' : ''
           ]">
           <div class="w-16 h-16 rounded-full flex items-center justify-center"
-            :class="isPhotoLimitReached ? 'bg-gray-400' : 'bg-red-500'">
-            <Icon
-              v-if="isProcessing"
-              name="heroicons:clock"
-              class="text-gray-800 text-sm"
-            />
-            <Icon
-              v-else-if="isPhotoLimitReached"
-              name="heroicons:x-mark"
-              class="text-gray-800 text-2xl"
-            />
-            <Icon
-              v-else
-              name="heroicons:camera"
-              class="text-gray-800 text-2xl"
-            />
+            :class="isPhotoLimitReached ? 'bg-gray-400' : 'bg-[#33cccc]'">
+            <Icon v-if="isProcessing" name="heroicons:clock" class="text-white text-sm" />
+            <Icon v-else-if="isPhotoLimitReached" name="heroicons:x-mark" class="text-white text-2xl" />
+            <Icon v-else name="heroicons:camera" class="text-white text-2xl" />
           </div>
         </button>
-        <!-- Photos prises -->
-        <div class="relative">
-          <span v-if="capturedPhotos.length > 0"
-            class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-xs text-gray-800 flex items-center justify-center">
-            {{ capturedPhotos.length }}
-          </span>
-        </div>
+        <!-- Switch Camera -->
+        <button @click="switchCamera"
+          class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-gray-800 text-xl backdrop-blur touch-manipulation"
+          :disabled="!isReady || isProcessing || !isCameraActive">
+          <Icon name="heroicons:arrow-path" />
+        </button>
       </div>
     </div>
   </div>
