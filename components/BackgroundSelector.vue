@@ -324,13 +324,13 @@ const backgrounds = ref([
   },
   {
     id: 'disney-pure-original',
-    name: 'Disney Fond Original',
+    name: 'Dessin Fond Original',
     emoji: '🏰📷',
     preview: '/previews/disney-pure-original.jpg'
   },
   {
     id: 'disney-pure-transformed',
-    name: 'Disney Monde Entier',
+    name: 'Dessin Monde Entier',
     emoji: '🏰🌍',
     preview: '/previews/disney-pure-transformed.jpg'
   },
@@ -381,12 +381,6 @@ const backgrounds = ref([
     name: 'Cités d\'Or Monde Entier',
     emoji: '🏛️✨🌍',
     preview: '/previews/cites-or-transformed.jpg'
-  },
-  {
-    id: 'frozen-transformed',
-    name: 'Reine des Neiges Monde Entier',
-    emoji: '❄️👑🌍',
-    preview: '/previews/frozen-transformed.jpg'
   },
   {
     id: 'kpop-pure-original',

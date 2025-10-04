@@ -110,7 +110,7 @@
             loading="lazy" />
 
           <!-- Badge de fond -->
-          <div class="absolute top-2 left-2 bg-black/50 text-gray-800 text-xs px-2 py-1 rounded backdrop-blur">
+          <div class="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded backdrop-blur">
             {{ photo.background_name }}
           </div>
 
@@ -119,17 +119,17 @@
             class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
             <div class="flex gap-2">
               <button @click.stop="openPhoto(photo)"
-                class="bg-blue-500 text-gray-800 w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
+                class="bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
                 <Icon name="heroicons:eye" class="w-5 h-5" />
               </button>
               <button @click.stop="sharePhoto(photo)"
-                class="bg-green-500 text-gray-800 w-10 h-10 rounded-full flex items-center justify-center hover:bg-green-600 transition-colors">
+                class="bg-green-500 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-green-600 transition-colors">
                 <Icon name="heroicons:share" class="w-5 h-5" />
               </button>
 
               <!-- Bouton admin uniquement -->
               <button v-if="isAdmin" @click.stop="generatePreview(photo)" :disabled="generatingPreview === photo.id"
-                class="bg-purple-500 text-gray-800 w-10 h-10 rounded-full flex items-center justify-center hover:bg-purple-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                class="bg-purple-500 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-purple-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 :title="`Générer preview pour ${photo.background_name}`">
                 <Icon v-if="generatingPreview !== photo.id" name="heroicons:sparkles" class="w-5 h-5" />
                 <div v-else class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
@@ -201,7 +201,7 @@ const toast = ref({
 
 // Computed
 const isAdmin = computed(() => {
-  const ADMIN_ID = '262af476-2407-4d63-9641-fb03ce4b784f'
+  const ADMIN_ID = 'd04dad76-47de-468b-ba95-b5269b1d5385'
   return currentUserId.value === ADMIN_ID
 })
 
